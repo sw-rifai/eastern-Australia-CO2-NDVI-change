@@ -1,0 +1,52 @@
+var dataset = ee.ImageCollection('NOAA/VIIRS/001/VNP09GA')
+// var rgb = dataset.select(['M5', 'M4', 'M3']);
+// var rgbVis = {
+//   min: 0.0,
+//   max: 3000.0,
+// };
+// Map.setCenter(17.93, 7.71, 2);
+// Map.addLayer(rgb, rgbVis, 'RGB');
+
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+
+var cci = dataset.filterDate("2016-01-01","2017-01-01")
+               .map(function(i){
+                 var cloud = getQABits(i.select("QF1"),2,3,'cloud').select('cloud').eq(0)
+                 var shadow = getQABits(i.select("QF2"),3,3,'shadow').select('shadow').eq(0)
+
+                 var qf5 = i.select("QF5");
+                 var q4 = getQABits(qf5, 5, 5, 'q4').select('q4').eq(0)
+                 var q5 = getQABits(qf5, 6, 6, 'q5').select('q5').eq(0)
+                var out = i.updateMask(cloud).updateMask(shadow)//.updateMask(q4).updateMask(q5)
+                out = out.updateMask(i.select("M2").gte(1))
+                out = out.updateMask(i.select("I1").gte(1))
+                // out = out.multiply(0.0001).copyProperties(i)
+                return(out); 
+               })
+               .map(function(i){
+                        var out = i.select(["M2","I1"]).multiply(0.0001)
+                                   .normalizedDifference(["M2","I1"]).rename("cci")
+                        i = i.addBands(out); 
+                  return(i)})
+               .map(function(i){
+                 var out = i.select(["M3"]).multiply(0.0001)
+                 out = ee.Image(out.gte(0)).divide(out).rename('cri1')
+                 
+                 return(i.addBands(out))
+               })
+
+  
+Map.addLayer(cci.select('cci'), {bands:['cci'],min:0, max:0.8, palette:['red','blue']},'cci',false)
+Map.addLayer(cci.select('cri1'), {bands:['cri1'],min:0, max:0.8, palette:['red','blue']},'cri1',false)
+  

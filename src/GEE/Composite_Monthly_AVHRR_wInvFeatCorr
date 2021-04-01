@@ -1,0 +1,249 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var avhrr = ee.ImageCollection("NOAA/CDR/AVHRR/SR/V5"),
+    roi = 
+    /* color: #3825d6 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.MultiPolygon(
+        [[[[145.90837579248387, -37.59326013636689],
+           [145.90837579248387, -37.78886793199764],
+           [146.28740411279637, -37.78886793199764],
+           [146.28740411279637, -37.59326013636689]]],
+         [[[147.52909112610217, -36.54589699632659],
+           [147.52909112610217, -36.67542302440299],
+           [147.71860528625842, -36.67542302440299],
+           [147.71860528625842, -36.54589699632659]]],
+         [[[150.64743938833004, -34.993175274299176],
+           [150.64743938833004, -35.12694404701049],
+           [150.78064861684567, -35.12694404701049],
+           [150.78064861684567, -34.993175274299176]]],
+         [[[150.18993107551205, -34.867307973228385],
+           [150.18993107551205, -35.003532281717966],
+           [150.34785954230892, -35.003532281717966],
+           [150.34785954230892, -34.867307973228385]]],
+         [[[136.76870145428256, -27.719026754784554],
+           [136.76870145428256, -29.498416737241183],
+           [138.16396512615756, -29.498416737241183],
+           [138.16396512615756, -27.719026754784554]]],
+         [[[137.05983914959506, -30.04674292823259],
+           [137.05983914959506, -30.988435594500363],
+           [137.98269071209506, -30.988435594500363],
+           [137.98269071209506, -30.04674292823259]]],
+         [[[141.2801056807633, -26.137779244642285],
+           [141.2801056807633, -26.55250929016639],
+           [141.83079537802894, -26.55250929016639],
+           [141.83079537802894, -26.137779244642285]]],
+         [[[149.39925913796333, -35.035199507917326],
+           [149.39925913796333, -35.194154187623134],
+           [149.45350413308051, -35.194154187623134],
+           [149.45350413308051, -35.035199507917326]]],
+         [[[149.33952097878364, -37.392120649250074],
+           [149.33952097878364, -37.477176344877684],
+           [149.44389109597114, -37.477176344877684],
+           [149.44389109597114, -37.392120649250074]]],
+         [[[152.6409771224496, -30.129310070676087],
+           [152.6409771224496, -30.201142913869468],
+           [152.8322078963754, -30.201142913869468],
+           [152.8322078963754, -30.129310070676087]]],
+         [[[145.63554612276698, -17.59601395451532],
+           [145.63554612276698, -17.77787820249899],
+           [145.79828110811854, -17.77787820249899],
+           [145.79828110811854, -17.59601395451532]]],
+         [[[145.57786790011073, -17.90925489821114],
+           [145.57786790011073, -18.064036726091373],
+           [145.6808647262826, -18.064036726091373],
+           [145.6808647262826, -17.90925489821114]]],
+         [[[145.00990224971991, -16.171204775210462],
+           [145.00990224971991, -16.277022514080315],
+           [145.11083913936835, -16.277022514080315],
+           [145.11083913936835, -16.171204775210462]]]], null, false),
+    roi2 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.37401268427408, -32.941552929340425],
+          [150.37401268427408, -33.36006605761333],
+          [151.05516502802408, -33.36006605761333],
+          [151.05516502802408, -32.941552929340425]]], null, false),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    geometry = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    ee.Geometry.MultiPoint();
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+ function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  var ch_1_5_BitMask = Math.pow(2, 7);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+            .and(
+              qa.bitwiseAnd(shadowBitMask).eq(0))
+              // .and(
+              // qa.bitwiseAnd(ch_1_5_BitMask).eq(0));
+  // var mask_2 = qa.bitwiseAnd(ch_1_5_BitMask).neq(0)
+  image = image.updateMask(mask);
+  // image = image.updateMask(mask_2); 
+  // image = image.updateMask(brdfBitMask.eq(0))
+
+  // Return the masked data.
+  var out = image.multiply(0.0001)
+  out = out.select(["SREFL_CH1","SREFL_CH2"],['red','nir'])
+  return(out); 
+  // return(qa.bitwiseAnd(brdfBitMask).eq(0));
+}
+
+var ref = avhrr.filterDate('2015-01-01','2015-01-31').map(qualityFlag).median();
+var dyn = avhrr.filterDate('2019-01-01','2019-01-31').map(qualityFlag).median();
+
+// var dyn = avhrr.filterDate('2019-01-01','2019-01-31').map(qualityFlag).median();
+
+
+var multiTemporal1 = ref.select('red').addBands(ee.Image(1))
+    .addBands(dyn.select('red'));
+
+
+var regression1 = multiTemporal1.reduceRegion({
+  reducer: ee.Reducer.linearRegression(2, 1), 
+  geometry: roi, 
+  scale: 5000, 
+  maxPixels:268551158
+});
+
+print(regression1)
+var b0 = ee.Array(regression1.get("coefficients")).get([0,0])
+var b1 = ee.Array(regression1.get("coefficients")).get([1,0])
+print(b1)
+var dyn_cor = ee.Image(dyn.multiply(b0)).add(b1); 
+
+// Map.addLayer(ref,{bands:['SREFL_CH2'],palette:['black','red','yellow']})
+Map.addLayer(ref.select("red"),{bands:['red'],palette:['black','red','yellow'],min:0,max:0.5},'ref',false)
+Map.addLayer(dyn.select("red"),{bands:['red'], palette:['black','red','yellow'],min:0,max:0.5},'dyn',false)
+Map.addLayer(dyn_cor.select("red"),{bands:['red'],palette:['black','red','yellow'],min:0,max:0.5},'dyn_cor',false)
+
+
+var histogram = ui.Chart.image.histogram(ref.select("red"), 
+                                ee.FeatureCollection([roi]), 500)
+// print(histogram)
+
+var arr1_red = ee.Array(ref.reduceRegion(ee.Reducer.toList(), roi, 5000).get('red'))
+                 .slice(0, 0,1000)
+var arr1_nir = ee.Array(ref.reduceRegion(ee.Reducer.toList(), roi, 5000).get('nir'))
+                 .slice(0, 0,1000)
+
+var arr2_red = ee.Array(dyn.reduceRegion(ee.Reducer.toList(), roi, 5000).get('red'))
+                 .slice(0, 0,1000)
+
+var arr2_nir = ee.Array(dyn.reduceRegion(ee.Reducer.toList(), roi, 5000).get('nir'))
+                 .slice(0, 0,1000)
+
+// print(arr1_red)
+// print(arr2_red)
+// print(arr1_nir)
+// print(arr2_nir)
+
+var yValues = ee.Array.cat([arr1_nir, arr2_nir], 1);
+var xValues = ee.Array.cat([arr1_red, arr2_red], 1);
+
+// print(yValues);
+// print(xValues)
+
+var scatter = ui.Chart.array.values(//array, axis, xLabels)
+ {
+  array:yValues,
+  axis:0,
+  xLabels:arr2_red
+ }).setChartType("ScatterChart")
+.setSeriesNames(['ref','dyn'])
+.setOptions({
+  hAxis:{'title':'red'},
+  vAxis:{'title':'nir'},
+  pointSize:1, 
+  trendlines: { 0: { 
+        // color: 'green',
+        lineWidth: 3,
+        opacity: 0.2,
+      }}
+})
+print(scatter)
+
+// Map.addLayer(nvis.eq(24).randomVisualizer(),null,'nvis')
+////////////////////////////////////////////////////////////////////////////
+// Get a dictionary with band names as keys, pixel lists as values.
+var result1 = ref.reduceRegion(ee.Reducer.toList(), roi, 5000);
+var result2 = dyn.reduceRegion(ee.Reducer.toList(), roi, 5000);
+
+// // Convert the band data to plot on the y-axis to arrays.
+// var y1 = ee.Array(result1.get('SREFL_CH2')).slice(0,1,10,1);
+// var y2 = ee.Array(result2.get('SREFL_CH2')).slice(0,1,10,1);
+// // Concatenate the y-axis data by stacking the arrays on the 1-axis.
+// var yValues = ee.Array.cat([y1, y2], 1);
+
+// print(y1.slice(0, 1,5,1))
+// print(y2)
+// var yValues = ee.Array.cat([y1], 1);
+
+// // The band data to plot on the x-axis is a List.
+// var xValues = result1.get('SREFL_CH2');
+
+// // Make a band correlation chart.
+// var chart = ui.Chart.array.values(yValues,y1)
+//     // .setSeriesNames(['ref_ch2', 'dyn_ch2'])
+//     .setOptions({
+//       title: 'REF vs. {DYN}',
+//       hAxis: {'title': 'rho'},
+//       // vAxis: {'title': '{ref,dyn}'},
+//       pointSize: 3,
+// });
+
+// // Print the chart.
+// print(chart);

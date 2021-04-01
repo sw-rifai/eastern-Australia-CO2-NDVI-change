@@ -1,0 +1,457 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    s2 = ee.ImageCollection("COPERNICUS/S2_SR"),
+    l7 = ee.ImageCollection("LANDSAT/LE07/C01/T1_SR"),
+    sydney = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* locked: true */
+    ee.Geometry.Polygon(
+        [[[150.5756871759296, -34.11385754468467],
+          [150.7185094415546, -33.570927257136916],
+          [150.8997838556171, -33.58008060164973],
+          [151.2678258478046, -33.83597966316538],
+          [151.4587132989765, -33.46903086787691],
+          [151.75122428530463, -32.990011667247956],
+          [150.7020299493671, -32.44234180364545],
+          [150.5207555353046, -32.36813761101028],
+          [150.0318639337421, -33.38765671873344],
+          [149.9879186212421, -33.721833230910484],
+          [149.7901647149921, -34.259265896494924],
+          [150.2955358087421, -34.49049164108611],
+          [150.4932897149921, -34.413487331825365]]]),
+    wollongong = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* locked: true */
+    ee.Geometry.Polygon(
+        [[[151.1792485772968, -34.08144736368242],
+          [150.93068290346866, -33.94826506977476],
+          [150.5420415460468, -34.34491648763313],
+          [150.48024345034366, -34.47973795336185],
+          [150.6848638116718, -34.59286512139457]]]),
+    nowra = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    /* locked: true */
+    ee.Geometry.Polygon(
+        [[[150.40578077967422, -34.6021596662088],
+          [150.17506788904922, -34.67673098666399],
+          [150.01851271326797, -34.758005004681806],
+          [149.80702589686172, -35.160929175499305],
+          [149.78230665858047, -35.304509965040715],
+          [149.88118361170547, -35.36052715286783],
+          [149.89216993983047, -35.48362822165313],
+          [150.26570509608047, -35.72926532362576],
+          [150.42775343592422, -35.52387497106655],
+          [150.58430861170547, -35.17440066723161],
+          [150.77382277186172, -34.985596851809355]]]),
+    katoomba_north = 
+    /* color: #ffc82d */
+    /* shown: false */
+    /* locked: true */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.2290970235684, -33.53807584177452],
+          [150.2290970235684, -33.70674874633912],
+          [150.55800022181057, -33.70674874633912],
+          [150.55800022181057, -33.53807584177452]]], null, false),
+    victoria_se = 
+    /* color: #00ffff */
+    /* shown: false */
+    /* locked: true */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[149.1652622033224, -37.48762746588891],
+          [149.1652622033224, -37.80947734877966],
+          [149.77774999629116, -37.80947734877966],
+          [149.77774999629116, -37.48762746588891]]], null, false),
+    ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    wollemi_south = 
+    /* color: #bf04c2 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.378274168603, -33.02994534976168],
+          [150.378274168603, -33.11625410197134],
+          [150.52796288930614, -33.11625410197134],
+          [150.52796288930614, -33.02994534976168]]], null, false),
+    dem = ee.Image("AU/GA/DEM_1SEC/v10/DEM-H"),
+    mtpi = ee.Image("CSP/ERGo/1_0/Global/SRTM_mTPI"),
+    flow_accum = ee.Image("WWF/HydroSHEDS/15ACC"),
+    landforms = ee.Image("CSP/ERGo/1_0/Global/SRTM_landforms"),
+    carrai = 
+    /* color: #ff0000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[152.20553551823645, -30.877811292577082],
+          [152.20553551823645, -30.918465944025492],
+          [152.28999291569738, -30.918465944025492],
+          [152.28999291569738, -30.877811292577082]]], null, false),
+    torrington = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[151.40549578449395, -29.139276917450903],
+          [151.40549578449395, -29.3316137665638],
+          [151.705559871408, -29.3316137665638],
+          [151.705559871408, -29.139276917450903]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** Options for seasonal aggegation ***
+//**************************************************************************************************
+var ic = l8; 
+var var_name = "NIRV"
+var roi_name = "torrington"
+var roi = torrington
+var export_scale = 30;
+// var export_scale = ic.first().projection().nominalScale().toFloat();
+var start_year = 2014; 
+var end_year = 2019;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List([1,4,7,11]) // Central months of DJF season
+var years=ee.List.sequence(start_year,end_year);
+
+var file_name = "Landsat8_"+var_name+"_"+roi_name+"_mean_"+"_"+start_year+"_"+end_year
+print(file_name)
+print(export_scale)
+
+//*** MASK
+var nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses");
+var nvis_mask = nvis.lte(18); 
+Map.addLayer(nvis_mask, {min:0,max:1},"nvis_mask",false)
+ba = ba.filterDate('2019-07-01','2020-01-31').max().updateMask(nvis_mask);
+Map.addLayer(ba,{bands:['BurnDate'],min:0,max:366,palette:['blue', 'black','purple','yellow']})
+
+var terrain = ee.Algorithms.Terrain(dem).select('aspect')
+
+//**********************************************************************
+//*** FUNCTIONS ********************************************************
+//**********************************************************************
+
+// This example demonstrates the use of the Landsat 4, 5 or 7
+// surface reflectance QA band to mask clouds.
+
+var cloudMaskL457 = function(image) {
+  var qa = image.select('pixel_qa');
+  // If the cloud bit (5) is set and the cloud confidence (7) is high
+  // or the cloud shadow bit is set (3), then it's a bad pixel.
+  var cloud = qa.bitwiseAnd(1 << 5)
+          .and(qa.bitwiseAnd(1 << 7))
+          .or(qa.bitwiseAnd(1 << 3))
+  // Remove edge pixels that don't occur in all bands
+  var mask2 = image.mask().reduce(ee.Reducer.min());
+  return image.updateMask(cloud.not()).updateMask(mask2).divide(10000);
+};
+
+// Function to cloud mask from the pixel_qa band of Landsat 8 SR data.
+function maskL8sr(image) {
+  // Bits 3 and 5 are cloud shadow and cloud, respectively.
+  var cloudShadowBitMask = 1 << 3;
+  var cloudsBitMask = 1 << 5;
+
+  // Get the pixel QA band.
+  var qa = image.select('pixel_qa');
+
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
+
+  // Return the masked image, scaled to reflectance, without the QA bands.
+  return image.updateMask(mask).divide(10000)
+      .select("B[0-9]*")
+      .copyProperties(image, ["system:time_start"]);
+}
+
+// Function to mask clouds using the Sentinel-2 QA band.
+function maskS2clouds(image) {
+  var qa = image.select('QA60')
+
+  // Bits 10 and 11 are clouds and cirrus, respectively.
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0).and(
+             qa.bitwiseAnd(cirrusBitMask).eq(0))
+
+  // Return the masked and scaled data, without the QA bands.
+  return image.updateMask(mask).divide(10000)
+      .select("B.*")
+      .copyProperties(image, ["system:time_start"])
+}
+
+
+
+//**********************************************************************
+//*** END SECTION 
+//**********************************************************************
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+   var seasonal_date = ee.Date.fromYMD(y, m, 01)
+   var seasonal_date_range = ee.DateRange(seasonal_date.advance(-1,'months'), 
+                                       seasonal_date.advance(1.999,'months'))
+   var orig_prop = ic.filterDate(seasonal_date_range).first()
+    return ic.filterDate(seasonal_date_range)
+            // .filter(ee.Filter.calendarRange(y, y, 'year'))
+            // .filter(ee.Filter.calendarRange(m, m, 'month'))
+               .map(maskL8sr)
+               .map(function(i){
+                 var out = i.normalizedDifference(['B5','B4']).rename('NDVI')
+                 out = out.copyProperties(i, ["system:time_start"]);
+
+                 return(i.addBands(out))
+                               }
+                    )
+               .map(function(i){
+                  var out = i.select("B5").multiply(i.select("NDVI")).rename("NIRV")
+                  return(i.addBands(out))
+                })
+            .map(function(i){return(i.select("NIRV"))})
+            .median()
+            .copyProperties(orig_prop,["system:time_start","system:index"])
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            // .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+var norms = months.map(function(m){
+  return(
+    tmp.filter(ee.Filter.eq('month',m))
+       .filter(ee.Filter.lte('year',2016)) // Not using 2017 onwards 
+      .map(function(i){
+            return(i.select("NIRV"))
+      }
+    ).mean()
+    .set('month',m)
+)
+}).flatten(); 
+
+norms = ee.ImageCollection.fromImages(norms)
+
+
+
+// Define an inner join.
+var innerJoin = ee.Join.inner();
+
+// Specify an equals filter for image timestamps.
+var filterTimeEq = ee.Filter.equals({
+  leftField: 'month',
+  rightField: 'month'
+});
+
+// Apply the join.
+var innerJoined = innerJoin.apply(tmp, norms, filterTimeEq);
+print("innerJoined",innerJoined)
+
+// Map a function to merge the results in the output FeatureCollection.
+var joined_landsat = innerJoined.map(function(feature) {
+  return ee.Image.cat(feature.get('primary'), feature.get('secondary'));
+});
+// print("joined_landsat", joined_landsat)
+// print(ee.Image(joined_landsat.first()).select("NIRV"))
+
+
+// // Aggregate to monthly sums
+// var joined_landsat_2 = ee.ImageCollection.fromImages(
+//             months.map(function (m) {
+//                 var w = joined_landsat.filter(ee.Filter.eq('month', m))
+//                 var out = w.first()
+//                 // var out = ee.Image(w.mean().select("NDVI_1"))
+//                 //           .subtract(w.mean().select("NDVI")).rename("NDVI_anom");
+//                 //     // .mean();
+//                 return out.set('month', m);
+//             }).flatten());
+// print(joined_landsat_2)
+
+var anoms_landsat = joined_landsat.map(function(i){
+  var out = ee.Image(i).select(["NIRV","NIRV_1"])
+  out = out.copyProperties(i)
+  // out = out.select("NIRV_1").subtract(i.select("NIRV")).rename("NIRV_anom");
+  return(out);
+})
+// print("anoms_landsat",anoms_landsat)
+anoms_landsat = ee.ImageCollection(anoms_landsat).map(function(i){
+  var out = i.select("NIRV_1").subtract(i.select("NIRV")).rename("NIRV_anom");
+  out = out.copyProperties(i)
+
+  return(out)
+})
+print('anoms_landsat',anoms_landsat)
+
+Map.addLayer(anoms_landsat//.filter(ee.Filter.eq('month',7)) 
+                          //.filter(ee.Filter.eq('year',2019))
+                          , 
+   {min:-0.1,max:0.1,bands:['NIRV_anom'],palette:['red','black','blue']}, 
+            "anoms_landsat",false)
+
+
+var multiband = anoms_landsat.toBands()
+multiband = ee.Image(multiband)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:roi_name+"_"+var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:file_name,
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:dem, 
+  description:roi_name+"_dem",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:roi_name+"_dem-h",
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:mtpi, 
+  description:roi_name+"_mtpi_srtm",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:roi_name+"_mtpi_srtm",
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:flow_accum, 
+  description:roi_name+"_flow_accum",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:roi_name+"_flow_accum",
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:landforms, 
+  description:roi_name+"_landforms",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:roi_name+"_landforms",
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:terrain, 
+  description:roi_name+"_aspect",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:roi_name+"_aspect",
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+
+// Map.addLayer(norms,
+//   {bands:['NIRV'], min:0, max:0.3, 
+//   palette:["#440154", "#3E4B89", "#25848E", "#38B977", "#BBDF27"]}, 
+//   'L8 norms',false)  
+// Map.addLayer(anoms_landsat, {min:-0.1,max:0.2,bands:['NIRV_anom'],palette:['red','black','blue']}, 
+//             "anoms_landsat",false)
+
+// var tmp_l7 = l7.filterDate("2017-01-01","2017-12-31")
+//               .map(cloudMaskL457)
+//               .map(function(i){
+//                 var out = i.normalizedDifference(['B4','B3']).rename('NDVI')
+//                 return(i.addBands(out))
+//                               }
+//                     )
+//                 .map(function(i){
+//                   var out = i.select("B4").multiply(i.select("NDVI")).rename("NIRV")
+//                   return(i.addBands(out))
+//                 })
+//               .mean();
+
+// var tmp_l8 = l8.filterDate("2017-01-01","2017-12-31")
+//               .map(maskL8sr)
+//               .map(function(i){
+//                 var out = i.normalizedDifference(['B5','B4']).rename('NDVI')
+//                 return(i.addBands(out))
+//                               }
+//                     )
+//               .map(function(i){
+//                   var out = i.select("B5").multiply(i.select("NDVI")).rename("NIRV")
+//                   return(i.addBands(out))
+//                 })
+//               .mean();
+
+// var tmp_s2 = s2.filterDate("2017-01-01","2017-12-31")
+//               .map(maskS2clouds)
+//               .map(function(i){
+//                 var out = i.normalizedDifference(['B8','B4']).rename('NDVI')
+//                 return(i.addBands(out))
+//                               }
+//                     )
+//               .mean();
+
+
+
+
+
+
+
+
+
+
+// Map.addLayer(tmp_l7,
+//   {bands:['NIRV'], min:0, max:0.3, 
+//   palette:["#440154", "#3E4B89", "#25848E", "#38B977", "#BBDF27"]}, 
+//   'tmp_l7')
+// Map.addLayer(tmp_l8,
+//   {bands:['NIRV'], min:0, max:0.3, 
+//   palette:["#440154", "#3E4B89", "#25848E", "#38B977", "#BBDF27"]}, 
+//   'tmp_l8')  
+// Map.addLayer(tmp_s2,
+//   {bands:['NDVI'], min:0.3, max:1, 
+//   palette:["#440154", "#3E4B89", "#25848E", "#38B977", "#BBDF27"]}, 
+//   'tmp_s2',false)

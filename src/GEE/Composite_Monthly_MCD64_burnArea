@@ -1,0 +1,102 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mod = ee.ImageCollection("MODIS/006/MCD64A1"),
+    firms = ee.ImageCollection("FIRMS"),
+    lc = ee.ImageCollection("MODIS/006/MCD12Q1"),
+    grid = ee.FeatureCollection("users/srifai/era5_grid"),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6"),
+    mod_ba = ee.ImageCollection("MODIS/006/MCD64A1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** OPTIONS ***
+//**************************************************************************************************
+var startyear = 2019; 
+var endyear = 2019;
+var startDate=ee.Date.fromYMD(startyear,01,01)
+var endDate=ee.Date.fromYMD(endyear+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(startyear,endyear);
+
+
+
+//**************************************************************************************************
+//*** DEFINE FUNCTIONS ***
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    return image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+};
+
+var add_SMapPeriod = function(image){
+  var bin = getQABits(image.select('QA'), 2,2,'SMP'); 
+  return(image.addBands(bin))
+}
+var add_valid = function(image){
+  var bin = getQABits(image.select('QA'), 1,1,'valid'); 
+  var burn_area = image.select('BurnDate').gt(0).and(bin.eq(1)).eq(1)
+  burn_area = burn_area.rename('burn_area')
+  var burn_area2 = ee.Image.constant(0).add(burn_area.gte(1)).unmask(0)
+  burn_area2 = burn_area2.rename('burn_area')
+  return(burn_area2.addBands(bin.select('valid')))
+  // return(image.addBands(bin.select('valid')).addBands(burn_area2))
+}
+//**************************************************************************************************
+//*** SECTION END ***
+//**************************************************************************************************
+
+ 
+//**************************************************************************************************
+//*** DEFINE MASKS ***
+//**************************************************************************************************
+// base mask from gfc where canopy cover is > 25% and it had not been deforested prior to 2003. Then buffered
+var base_mask = gfc.select('treecover2000').gte(25).and(gfc.select('loss').lte(3)).focal_min(1.5,null,'pixels',2)
+
+
+// Map.addLayer(forest_e, {palette:['black','red']},'forest_e',false)
+// Map.addLayer(forest,null,'forest',false); 
+// Map.addLayer(base_mask,null,'base_mask');
+//**************************************************************************************************
+//*** SECTION END ***
+//**************************************************************************************************
+
+
+//**************************************************************************************************
+//*** Aggregate monthly fire ***
+//**************************************************************************************************
+
+var ba_ym =  ee.ImageCollection.fromImages(
+  years.map(function (y) {
+     return months.map(function(m) {
+        // var days = getDaysInMonth(y,m) // Get List of days for each month
+        // return days.map(function(d) {
+        var forest = ee.Image(lc.filter(ee.Filter.calendarRange(y,y,'year')).select("LC_Type1").mean().eq(2)); 
+        var forest_e = forest.focal_min(2,null,'pixels',2); 
+        var full_mask = base_mask.and(forest_e.eq(1));
+
+        var ba_filtered_monthly = mod_ba.filter(ee.Filter.calendarRange(y, y, 'year'))
+                    .filter(ee.Filter.calendarRange(m, m, 'month'))
+                    .map(add_valid)
+                    // .filter(ee.Filter.calendarRange(d, d, 'day_of_month'))
+                    .select(["burn_area","valid"]) //
+                    .first()
+        // firms_filtered_monthly = mask_forest(ee.Image(firms_filtered_monthly),ee.Number(y));
+        ba_filtered_monthly = ee.Image(ba_filtered_monthly).mask(full_mask); 
+        return ba_filtered_monthly.set('year', y)
+              .set('month', m)
+              .set('day', 15)
+              .set('system:time_start', ee.Date.fromYMD(y, m, 15));
+                        
+    // });
+    });
+  }).flatten()
+);
+//**************************************************************************************************
+//*** SECTION END ***
+//**************************************************************************************************
+
+Map.addLayer(ba_ym)

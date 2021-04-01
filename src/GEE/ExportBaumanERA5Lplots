@@ -1,0 +1,23 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("users/srifai/bauman_australia_plots"),
+    e5 = ee.ImageCollection("ECMWF/ERA5_LAND/MONTHLY");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
+var data = e5.map(function(i){
+  var out = i.reduceRegions(
+     {collection:table,
+     reducer:'mean'});
+  return(out)})
+
+data=data.flatten();
+data = data.map(function(f){return f.select(['.*'],null, false)});
+
+Export.table.toDrive({
+  collection: data, 
+  description: 'ERA5_Oz',
+  folder:"ee_exports_bauman",
+  fileNamePrefix:"ERA5L_test",
+  fileFormat:'csv'
+})
+  // collection, description, folder, fileNamePrefix, fileFormat, selectors)

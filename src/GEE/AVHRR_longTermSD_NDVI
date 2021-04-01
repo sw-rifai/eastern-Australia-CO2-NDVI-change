@@ -1,0 +1,49 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var cdr = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  var ch_1_5_BitMask = Math.pow(2, 7);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+            .and(
+              qa.bitwiseAnd(shadowBitMask).eq(0))
+              // .and(
+              // qa.bitwiseAnd(ch_1_5_BitMask).eq(0));
+  // var mask_2 = qa.bitwiseAnd(ch_1_5_BitMask).neq(0)
+  image = image.updateMask(mask);
+  // image = image.updateMask(mask_2); 
+  // image = image.updateMask(brdfBitMask.eq(0))
+
+  // Return the masked data.
+  var out = image.select(["NDVI"],['ndvi']).multiply(0.0001)
+  return(out); 
+}
+
+
+var sd = cdr.filterDate("1982-01-01","2000-12-01")
+            .map(qualityFlag)
+            .reduce(ee.Reducer.stdDev()); 
+// Map.addLayer(sd,{min:0,max:0.1,palette:['black','purple','red','orange','yellow']})
+
+
+var roi = ee.Geometry.Rectangle([136, -44, 154, -11])
+roi = roi.buffer(50000)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:sd, 
+  description:"sd_of_longterm_NDVI",
+  folder:"AVHRR_CDRv5_VI", 
+  fileNamePrefix:"AVHRR_longTermSdNDVI_"+"EastOz_1982_2000", // Relatively stable period of Solar Zenith Angle
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:15000000
+  })

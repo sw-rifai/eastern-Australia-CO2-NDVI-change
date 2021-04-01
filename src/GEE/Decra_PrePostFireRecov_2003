@@ -1,0 +1,189 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([153.28439783139595, -29.60940923233875]),
+    l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    l5 = ee.ImageCollection("LANDSAT/LT05/C01/T1_SR"),
+    roi2 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.Point([145.63147623201422, -37.43766254148894]),
+    resolve = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    roi_export = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[145.02662180124503, -37.25234147098301],
+          [145.02662180124503, -37.51967664140292],
+          [145.40084360300284, -37.51967664140292],
+          [145.40084360300284, -37.25234147098301]]], null, false),
+    act = 
+    /* color: #ffc82d */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[148.82936813491833, -35.47896492653641],
+          [148.82936813491833, -35.64346733634119],
+          [149.07415725845348, -35.64346733634119],
+          [149.07415725845348, -35.47896492653641]]], null, false),
+    l7 = ee.ImageCollection("LANDSAT/LE07/C01/T1_SR"),
+    mod15 = ee.ImageCollection("MODIS/006/MOD15A2H"),
+    roi_L = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([148.95300416823898, -35.61137997218059]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var fireDates = ee.DateRange("2002-11-01","2003-01-31")
+print(fireDates.start())
+
+var b2003 = ba.filterDate("2002-11-01","2003-01-31")
+              // .max(); 
+// doy 259              
+var l7_pre = l7.filterDate("2002-01-01","2002-06-01")
+               .filterBounds(roi_L)
+              .filterMetadata('CLOUD_COVER','less_than',25)
+              // .filter(ee.Filter.calendarRange(1,365,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+              .first();
+print(l7_pre)
+
+var l5_post = l5.filterDate("2003-01-01","2003-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+
+
+// var l7_post = l7.filterDate("2003-01-01","2003-12-31")
+//               .filterBounds(roi_L)
+//               .filterMetadata('CLOUD_COVER','less_than',25)
+//               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+//               .sort("CLOUD_COVER", true)
+//               .first();
+
+var l5_post2 = l5.filterDate("2004-01-01","2004-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+var l5_post3 = l5.filterDate("2005-01-01","2005-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+var l5_post4 = l5.filterDate("2006-01-01","2006-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+var l5_post5 = l5.filterDate("2007-01-01","2007-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+var l5_post6 = l5.filterDate("2008-01-01","2008-12-31")
+               .filterBounds(roi_L)
+               .filterMetadata('CLOUD_COVER','less_than',25)
+               .filter(ee.Filter.calendarRange(1,258,'day_of_year'))
+               .sort("CLOUD_COVER", true)
+               .first();
+
+               
+// var l7_post = l7.filterDate("2010-01-01","2010-12-31")
+//               .filterBounds(roi2)
+//               .filterMetadata('CLOUD_COVER','less_than',25)
+//               .filter(ee.Filter.calendarRange(1,365,'day_of_year'))
+//               .sort("CLOUD_COVER", true)
+//               .first();
+               
+Map.addLayer(b2003,null,'b2003',false)
+Map.addLayer(l7_pre,{min:0, max:5000, bands:['B5','B4','B3']},'l7_pre',false)
+Map.addLayer(l5_post,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post',false)
+Map.addLayer(l5_post2,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post2',false)
+Map.addLayer(l5_post3,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post3',false)
+Map.addLayer(l5_post4,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post4',false)
+Map.addLayer(l5_post5,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post5',false)
+Map.addLayer(l5_post6,{min:0, max:5000, bands:['B5','B4','B3']},'l5_post6',false)
+
+
+// Map.addLayer(resolve,null,'resolve',false)
+Map.addLayer(nvis.randomVisualizer(),null,'nvis',false)
+
+/**
+ * 
+ * shows fire impact: LANDSAT/LT05/C01/T1_SR/LT05_092086_20090216
+ * **/
+
+// Pre
+var fn_pre = l7_pre.get('LANDSAT_ID').getInfo()
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:ee.Image(l7_pre).toInt(),
+folder:"decra_figures",
+fileNamePrefix:fn_pre,
+region:act,
+scale:30
+})
+
+// // Post
+var fn_post = l5_post.get('LANDSAT_ID').getInfo()
+print(fn_post)
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:ee.Image(l5_post).toInt(),
+description:'post',
+folder:"decra_figures",
+fileNamePrefix:fn_post,
+region:act,
+scale:30
+})
+
+// Post2
+var fn_post2 = l5_post2.get('LANDSAT_ID').getInfo()
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:ee.Image(l5_post2).toInt(),
+description:'post2',
+folder:"decra_figures",
+fileNamePrefix:fn_post2,
+region:act,
+scale:30
+})
+
+
+// Post3
+var fn_post3 = l5_post3.get('LANDSAT_ID').getInfo()
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:ee.Image(l5_post3).toInt(),
+description:'post3',
+folder:"decra_figures",
+fileNamePrefix:fn_post3,
+region:act,
+scale:30
+})
+
+
+// Post3
+var fn_post6 = l5_post6.get('LANDSAT_ID').getInfo()
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:ee.Image(l5_post6).toInt(),
+description:'post6',
+folder:"decra_figures",
+fileNamePrefix:fn_post6,
+region:act,
+scale:30
+})

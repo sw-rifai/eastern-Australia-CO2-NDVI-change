@@ -1,0 +1,107 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var cdr = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//******************************************************************
+// FUNCTIONS
+ function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0).and(
+             qa.bitwiseAnd(shadowBitMask).eq(0)).and(
+            qa.bitwiseAnd(brdfBitMask).eq(0));
+
+  // Return the masked data.
+  return image.updateMask(mask);
+}
+
+
+function createTimeBand(img) {
+  var year = img.date().difference(ee.Date('2000-01-01'), 'year');
+  return ee.Image(year).float().addBands(img);
+}
+
+function calcEVI2_avhrr(img){
+  // var ndvi1999 = landsat1999.select('B4').subtract(landsat1999.select('B3'))
+  //             .divide(landsat1999.select('B4').add(landsat1999.select('B3')));
+
+  // EVI2=2.5*((NIR-Red)/(NIR+2.4*Red+1))
+  var time = img.select('constant');
+  img = img.select(['SREFL_CH1','SREFL_CH2'],['Red','NIR'])
+            .multiply(0.0001);
+  var out = img.select('NIR').subtract(img.select('Red')).multiply(2.5)
+     .divide(img.select('NIR').add(img.select('Red').multiply(2.4)).add(1))
+  return(out.select(['NIR'],['EVI2']).addBands(time))
+}
+//******************************************************************
+
+
+
+//******************************************************************
+//*** MAIN
+//******************************************************************
+var country = "Australia"
+
+
+var roi = lsib.filterMetadata("country_na","equals",country)
+// var fit_evi2 = sr.filterDate('1982-01-01','2018-12-31')
+//                 .map(function(i){
+//                   return(i.clip(roi))
+//                 })
+//                 .map(qualityFlag)
+//                 .map(createTimeBand)
+//                 .map(calcEVI2_avhrr)
+//                 .map(function(i){
+//                   return(i.select(['constant','EVI2']))
+//                 })
+//                 .reduce(ee.Reducer.linearFit())
+// Map.addLayer(test,{min:0,max:0.7,palette:['black','green']},'test')
+
+var fit = cdr.filterDate('2000-06-01','2003-6-01')
+                .map(function(i){
+                  return(i.clip(roi))
+                })
+                .map(qualityFlag)
+                .map(createTimeBand)
+                .map(function(i){
+                  return(i.select(['constant','NDVI']))
+                })
+                .reduce(ee.Reducer.linearFit())
+
+// Mappy stuff
+// Map.centerObject(roi); 
+Map.addLayer(roi,null,country, false)
+Map.addLayer(fit,
+        {min: -100, max: [100], 
+        bands: ['scale'], 
+        palette:['#c15326','black','#049b11']
+        },
+        'NDVI Trend (unit/yr)',true);
+
+
+// Export.image.toAsset( //image, description, assetId, pyramidingPolicy, dimensions, region, scale, crs, crsTransform, maxPixels)
+// {
+//   image: fit, 
+//   description: 'NDVI_trend_2000_2018',
+//   assetId:'NDVI_trend_AVHRR_CDR_2000_2018',
+//   region:roi, 
+//   scale: 10000
+// }
+// )
+
+// Export.image.toAsset( //image, description, assetId, pyramidingPolicy, dimensions, region, scale, crs, crsTransform, maxPixels)
+// {
+//   image: fit_evi2, 
+//   description: 'EVI2_trend_1982_2018',
+//   assetId:'EVI2_trend_AVHRR_CDR_1982_2018',
+//   region:roi, 
+//   scale: 10000
+// }
+// )

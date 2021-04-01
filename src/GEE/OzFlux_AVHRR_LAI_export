@@ -1,0 +1,120 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var cdr = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Options 
+var product_name = "NOAA_CDR_AVHRR_LAI_v5"
+var roi_name = "OzFlux_subset_cdrA3_LAI"
+var start_date = "1981-07-01"
+var end_date = "2020-09-01"
+var point_buffer_size = 1000; // meters
+
+// Manually constructing feature collection because it's relatively small
+var p1 = ee.Feature(ee.Geometry.Point([131.1523 ,-12.4943]),{site:'Howard Springs'})
+var p2 = ee.Feature(ee.Geometry.Point([133.3502 ,-17.1507]),{site:'Sturt Plains'})
+var p3 = ee.Feature(ee.Geometry.Point([131.3881 ,-14.1592]),{site:'Daly River Uncleared'})
+var p4 = ee.Feature(ee.Geometry.Point([132.3706 ,-15.2588]),{site:'Dry River'})
+var p5 = ee.Feature(ee.Geometry.Point([130.7945 ,-13.1790]),{site:'Litchfield'})
+var p6 = ee.Feature(ee.Geometry.Point([133.6400 ,-22.2870]),{site:'Ti Tree East'})
+var p7 = ee.Feature(ee.Geometry.Point([133.2493 ,-22.2828]),{site:'Alice Springs'})
+var p8 = ee.Feature(ee.Geometry.Point([148.1517,-35.6566]),{site:'Tumbarumba'})
+var p9 = ee.Feature(ee.Geometry.Point([144.0944,-37.4222]),{site:'Wombat'})
+
+
+var roi = ee.FeatureCollection([p1,p2,p3,p4,p5,p6,p7,p8,p9])
+roi = roi.map(function(f){
+  return(f.buffer(point_buffer_size))})
+
+Map.addLayer(roi,{color:'red'}); 
+Map.centerObject(roi)
+
+// Functions *********************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+
+function qa_flag_cdr(image){  // filtering for best quality retrievals 
+  var good = getQABits(image.select("QA"),0,1,'valid')
+                        .select('valid').eq(0); 
+  var out = image.updateMask(good).select(['LAI']).multiply(0.001); 
+  out = out.copyProperties(image,['system:time_start'])
+
+  return(out)
+}
+
+
+// Prep data ********************************************************
+
+// Why add an extra image to the beginning of the collection? 
+// It's basically needed to instantiate the columns for the reducer. 
+// If the first image is null, the reducer has nothing to 'reduce' on 
+// so it doesn't create the columns, and then proceeds to reduce the 
+// other values, but doesn't put them in the out put.  
+var blank = ee.ImageCollection(cdr)
+              .filterDate(start_date,end_date)
+              .first()
+              .unmask()
+              .copyProperties(ee.Image(ee.ImageCollection(cdr).first()),['system:time_start'])
+blank = ee.ImageCollection([blank])
+                          .map(function(i){
+                          var out = i.select('LAI')
+                          return(out)})
+// print("blank",blank)
+// print("sr.first()",ee.Image(sr.first()))
+
+
+// Processing ************************************************************
+var cdr_2 = cdr.filterDate(start_date, end_date);
+
+cdr_2 = cdr_2.map(qa_flag_cdr) // apply masks
+cdr_2 = ee.ImageCollection(ee.ImageCollection(blank).merge(cdr_2));
+// print('sr2',sr2)
+
+// var cdr_3 = cdr_2.map(function(i){
+//         var out1 = i.normalizedDifference(['nir','red']).rename('ndvi')
+//         var out2 = out1.select('ndvi').multiply(i.select('nir')).rename('nirv')
+//         var out = i.addBands(out1.select('ndvi'))
+//         out = out.addBands(out2.select('nirv'))
+//         return(out);
+//       })
+// print("sr3",sr3)
+// Map.addLayer(ee.Image(sr3.first()),null,"sr3")
+
+var data = cdr_2.map(function(image) {
+  return image.reduceRegions({
+    collection: roi, 
+    reducer: ee.Reducer.mean(), 
+    scale: 500
+  })
+    .map(function(f) {
+    return f.set({
+      date: image.date().format()
+    })
+  })
+}).flatten()
+
+// print(data)
+
+// Sets geoJSON column to null. Increases file size if kept
+// Reduces file size; important if working w/large feature collection
+data = data.map(function(f){return f.select(['.*'],null, false)}); 
+// print(data)
+
+var fileNamePrefix = product_name+"_"+roi_name+"_"+
+                      start_date+"_"+end_date; // construct file name from defs at the top
+Export.table.toDrive(//collection, description, folder, fileNamePrefix, fileFormat, selectors)
+{
+  collection:data,
+  description:product_name,
+  folder:"Oz_misc_data", // replace with the name of a folder in your google drive
+  fileNamePrefix:fileNamePrefix,
+  fileFormat:"csv"
+})

@@ -1,0 +1,108 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var country = "Australia"
+var start_year = 1982; 
+var end_year = 2019;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(start_year,end_year);
+var ic = lai; 
+var var_name = "LAI"
+
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+ function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0).and(
+             qa.bitwiseAnd(shadowBitMask).eq(0)).and(
+            qa.bitwiseAnd(brdfBitMask).eq(0));
+
+  // Return the masked data.
+  return image.updateMask(mask);
+}
+
+//******************************************************************
+// MAIN
+//******************************************************************
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+  
+    return ic.filter(ee.Filter.calendarRange(y, y, 'year'))
+             .filter(ee.Filter.calendarRange(m, m, 'month'))
+             .map(function(image){
+               return(getQABits(image, 0, 1, 'qual'))
+             })
+            .map(function(i){
+              return(i.addBands(i.select(var_name).multiply(0.001)))
+            })
+            .map(function(i){
+              var bad = i.select("qual").neq(0); 
+              var out = i.updateMask(bad); 
+              return(out); 
+            }) 
+            .map(function(i){
+              return(i.select("LAI_1").rename(var_name))
+            })
+            .median()
+            .clip(roi)
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+var multiband = ee.Image().select()
+var multiband = ee.Image(tmp.iterate(function(image, result) {
+   return ee.Image(result).addBands(image)
+}, multiband))
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+// Map.addLayer(multiband); 
+Map.addLayer(roi)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"AVHRR_LAI_FAPAR_CDR_V5", 
+  fileNamePrefix:"AVHRR_LAI_monMedian_"+"_"+start_year+"_"+end_year,
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:15000000
+  })

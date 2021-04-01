@@ -1,0 +1,130 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    avhrr_ndvi = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var country = "Australia"
+var start_year = 1982; 
+var end_year = 2019;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(start_year,end_year);
+var ic = avhrr_ndvi; 
+var var_name = "NDVI"
+
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+ function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  var ch_1_5_BitMask = Math.pow(2, 7);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+            .and(
+              qa.bitwiseAnd(shadowBitMask).eq(0))
+              // .and(
+              // qa.bitwiseAnd(ch_1_5_BitMask).eq(0));
+  // var mask_2 = qa.bitwiseAnd(ch_1_5_BitMask).neq(0)
+  image = image.updateMask(mask);
+  // image = image.updateMask(mask_2); 
+  // image = image.updateMask(brdfBitMask.eq(0))
+
+  // Return the masked data.
+  return(image); 
+  // return(qa.bitwiseAnd(brdfBitMask).eq(0));
+}
+
+function calcEVI2_avhrr(img){
+  // var ndvi1999 = landsat1999.select('B4').subtract(landsat1999.select('B3'))
+  //             .divide(landsat1999.select('B4').add(landsat1999.select('B3')));
+
+  // EVI2=2.5*((NIR-Red)/(NIR+2.4*Red+1))
+  // var time = img.select('constant');
+  img = img.select(['SREFL_CH1','SREFL_CH2'],['Red','NIR'])
+            .multiply(0.0001);
+  var out = img.select('NIR').subtract(img.select('Red')).multiply(2.5)
+     .divide(img.select('NIR').add(img.select('Red').multiply(2.4)).add(1))
+  return(out.select(['NIR'],['EVI2']))
+}
+
+//******************************************************************
+// MAIN
+//******************************************************************
+// var roi = lsib.filterMetadata("country_na","equals",country)
+//               .first()
+//               .geometry()
+//               .bounds()
+
+var roi = ee.Geometry.Rectangle([112, -44, 154.5, -10.45])
+roi = roi.buffer(5000)
+Map.addLayer(roi)
+// var tmp = cdr.filterDate('2010-01-01','2010-02-01')
+//             .map(qualityFlag)
+//             // .map(calcEVI2_avhrr)
+//             // .mean()
+//             // .clip(roi)
+// Map.addLayer(tmp.first())
+
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+  
+    return ic.filter(ee.Filter.calendarRange(y, y, 'year'))
+            .filter(ee.Filter.calendarRange(m, m, 'month'))
+            .map(qualityFlag)
+            .map(function(i){
+              var out2 = i.select("NDVI").multiply(0.0001)
+              return(out2); 
+            })
+            .mean()
+            .clip(roi)
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+var multiband = ee.Image().select()
+var multiband = ee.Image(tmp.iterate(function(image, result) {
+  return ee.Image(result).addBands(image)
+}, multiband))
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+// Map.addLayer(multiband, null, false); 
+// Map.addLayer(roi)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"AVHRR_NDVI_CDR_V5", 
+  fileNamePrefix:"AVHRR_NDVI_monmean_"+start_year+"_"+end_year,
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:30000000
+  })

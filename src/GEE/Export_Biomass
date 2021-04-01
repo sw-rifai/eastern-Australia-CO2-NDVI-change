@@ -1,0 +1,25 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var vcf = ee.ImageCollection("MODIS/006/MOD44B"),
+    mcd64 = ee.ImageCollection("MODIS/006/MCD64A1"),
+    avhrr = ee.ImageCollection("NOAA/CDR/AVHRR/SR/V5"),
+    biomass = ee.ImageCollection("NASA/ORNL/biomass_carbon_density/v1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+biomass = ee.Image(biomass.first())
+
+var roi = ee.Geometry.Rectangle([112, -42.5, 154, -10.5])
+roi = roi.buffer(50000)
+Map.addLayer(roi)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:biomass.select('agb'), 
+  description:"biomass_export",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"WCMC_carbon_biomass_25km",
+  region:roi,
+  scale:25000,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })
+

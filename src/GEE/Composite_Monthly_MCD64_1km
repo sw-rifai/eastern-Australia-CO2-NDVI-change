@@ -1,0 +1,136 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var aqua = ee.ImageCollection("MODIS/006/MYD11A2"),
+    lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    aqua_daily = ee.ImageCollection("MODIS/006/MYD11A1"),
+    mod_2 = ee.ImageCollection("MODIS/006/MODOCGA"),
+    mod_1 = ee.ImageCollection("MODIS/006/MOD09GA"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[144.74606472188913, -38.65956147072381],
+          [145.60299831563913, -39.49534964722019],
+          [146.54782253438913, -39.20650424627326],
+          [150.08542019063913, -37.84861381953949],
+          [152.94186550313913, -31.41905178392264],
+          [150.48092800313913, -31.3627820092536],
+          [148.17379909688913, -31.56893948719329],
+          [147.84420925313913, -35.12866783661259],
+          [144.98776394063913, -36.9233262785569],
+          [144.74606472188913, -37.65751287379527]]]),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2019_v1_7"),
+    terra_daily = ee.ImageCollection("MODIS/006/MOD11A1"),
+    mcd64 = ee.ImageCollection("MODIS/006/MCD64A1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var scale_m = 1000; // meters
+var country = "Australia"
+var min_date = "2001-01-01" // Look for product start date
+var max_date = "2020-06-01" // Look for product end date
+var start_year = 2001; 
+var end_year = 2020; 
+var years = ee.List.sequence(start_year,end_year,1); 
+var months = ee.List.sequence(1,12,1); 
+var ic = aqua; 
+var var_name = "LST_Day_1km"
+var roi_name = "SE_coastal"   //
+
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+ function qualityFlag_MYD11A2(image) {
+  var qa = getQABits(image.select('QC_Day'), 0,1,"good").eq(0);
+  return image.updateMask(qa.select('good'));
+}
+
+var mask_non_trees = function(i){
+  var non_tree = ee.Image(cgls.first())
+                   .select('tree-coverfraction')
+                   .gte(75); // 50% is arbitrary;
+  var out = i.updateMask(non_tree); 
+  return(out); 
+}
+
+
+//******************************************************************
+// MAIN
+//******************************************************************
+var dates = years.map(function(y){
+  return(months.map(function(m){
+    return(ee.Date.fromYMD(y,m,1))
+  }))
+})
+dates = dates.flatten()
+dates = dates.filter(ee.Filter.lessThanOrEquals('item',ee.Date(max_date)))
+dates = dates.filter(ee.Filter.greaterThanOrEquals('item',ee.Date(min_date)))
+print(dates)
+
+
+
+var forest_mask = gfc.select("treecover2000").gte(25); 
+Map.addLayer(forest_mask,{min:0,max:1})
+// var test = ee.ImageCollection.fromImages(dates.map(function(d){
+//   var date_focal = ee.Date(d)
+//   var dateFilter = ee.Filter.date(date_focal, date_focal.advance(1,'month'));
+
+//   var im_dict = ee.Image(mcd64.filter(dateFilter).first());
+  
+//   var out = mcd64.filter(dateFilter)
+//             .map(function(i){
+//               var out = i.select("BurnDate")
+//                 return(out)
+//             })
+//             .max()
+
+//   out = ee.Image(out); 
+//   // out = out.set('system:time_start', ee.Date(date_focal));
+//   // out = out.set('system:time_end', ee.Date(date_focal).advance(28,'days'));
+//   out = out.copyProperties(im_dict,["system:index"])
+//   out = out.copyProperties(im_dict,["system:time_start"])
+//   out = out.copyProperties(im_dict,["system:time_end"])
+//   out = ee.Image(out); 
+//   out = out.updateMask(forest_mask).clip(roi)
+  
+//   return(out)
+// }).flatten()); 
+// print(test)
+
+
+var out = mcd64.filterDate(min_date,max_date)
+               .select("BurnDate")
+var multiband_mcd64 = out.toBands()
+multiband_mcd64 = ee.Image(multiband_mcd64).clip(roi).updateMask(forest_mask)
+
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+// Map.addLayer(multiband_lst,{palette:['black','red','yellow'], min:35, max:45}); 
+// Map.addLayer(roi)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband_mcd64, 
+  description:"MCD64_1km_"+roi_name+"_"+min_date+"_"+max_date,
+  folder:"MCD64", 
+  fileNamePrefix:"MCD64_1km_"+roi_name+"_"+min_date+"_"+max_date,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:50596711
+  })
+

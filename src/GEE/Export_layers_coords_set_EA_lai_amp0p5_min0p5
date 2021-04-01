@@ -1,0 +1,24 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var lc = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6"),
+    l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    coords = ee.FeatureCollection("users/srifai/Oz_coords_set_EA_lai_amp0p5_min0p5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+lc = ee.Image(lc.first());
+var im = l8.filterDate('2019-12-01',"2020-02-01")
+           .map(function(i){
+             var out = i.select(["B6","B5","B4"])
+                        .multiply(0.0001); 
+             return(out)
+           })
+
+
+Map.addLayer(lc, null, 'lc', false)
+Map.addLayer(gfc.select('treecover2000'),
+        {palette:["black","green"], min:0, max:100},
+        "gfc 2000", false)
+Map.addLayer(im, {bands:["B6","B5","B4"], 
+                  min:[0,0,0],
+                  max:[0.4,0.4,04]
+                   },"l8")
+Map.addLayer(coords, {color:'red'}, "coords",false)

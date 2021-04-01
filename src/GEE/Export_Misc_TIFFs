@@ -1,0 +1,108 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ic = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    slga = ee.ImageCollection("CSIRO/SLGA"),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6"),
+    lai = ee.ImageCollection("MODIS/006/MCD15A3H"),
+    mcd43a4 = ee.ImageCollection("MODIS/006/MCD43A4");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var Oz = lsib.filterMetadata("country_na","equals","Australia")
+             .geometry()
+             .bounds(); 
+
+var lc = ee.Image(ic.first());
+// print(lc)
+
+var out = ee.Image(slga.first().select(["AWC.*"]).select([".*EV.*"]))
+// Map.addLayer(out, 
+// {bands:["AWC_000_005_EV","AWC_030_060_EV","AWC_100_200_EV"], min:5,max:25},'slga',false)             
+
+
+
+
+// Export.image.toDrive( //image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+//   {
+//     image:lc, 
+//     description:"export_copernicus_lc",
+//     folder:"Oz_misc_data",
+//     fileNamePrefix:"Oz_CGLS-LC100_500m",
+//     region:Oz, 
+//     scale:500, 
+//     crs:"EPSG:4326", 
+//     maxPixels: 200e6
+//   }
+// )
+
+Map.addLayer(gfc,{bands:['loss'],min:0,max:1},'gfc'); 
+
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+lai = lai.map(function(i){
+  var good = getQABits(i.select("FparLai_QC"),0,0,'good').select('good').eq(0)
+  var out = i.updateMask(good); 
+  return(out)
+})
+
+// Map.addLayer(lai.select('Lai'),null,'Lai',false)
+
+function mask_deforestation(i){
+  // Mask deforestation between 2000-2018
+  var gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6")
+  var focal_year = i.date().get('year')
+  var base_mask = gfc.expression(
+  "(lossyear == focal_year) || (focal_year == (lossyear+1)) || (focal_year == (lossyear+2))",{
+      'loss':gfc.select("loss"),
+      'lossyear':gfc.select("lossyear").add(2000),
+      'focal_year':focal_year
+    }).neq(1)
+  var out = i.updateMask(base_mask)
+  return(out); 
+}
+
+// function mask_forest(i){ // fixed it to mask for forest cover in 2016
+//   return(ee.Image(i.mask(fc_25.where(loss.eq(1).and(ly.lte(2016)),0))))}; 
+
+// print(ee.Image(mcd43a4.first()).date().get('year'))
+var lai2 = lai.filterDate("2016-11-01","2017-05-01").map(function(i){
+  var good = getQABits(i.select("FparLai_QC"),0,0,'good').select('good').eq(0)
+  var out = i.updateMask(good); 
+    return(out)})
+    .map(mask_deforestation)
+//               .map(function(i){
+//                 return(i.select("Lai").multiply(0.1))
+//               })
+
+Map.addLayer(lai2,null,'Lai2',false)
+
+var tmp = ee.List(lai.get("system:id"))
+print(tmp)
+
+// var gfc = ee.Image("UMD/hansen/global_forest_change_2018_v1_6")
+// var lai3 = lai.filterDate("2016-06-21","2016-07-01").map(function(i){
+//   var good = getQABits(i.select("FparLai_QC"),0,0,'good').select('good').eq(0)
+//   var out = i.updateMask(good); 
+//     return(out)}).first()
+// // var focal_year = ee.Image(0).add(lai2.first().date().get('year')).rename("focal_year")
+// // lai3 = ee.Image(lai3); 
+// var focal_year = lai3.date().get('year')
+// print('focal_year', focal_year)
+// var base_mask = gfc.expression(
+//   "(lossyear == focal_year) || (focal_year == (lossyear+1)) || (focal_year == (lossyear+2))",{
+//   // "loss == 1 && lossyear >= focal_year && lossyear <= (focal_year+2)",{
+//     'loss':gfc.select("loss"),
+//     'lossyear':gfc.select("lossyear").add(2000),
+//     'focal_year':focal_year //.select("focal_year")
+//   }).neq(1)
+// Map.addLayer(base_mask,{min:0,max:1,palette:['black','white']},'base_mask')
+// Map.addLayer(lai3.updateMask(base_mask),null,'lai3',false)
+// // Map.addLayer(lai3,null,'lai3',false)

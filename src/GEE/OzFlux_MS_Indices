@@ -1,0 +1,210 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mcd43 = ee.ImageCollection("MODIS/006/MCD43A3"),
+    mcd43_qa = ee.ImageCollection("MODIS/006/MCD43A2"),
+    modo = ee.ImageCollection("MODIS/006/MODOCGA"),
+    mcd43a4 = ee.ImageCollection("MODIS/006/MCD43A4"),
+    mod09ga = ee.ImageCollection("MODIS/006/MOD09GA");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Options 
+var product_name = "MOD09"
+var roi_name = "OzFlux_subset_CCI_test"
+var start_date = "2009-01-01"
+var end_date = "2020-09-30"
+var point_buffer_size = 1000; // meters
+
+// Manually constructing feature collection because it's relatively small
+var p1 = ee.Feature(ee.Geometry.Point([131.1523 ,-12.4943]),{site:'Howard Springs'})
+var p2 = ee.Feature(ee.Geometry.Point([133.3502 ,-17.1507]),{site:'Sturt Plains'})
+var p3 = ee.Feature(ee.Geometry.Point([131.3881 ,-14.1592]),{site:'Daly River Uncleared'})
+var p4 = ee.Feature(ee.Geometry.Point([132.3706 ,-15.2588]),{site:'Dry River'})
+var p5 = ee.Feature(ee.Geometry.Point([130.7945 ,-13.1790]),{site:'Litchfield'})
+var p6 = ee.Feature(ee.Geometry.Point([133.6400 ,-22.2870]),{site:'Ti Tree East'})
+var p7 = ee.Feature(ee.Geometry.Point([133.2493 ,-22.2828]),{site:'Alice Springs'})
+var p8 = ee.Feature(ee.Geometry.Point([148.1517,-35.6566]),{site:'Tumbarumba'})
+var p9 = ee.Feature(ee.Geometry.Point([144.0944,-37.4222]),{site:'Wombat'})
+
+
+var roi = ee.FeatureCollection([p1,p2,p3,p4,p5,p6,p7,p8,p9])
+roi = roi.map(function(f){
+  return(f.buffer(point_buffer_size))})
+
+Map.addLayer(roi,{color:'red'}); 
+// Map.centerObject(roi)
+
+// Functions *********************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+var qa_flag_mcd = function(image){  // filtering for best quality retrievals 
+  var qa_red = getQABits(image
+                        .select("BRDF_Albedo_Band_Mandatory_Quality_Band1"),0,0,'valid_red')
+                        .select('valid_red').eq(0); 
+  var qa_nir = getQABits(image
+                        .select("BRDF_Albedo_Band_Mandatory_Quality_Band2"),0,0,'valid_nir')
+                        .select('valid_nir').eq(0);
+  var good = qa_red.add(qa_nir)
+  good = good.lte(0);
+  var out = image.updateMask(good).select(['red','nir']).multiply(0.0001); 
+  out = out.copyProperties(image,['system:time_start'])
+
+  return(out)
+}
+
+// var qa_flag_modo = function(image){  // filtering for best quality retrievals 
+//   var qa_b11 = getQABits(image
+//                         .select("QC_b8_15_1km"),12,15,'valid')
+//                         .select('valid').eq(0); 
+//   // var good = qa_b11.eq(0);
+//   // out = out.updateMask(image.select("sur_refl_b11").gt(0))
+//   var out = image//.updateMask(good)
+//                 .select(['sur_refl_b11']).multiply(0.0001); 
+//   out = out.copyProperties(image,['system:time_start'])
+
+//   return(out)
+// }
+
+var qa_flag_mod0CGA = function(image){  // filtering for best quality retrievals 
+  var mqa_b11 = getQABits(image
+                        .select("QC_b8_15_1km"),12,15,'valid')
+                        .select('valid').eq(0)                      
+  var good_b11 = image.select("sur_refl_b11").gt(0);
+  var high_b11 = image.select("sur_refl_b11").lt(1500)
+  var out = image//.updateMask(good)
+                 .select(['sur_refl_b.*']).multiply(0.001)
+                .updateMask(good_b11)
+                .updateMask(high_b11)
+                .updateMask(mqa_b11)
+  out = out.copyProperties(image,['system:time_start'])
+  return(out)
+}
+
+
+var qa_flag_mod09ga = function(i){
+  var mqa = getQABits(i.select("QC_500m"),0,1,'valid')
+                        .select('valid').eq(0)                      
+  var out = i.select(['sur_refl_b.*']).multiply(0.0001)
+              .updateMask(mqa)
+  out = out.copyProperties(i,['system:time_start'])
+  return(out)
+  
+}
+
+// Prep data ********************************************************
+// var mcd43a4 = ee.ImageCollection('MODIS/006/MCD43A4')
+//     .select(["Nadir_Reflectance_Band1","Nadir_Reflectance_Band2", 
+//     "BRDF_Albedo_Band_Mandatory_Quality_Band1",
+//     "BRDF_Albedo_Band_Mandatory_Quality_Band2"],
+//     ["red","nir",
+//     "BRDF_Albedo_Band_Mandatory_Quality_Band1",
+//     "BRDF_Albedo_Band_Mandatory_Quality_Band2"])
+//     .filterDate(start_date, end_date)
+//     .map(qa_flag_mcd);
+
+var mod09ga = ee.ImageCollection('MODIS/006/MOD09GA')
+    .filterDate(start_date, end_date)
+    .map(qa_flag_mod09ga)
+    .select(["sur_refl_b01","sur_refl_b02"],
+    ["red","nir"])
+
+
+var modo = ee.ImageCollection("MODIS/006/MODOCGA")
+             .filterDate(start_date, end_date)
+             .map(qa_flag_mod0CGA)
+            // .select(["sur_refl_b11", "QC_b8_15_1km"])
+
+// print("modo",modo.first())
+// Map.addLayer(modo)
+// Define an inner join.
+var innerJoin = ee.Join.inner();
+
+// Specify an equals filter for image timestamps.
+var filterTimeEq = ee.Filter.equals({
+    leftField: 'system:time_start',
+    rightField: 'system:time_start'
+   });
+
+var innerJoinedMODIS = innerJoin.apply(mod09ga, modo, filterTimeEq);
+
+var joinedMODIS = innerJoinedMODIS.map(function(feature) {
+  return ee.Image.cat(feature.get('primary'), feature.get('secondary'));
+});
+var sr = ee.ImageCollection(joinedMODIS)
+// print(sr)
+var blank_sr = ee.Image(sr.first())
+// print("sr.first()",blank_sr)
+
+// Why add an extra image to the beginning of the collection? 
+// It's basically needed to instantiate the columns for the reducer. 
+// If the first image is null, the reducer has nothing to 'reduce' on 
+// so it doesn't create the columns, and then proceeds to reduce the 
+// other values, but doesn't put them in the out put.  
+var blank = ee.ImageCollection(joinedMODIS)
+              .filterDate(start_date,end_date)
+              .first()
+              .unmask()
+              .copyProperties(ee.Image(ee.ImageCollection(joinedMODIS).first()),['system:time_start'])
+// print('blank',blank)
+blank = ee.ImageCollection([blank])
+                                  // .map(function(i){
+                                  // var out = i.subtract(999)
+                                  // return(out)})
+// print("blank",blank)
+// print("sr.first()",ee.Image(sr.first()))
+
+
+// Processing ************************************************************
+var sr2 = sr // apply masks
+sr2 = ee.ImageCollection(ee.ImageCollection(blank).merge(sr2));
+// print('sr2',sr2)
+
+var sr3 = sr2.map(function(i){
+        var out1 = i.normalizedDifference(['nir','red']).rename('ndvi')
+        var out2 = out1.select('ndvi').multiply(i.select('nir')).rename('nirv')
+        var out = i.addBands(out1.select('ndvi'))
+        out = out.addBands(out2.select('nirv'))
+        var out3= i.normalizedDifference(['sur_refl_b11','red']).rename('cci')
+        out = out.addBands(out3)
+        return(out);
+      })
+// print("sr3",sr3)
+// Map.addLayer(ee.Image(sr3.first()),null,"sr3")
+// Map.addLayer(sr3.select(['cci','ndvi']),null,"sr3")
+
+var data = sr3.map(function(image) {
+  return image.reduceRegions({
+    collection: roi, 
+    reducer: ee.Reducer.mean(), 
+    scale: 500
+  })
+    .map(function(f) {
+    return f.set({
+      date: image.date().format()
+    })
+  })
+}).flatten()
+
+print(data)
+
+// Sets geoJSON column to null. Increases file size if kept
+// Reduces file size; important if working w/large feature collection
+data = data.map(function(f){return f.select(['.*'],null, false)}); 
+
+
+var fileNamePrefix = product_name+"_"+roi_name;
+Export.table.toDrive(//collection, description, folder, fileNamePrefix, fileFormat, selectors)
+{
+  collection:data,
+  description:product_name,
+  folder:"Oz_misc_data", // replace with the name of a folder in your google drive
+  fileNamePrefix:fileNamePrefix,
+  fileFormat:"csv"
+})

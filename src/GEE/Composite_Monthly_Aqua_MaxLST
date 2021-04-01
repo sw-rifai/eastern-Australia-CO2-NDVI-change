@@ -1,0 +1,116 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var aqua = ee.ImageCollection("MODIS/006/MYD11A2"),
+    lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    aqua_daily = ee.ImageCollection("MODIS/006/MYD11A1"),
+    cgls = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+    
+    
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var country = "Australia"
+var start_year = 2002; 
+var end_year = 2003;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(start_year,end_year);
+var ic = aqua; 
+var var_name = "LST_Day_1km"
+
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+ function qualityFlag_MYD11A2(image) {
+  var qa = getQABits(image.select('QC_Day'), 0,1,"good").eq(0);
+  return image.updateMask(qa.select('good'));
+}
+
+var mask_non_trees = function(i){
+  var non_tree = ee.Image(cgls.first())
+                   .select('tree-coverfraction')
+                   .gte(75); // 50% is arbitrary;
+  var out = i.updateMask(non_tree); 
+  return(out); 
+}
+
+
+//******************************************************************
+// MAIN
+//******************************************************************
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+var roi2 = ee.Geometry.Rectangle(//coords, proj, geodesic, evenOdd)
+                                 // xMin, yMin, xMax, yMax
+                                 [135,-43,154,-10],"EPSG:4326")
+// Map.addLayer(roi2)
+// var tmp = cdr.filterDate('2010-01-01','2010-02-01')
+//             .map(qualityFlag)
+//             // .map(calcEVI2_avhrr)
+//             // .mean()
+//             // .clip(roi)
+// Map.addLayer(tmp.first())
+
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+  
+    return ic.filter(ee.Filter.calendarRange(y, y, 'year'))
+            .filter(ee.Filter.calendarRange(m, m, 'month'))
+            .map(qualityFlag_MYD11A2)
+            .map(mask_non_trees)
+            .map(function(i){
+              var out = i.select("LST_Day_1km")
+                         .multiply(0.02)
+                         .subtract(273.15)
+                return(out)
+            })
+            .max()
+            .clip(roi)
+            .clip(roi2)
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+var multiband = ee.Image().select()
+var multiband = ee.Image(tmp.iterate(function(image, result) {
+  return ee.Image(result).addBands(image)
+}, multiband))
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+Map.addLayer(multiband,{bands:["LST_Day_1km"],palette:['black','red','yellow'], min:35, max:45}); 
+// Map.addLayer(roi)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"MYD11A1_C6_LST", 
+  fileNamePrefix:"MYD11A1_C6_LST_5km_"+country+"_"+start_year+"_"+end_year,
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:50596711
+  })

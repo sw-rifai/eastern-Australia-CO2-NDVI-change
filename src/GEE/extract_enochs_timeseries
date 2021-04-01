@@ -1,0 +1,110 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ic = ee.ImageCollection("MODIS/006/MOD13Q1"),
+    cci = ee.ImageCollection("ESA/CCI/FireCCI/5_1"),
+    enochs = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[145.9180967970853, -37.318056102124174],
+          [145.9180967970853, -37.49259754117935],
+          [146.34999682149936, -37.49259754117935],
+          [146.34999682149936, -37.318056102124174]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var roi_name = 'enochs'
+var scale_m = 250
+var min_date = 20020218
+var max_date = 20201202
+var start_year = 2002
+var end_year = 2020
+          
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlagMOD13(image){
+  var qa = image.select('SummaryQA')
+  qa = getQABits(image, 0,1,"VI")
+  var good = qa.select("VI").eq(0); 
+  var i_out = image.updateMask(good); 
+  return(i_out); 
+}
+
+var ndvi = ic.filterDate("2001-01-01","2001-06-11")
+               .map(function(i){
+                 var ndvi = i.select(['NDVI']).multiply(0.0001).rename('ndvi')
+                 var sz = i.select(['SolarZenith']).multiply(0.01).rename('sz')
+                 var vz = i.select(['ViewZenith']).multiply(0.01).rename('vz')
+                 var ra = i.select(['RelativeAzimuth']).multiply(0.01).rename('ra')
+                 i = i.addBands([ndvi,sz,vz,ra])
+                 return(i)
+               }).select(['ndvi','sz','vz','ra'])
+            // .map(qualityFlagMOD13)
+//             .map(function(i){
+//               var out = i.select("NDVI")
+//                         .multiply(0.0001)
+//                         .copyProperties(i,i.propertyNames())
+//   return(out)
+// })
+
+Map.addLayer(ndvi,null,'ndvi',false)
+
+
+var multiband_ndvi = ndvi.select(['NDVI']).toBands()
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+
+// Map.addLayer(multiband, 
+// {palette:['black','green'], bands:["NDVI"], min:0, max:0.75}, 
+// "NDVI",
+// false); 
+// Map.addLayer(roi)
+
+// Export.image.toDrive(
+//   // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+//   {image:multiband_ndvi, 
+//   description:"NDVI_"+start_year+"_"+end_year,
+//   folder:"Oz_misc_data", 
+//   fileNamePrefix:"MOD_NDVI_"+scale_m+"m_"+roi_name+"_"+min_date+"_to_"+max_date,
+//   region:enochs,
+//   scale:scale_m,
+//   crs:"EPSG:4326", 
+//   maxPixels:500000000
+//   })
+
+
+// **********************************************************************
+
+// ic = ic.map(function(i){
+  
+// })
+// Map.addLayer(ic.first())
+// var multiband_all = ic.toBands()
+
+// Export.image.toDrive(
+//   // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+//   {image:multiband_all, 
+//   description:"MOD13Q1_"+start_year+"_"+end_year,
+//   folder:"Oz_misc_data", 
+//   // fileNamePrefix:"MOD13Q1_"+scale_m+"m_"+roi_name+"_"+min_date+"_to_"+max_date+"_8006ebf72f89cf4d524c3d6c7c9e3518",
+//   fileNamePrefix:"MOD13Q1_"+scale_m+"m_"+roi_name+"_"+start_year+"_to_"+end_year+"_8006ebf72f89cf4d524c3d6c7c9e3518",
+//   region:enochs,
+//   scale:scale_m,
+//   crs:"EPSG:4326", 
+//   maxPixels:500000000
+//   })

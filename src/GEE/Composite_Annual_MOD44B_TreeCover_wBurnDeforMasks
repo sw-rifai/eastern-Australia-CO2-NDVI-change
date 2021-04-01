@@ -1,0 +1,217 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mod44 = ee.ImageCollection("MODIS/006/MOD44B"),
+    mod_ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    mod_vi = ee.ImageCollection("MODIS/006/MOD13A2"),
+    myd13a2 = ee.ImageCollection("MODIS/006/MYD13A2"),
+    mod13a2 = ee.ImageCollection("MODIS/006/MOD13A2"),
+    mcd43a4 = ee.ImageCollection("MODIS/006/MCD43A4"),
+    mcd43a2 = ee.ImageCollection("MODIS/006/MCD43A2"),
+    roi_se_vic = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[147.72624179419688, -36.851631153177266],
+          [147.72624179419688, -37.86024466689231],
+          [150.0828091770094, -37.86024466689231],
+          [150.0828091770094, -36.851631153177266]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var scale_m = 5000; // 500m(native) to 5000(analysis)
+var roi_name = "East_Oz"
+var start_year = 2000; 
+var end_year = 2019; 
+var fire_buffer_years = 3
+var var_name = 'Percent_NonTree_Vegetation' // Percent_Tree_Cover, Percent_NonTree_Vegetation, Percent_NonVegetated
+var years = ee.List.sequence(start_year,end_year,1); 
+// var months = ee.List.sequence(1,12,1); 
+// var dates = ee.List.sequence(ee.Date.fromYMD(years[0],months[0],1))
+// Map.addLayer(nvis.lte(15),{palette:['yellow','green'],min:0,max:1})
+
+var roi = ee.Geometry.Rectangle([136, -44, 154, -11])
+roi = roi.buffer(50000)
+
+var nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses");
+var nvis_mask = nvis.lte(12).add(nvis.eq(22)).add(nvis.eq(24)).gte(1)
+
+// band 1: red, band 2: nir (841-876 nm)
+
+
+//***************************************************************************
+//*** FUNCTIONS 
+//***************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlagMYD13(image){
+  var qa = image.select('SummaryQA')
+  qa = getQABits(image, 0,1,"VI")
+  var good = qa.select("VI").eq(0); 
+  var i_out = image.updateMask(good); 
+  return(i_out); 
+}
+
+function selectBands(image){
+ var red = image.select("sur_refl_b01").rename('red').multiply(0.0001)
+ var nir = image.select("sur_refl_b02").rename('nir').multiply(0.0001)
+ image = image.addBands(red).addBands(nir)
+ return(image)
+}
+
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qa_flag_mcd(image){
+  var qa_red = getQABits(image.select("BRDF_Albedo_Band_Quality_Band1"),0,2,'valid_red')
+                        .select('valid_red').eq(0);
+  var qa_nir = getQABits(image.select("BRDF_Albedo_Band_Quality_Band2"),0,2,'valid_nir')
+                        .select('valid_nir').eq(0);
+  var good = qa_red.add(qa_nir)
+  good = good.lte(0);
+  var out = image.updateMask(good).select(['red','nir']).multiply(0.0001); 
+  return(out)
+}
+
+function mask_deforestation(i){
+  // Mask deforestation between 2000-2018
+  var gfc = ee.Image("UMD/hansen/global_forest_change_2019_v1_7")
+  var focal_year = i.date().get('year')
+  var base_mask = gfc.expression(
+  "(lossyear == focal_year) || (focal_year == (lossyear+1)) || (focal_year == (lossyear+2))",{
+      'loss':gfc.select("loss"),
+      'lossyear':gfc.select("lossyear").add(2000),
+      'focal_year':focal_year
+    }).neq(1)
+  var out = i.updateMask(base_mask)
+  return(out); 
+}
+// Map.addLayer(ee.Image("UMD/hansen/global_forest_change_2019_v1_7"))
+//***************************************************************************
+//*** END SECTION 
+//***************************************************************************
+
+
+//***************************************************************************
+//*** MAIN
+//***************************************************************************
+// var dates = years.map(function(y){
+//   return(months.map(function(m){
+//     return(ee.Date.fromYMD(y,m,1))
+//   }))
+// })
+var dates = years.map(function(y){return(ee.Date.fromYMD(y,1,1))})
+
+dates = dates.flatten(); print(dates)
+// print(ee.Date(dates.get(0)).advance(1,'year')); 
+
+
+var test = ee.ImageCollection.fromImages(dates.map(function(d){
+  var date_focal = ee.Date(d)
+  var date1 = ee.Date(d).advance(-fire_buffer_years,'year'); 
+  // var date2 = ee.Date(d)
+  var bin_burn = mod_ba.filterDate(date1,date_focal)
+            .map(function(i){
+              var out2 = i.select("BurnDate")
+                          .gte(1)
+              return(out2); 
+            })
+            .max()
+                      // .select("BurnDate")
+                      // .max()
+                      // .gte(1)
+  bin_burn = ee.Image(bin_burn).unmask().eq(0)                     
+
+                      // .toDictionary()
+  
+  
+  var dateFilter = ee.Filter.date(date_focal, date_focal.advance(1,'month'));
+
+  var im_dict = mod44.filterDate(date_focal, date_focal.advance(11,'month'))
+                      .first()
+
+
+  var sr = mod44.filterDate(date_focal, date_focal.advance(11,'month'))
+  // sr = sr.map(mask_deforestation)
+  sr = sr.map(function(i){
+           var out = i.select(var_name)
+           return(out);
+         })
+         .mean()
+        // .updateMask(bin_burn)
+        // .updateMask(nvis_mask)
+
+  var out = ee.Image(sr)//.addBands(bin_burn.rename("burn_mask"))
+  // out = out.set('system:time_start', ee.Date(date_focal));
+  // out = out.set('system:time_end', ee.Date(date_focal).advance(28,'days'));
+  out = out.copyProperties(im_dict,["system:index"])
+  out = out.copyProperties(im_dict,["system:time_start"])
+  out = out.copyProperties(im_dict,["system:time_end"])
+  return(out)
+}).flatten()); 
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+//***************************************************************************
+//*** EXPORT
+//***************************************************************************
+// var multiband = ee.Image().select()
+// var multiband = ee.Image(test.iterate(function(image, result) {
+//   return ee.Image(result).addBands(image)
+// }, multiband))
+var multiband = test.toBands()
+Map.addLayer(test)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MOD44B"+var_name+"_"+scale_m+"m_"+roi_name+"_noMask_"+start_year+"_"+end_year,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:100000000
+  })
+
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+
+
+
+// Map.addLayer(test,{palette:['black','red']},'bin_burn')
+// Map.addLayer(test,{palette:['black','green'],
+//   bands:["nirv"]
+// },'nirv'); 
+// Map.addLayer(test,{palette:['red','black'],
+//   bands:["burn_mask"]
+// },'burn_mask'); 
+
+// Map.addLayer(mod_ba.filterDate("2014-01-01","2019-12-31"),
+// {bands:['BurnDate']},
+// 'mod_ba')

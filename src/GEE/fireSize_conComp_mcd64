@@ -1,0 +1,84 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mcd64 = ee.ImageCollection("MODIS/006/MCD64A1"),
+    roi = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[152.93795284324688, -27.381025264607807],
+          [150.38912339281575, -27.391772988581643],
+          [148.38693768907672, -30.5018469657969],
+          [148.52468439849812, -31.989360332336613],
+          [142.75362667137185, -38.65076040587153],
+          [143.42697234917478, -38.98768897634071],
+          [146.15938839012185, -39.299865255495014],
+          [150.03756221824688, -37.62248945386535],
+          [151.44381221824688, -33.915547769883126],
+          [153.11373409324688, -32.62965075889003],
+          [153.81685909324688, -28.08117899050527]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var p = ee.Geometry.Point([143.324,-38.64777])
+Map.addLayer(p)
+
+var hotspots = mcd64//.filterDate('2019-11-01','2019-12-31')
+             .map(function(i){
+              var bin = i.select('BurnDate')
+             .gt(0)
+             .selfMask()
+              
+              var objectId = bin.connectedComponents({
+                connectedness: ee.Kernel.plus(1),
+                maxSize: 256
+              }).select('labels')
+              
+              var objectSize = objectId.select('labels')
+                .connectedPixelCount({
+                  maxSize: 256, eightConnected: false
+                })
+              
+              var pixelArea = ee.Image.pixelArea()
+
+              var objectArea = objectSize.multiply(pixelArea);
+              
+              var cc = objectArea.rename('area')
+                          .addBands(objectId)
+                          .reduceConnectedComponents({
+                              reducer:ee.Reducer.sum(),
+                              labelBand:'labels',
+                              maxSize:256}
+                           )//reducer, labelBand, maxSize)
+
+             return(cc.addBands(objectId.select('labels').toDouble()))
+             })
+
+// hotspots = hotspots.map(function(i){
+//   var out = i.toDouble();
+//   out = out.reduceResolution({
+//     reducer: ee.Reducer.mean(), 
+//     bestEffort: false, 
+//     maxPixels: 1024})
+//   // out = out.multiply(ee.Image.pixelArea())
+//   return(out)
+//     })
+    
+// hotspots = hotspots.toBands()
+//               .reproject({
+//       crs: ee.Projection('EPSG:4326')
+//     });
+// hotspots = hotspots.map(function(i){
+//   return(i.reproject('EPSG:4326', null, 500))
+// }).toBands()
+
+// Map.addLayer(hotspots)
+// var i_export = hotspots
+
+// Map.addLayer(hotspots)
+Export.image.toDrive({
+  image:hotspots.toBands(),
+  description:'cc_test',
+  folder:'Oz_misc_data',
+  // fileNamePrefix:'conComp_reproject_test',
+  // fileNamePrefix:'conComp_area_labels_2000nov_2020nov',
+  fileNamePrefix:'conComp_area_labels_mcd64_espg4326_500m_200011_202011',
+  region:roi,
+  scale:500, 
+  crs:'EPSG:4326'
+}
+  )//image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)

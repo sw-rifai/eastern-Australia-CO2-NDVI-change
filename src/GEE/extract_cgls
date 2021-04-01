@@ -1,0 +1,47 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var coords = ee.FeatureCollection("users/srifai/Oz_coords_set_EA_lai_amp0p5_min0p5"),
+    cgls = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[138.73382686822254, -10.491675036139565],
+          [138.73382686822254, -44.593264991043775],
+          [154.90570186822254, -44.593264991043775],
+          [154.90570186822254, -10.491675036139565]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var roi = ee.Geometry.Polygon(
+        [[[140, -10],
+          [140, -44.593264991043775],
+          [155, -44.593264991043775],
+          [155, -10]]], null, false)
+coords = coords.select('id')
+coords = coords.filterBounds(roi)
+
+var tree_cov = ee.Image(cgls.first()).select('tree-coverfraction')
+
+var values = tree_cov.reduceRegions(
+  {collection:coords,
+    reducer:ee.Reducer.mean(), 
+    scale:100, 
+    crs:"EPSG:4326"
+  }
+  )//collection, reducer, scale, crs, crsTransform, tileScale)
+
+values = values.map(function(f){return f.select(['.*'],null, false)});
+
+Map.addLayer(tree_cov)
+Export.table.toDrive(//collection, description, folder, fileNamePrefix, fileFormat, selectors)
+{
+  collection:values, 
+  description:"tree_cover_export",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"CGLS_EOz_tree_cover",
+  fileFormat:'csv'
+}
+)

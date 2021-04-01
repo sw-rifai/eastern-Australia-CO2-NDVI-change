@@ -1,0 +1,19 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var sr = ee.ImageCollection("NOAA/CDR/AVHRR/SR/V5"),
+    chirps = ee.ImageCollection("UCSB-CHG/CHIRPS/PENTAD"),
+    l5 = ee.ImageCollection("LANDSAT/LT05/C01/T1_TOA");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var wet_c = chirps.filterDate('2011-11-01','2011-12-01').sum()
+var dry = sr.filterDate('2003-11-01','2003-12-01').median().multiply(0.0001); 
+var wet = sr.filterDate('2011-11-01','2011-12-01').median().multiply(0.0001); 
+Map.addLayer(wet_c,null,'chirps',false)
+Map.addLayer(wet,{min:0, max:0.5,palette:['black','red'],bands:['SREFL_CH1']},'wet: red',false);
+Map.addLayer(dry,{min:0, max:0.5,palette:['black','red'],bands:['SREFL_CH1']},'dry: red',false);
+Map.addLayer(wet.select('SREFL_CH1').subtract(dry.select('SREFL_CH1')),{min:-0.2, max:0.2,
+               palette:['blue','black','red'],bands:['SREFL_CH1']},'wet-dry red',false);
+               
+var l5_wet = l5.filterDate('2011-11-01','2011-12-01').median();
+Map.addLayer(l5_wet,{bands:['B5',"B4","B3"]},'L5 wet',false)
+
+var l5_dry = l5.filterDate('2003-11-01','2003-12-01').median();
+Map.addLayer(l5_dry,{bands:['B5',"B4","B3"]},'L5 dry',false)

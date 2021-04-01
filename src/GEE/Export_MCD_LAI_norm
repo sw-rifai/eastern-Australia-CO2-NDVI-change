@@ -1,0 +1,29 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var gcom = ee.ImageCollection("JAXA/GCOM-C/L3/LAND/LAI/V2"),
+    modis = ee.ImageCollection("MODIS/006/MCD15A3H"),
+    cdr = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var norm = modis.filterDate("2005-08-01","2015-08-01").mean().select("Lai").multiply(0.1)
+Map.addLayer(norm,{min:0,max:6,palette: [
+    "040274","040281","0502a3","0502b8","0502ce","0502e6",
+    "0602ff","235cb1","307ef3","269db1","30c8e2","32d3ef",
+    "3be285","3ff38f","86e26f","3ae237","b5e22e","d6e21f",
+    "fff705","ffd611","ffb613","ff8b13","ff6e08","ff500d",
+    "ff0000","de0101","c21301","a71001","911003",
+  ]})
+  
+var roi = ee.Geometry.Rectangle([136, -44, 154, -11])
+roi = roi.buffer(50000)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:norm, 
+  description:"lai_export",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MCD15A3H_meanAnnualLAI_20020801_20190801",
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })

@@ -1,0 +1,200 @@
+//**************************************************************************************************
+//*** Imports ***
+//**************************************************************************************************
+var lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    avhrr_ndvi = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5"),
+    avhrr_sr = ee.ImageCollection("NOAA/CDR/AVHRR/SR/V5"),
+    avhrr_lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+var olm_fc = ee.Image("OpenLandMap/SOL/SOL_WATERCONTENT-33KPA_USDA-4B1C_M/v01");    
+var land_sea_mask = olm_fc.select('b0').gte(1)    
+    
+    
+//**************************************************************************************************
+//*** Options for seasonal aggegation ***
+//**************************************************************************************************
+var ic = avhrr_sr; 
+var var_name = "NIRV"
+var country = "Australia"
+// var export_scale = 5000;
+var export_scale = ic.first().projection().nominalScale().toFloat();
+var start_year = 1982; 
+var end_year = 2019;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List([1,4,7,11]) // Central months of DJF season
+var years=ee.List.sequence(start_year,end_year);
+
+var file_name = "AVHRR_CDRv5_"+var_name+"_seasonalMedian_"+country+"_1982_2019"
+print(file_name)
+print(export_scale)
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+      pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlag(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  var ch_1_5_BitMask = Math.pow(2, 7);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+            .and(
+              qa.bitwiseAnd(shadowBitMask).eq(0))
+              // .and(
+              // qa.bitwiseAnd(ch_1_5_BitMask).eq(0));
+  // var mask_2 = qa.bitwiseAnd(ch_1_5_BitMask).neq(0)
+  image = image.updateMask(mask);
+  // image = image.updateMask(mask_2); 
+  // image = image.updateMask(brdfBitMask.eq(0))
+
+  // Return the masked data.
+  return(image); 
+  // return(qa.bitwiseAnd(brdfBitMask).eq(0));
+}
+
+// This function adds a time band to the image.
+var createTimeBand = function(image) {
+  // Scale milliseconds by a large constant to avoid very small slopes
+  // in the linear regression output.
+  return image.addBands(image.metadata('system:time_start').divide(1e18));
+};
+
+var createYearBand = function(image) {
+  // Scale milliseconds by a large constant to avoid very small slopes
+  // in the linear regression output.
+  var d = image.date();
+  var y = d.get('year')
+  y = ee.Image(y).rename('year')
+  y = y.toInt();
+  var out = image.addBands(y)
+  return(out)
+};
+
+function calcEVI2_avhrr(img){
+  img = img.select(['SREFL_CH1','SREFL_CH2'],['Red','NIR'])
+            .multiply(0.0001);
+  var out = img.select('NIR').subtract(img.select('Red')).multiply(2.5)
+    .divide(img.select('NIR').add(img.select('Red').multiply(2.4)).add(1))
+  return(out.select(['NIR'],['EVI2']))
+}
+
+function calc_nirv_avhrr(img){
+  var b = img.select(['SREFL_CH1','SREFL_CH2'],['Red','NIR'])
+            .multiply(0.0001);
+  var nirv = b.normalizedDifference(['NIR','Red']).multiply(b.select('NIR'))
+              .rename("NIRV")
+  var out = img.addBands(nirv);
+  return(out)
+}
+
+function calc_ndvi_avhrr(img){
+  var b = img.select(['SREFL_CH1','SREFL_CH2'],['Red','NIR'])
+            .multiply(0.0001);
+  var ndvi = b.normalizedDifference(['NIR','Red'])
+              .rename("NDVI")
+  var out = img.addBands(ndvi);
+  return(out)
+}
+
+
+//******************************************************************
+// MAIN
+//******************************************************************
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+
+// var roi = ee.Geometry.Rectangle([140, -40, 154, -28])
+// roi = roi.buffer(50000)
+
+
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+   var seasonal_date = ee.Date.fromYMD(y, m, 01)
+   var seasonal_date_range = ee.DateRange(seasonal_date.advance(-1,'months'), 
+                                       seasonal_date.advance(1.999,'months'))
+    return ic.filterDate(seasonal_date_range)
+            // .filter(ee.Filter.calendarRange(y, y, 'year'))
+            // .filter(ee.Filter.calendarRange(m, m, 'month'))
+            .map(createTimeBand)
+            .map(createYearBand)
+            .map(qualityFlag)
+            .map(calc_nirv_avhrr)
+            // .map(calc_ndvi_avhrr)
+            .map(function(i){return(i.select("NIRV"))})
+            .median()
+            .clip(roi)
+            .updateMask(land_sea_mask)
+            // .reduce(ee.Reducer.percentile([5,50,95],['p05','p50','p95']))
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+
+// Map.addLayer(tmp)
+
+// Reduce the collection with the linear fit reducer.
+// Independent variable are followed by dependent variables.
+// var linearFit = tmp.select(['year', var_name])
+//   .reduce(ee.Reducer.linearFit())
+//   .updateMask(land_sea_mask)
+//   .clip(roi)
+
+// Display the results.
+// Map.addLayer(linearFit,
+//   {min: -0.006, max: 0.006, bands: ['scale'],
+//   // palette:['red','grey','blue']
+//     palette:['red','orange','yellow','green','blue']
+//   }, 'linear fit');
+// Map.addLayer(robustFit,
+//   {min: -0.001, max: 0.001, bands: ['scale'],palette:['red','grey','blue']}, 'robust fit');
+
+
+var multiband = ee.Image().select()
+var multiband = ee.Image(tmp.iterate(function(image, result) {
+  return ee.Image(result).addBands(image)
+}, multiband))
+
+// Map.addLayer(multiband)
+// // Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+// Map.addLayer(multiband, 
+// {bands:['NIRV_p95'], min:0, max:0.3, 
+//   palette:['black','purple','red','orange','yellow']}, 
+//   false); 
+// Map.addLayer(roi)
+
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"AVHRR_NDVI_CDR_V5", 
+  fileNamePrefix:file_name,
+  region:roi,
+  scale:export_scale,
+  crs:"EPSG:4326", 
+  maxPixels:15000000
+  })

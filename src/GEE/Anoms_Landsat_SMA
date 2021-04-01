@@ -1,0 +1,432 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    s2 = ee.ImageCollection("COPERNICUS/S2_SR"),
+    l7 = ee.ImageCollection("LANDSAT/LE07/C01/T1_SR"),
+    sydney = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[150.5756871759296, -34.11385754468467],
+          [150.7185094415546, -33.570927257136916],
+          [150.8997838556171, -33.58008060164973],
+          [151.2678258478046, -33.83597966316538],
+          [151.4587132989765, -33.46903086787691],
+          [151.75122428530463, -32.990011667247956],
+          [150.7020299493671, -32.44234180364545],
+          [150.5207555353046, -32.36813761101028],
+          [150.0318639337421, -33.38765671873344],
+          [149.9879186212421, -33.721833230910484],
+          [149.7901647149921, -34.259265896494924],
+          [150.2955358087421, -34.49049164108611],
+          [150.4932897149921, -34.413487331825365]]]),
+    wollongong = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[151.1792485772968, -34.08144736368242],
+          [150.93068290346866, -33.94826506977476],
+          [150.5420415460468, -34.34491648763313],
+          [150.48024345034366, -34.47973795336185],
+          [150.6848638116718, -34.59286512139457]]]),
+    nowra = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[150.40578077967422, -34.6021596662088],
+          [150.17506788904922, -34.67673098666399],
+          [150.01851271326797, -34.758005004681806],
+          [149.80702589686172, -35.160929175499305],
+          [149.78230665858047, -35.304509965040715],
+          [149.88118361170547, -35.36052715286783],
+          [149.89216993983047, -35.48362822165313],
+          [150.26570509608047, -35.72926532362576],
+          [150.42775343592422, -35.52387497106655],
+          [150.58430861170547, -35.17440066723161],
+          [150.77382277186172, -34.985596851809355]]]),
+    katoomba_north = 
+    /* color: #ffc82d */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.2290970235684, -33.53807584177452],
+          [150.2290970235684, -33.70674874633912],
+          [150.55800022181057, -33.70674874633912],
+          [150.55800022181057, -33.53807584177452]]], null, false),
+    victoria_se = 
+    /* color: #00ffff */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[149.1652622033224, -37.48762746588891],
+          [149.1652622033224, -37.80947734877966],
+          [149.77774999629116, -37.80947734877966],
+          [149.77774999629116, -37.48762746588891]]], null, false),
+    ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    wollemi_south = 
+    /* color: #bf04c2 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.378274168603, -33.02994534976168],
+          [150.378274168603, -33.11625410197134],
+          [150.52796288930614, -33.11625410197134],
+          [150.52796288930614, -33.02994534976168]]], null, false),
+    dem = ee.Image("AU/GA/DEM_1SEC/v10/DEM-H"),
+    mtpi = ee.Image("CSP/ERGo/1_0/Global/SRTM_mTPI"),
+    flow_accum = ee.Image("WWF/HydroSHEDS/15ACC"),
+    landforms = ee.Image("CSP/ERGo/1_0/Global/SRTM_landforms"),
+    carrai = 
+    /* color: #ff0000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[152.20553551823645, -30.877811292577082],
+          [152.20553551823645, -30.918465944025492],
+          [152.28999291569738, -30.918465944025492],
+          [152.28999291569738, -30.877811292577082]]], null, false),
+    torrington = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[151.40549578449395, -29.139276917450903],
+          [151.40549578449395, -29.3316137665638],
+          [151.705559871408, -29.3316137665638],
+          [151.705559871408, -29.139276917450903]]], null, false),
+    firms = ee.ImageCollection("FIRMS"),
+    blue_mountains_1 = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.4202816200132, -33.625818667686524],
+          [150.4202816200132, -33.64204055599606],
+          [150.45246812819192, -33.64204055599606],
+          [150.45246812819192, -33.625818667686524]]], null, false),
+    wollemi_ne = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.47696488657465, -32.94694076816943],
+          [150.47696488657465, -32.98251491080851],
+          [150.52503007212152, -32.98251491080851],
+          [150.52503007212152, -32.94694076816943]]], null, false),
+    wollemi_n = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.3631061833222, -32.9857436607814],
+          [150.3631061833222, -33.007483563919344],
+          [150.39143031051947, -33.007483563919344],
+          [150.39143031051947, -32.9857436607814]]], null, false),
+    goonoo = 
+    /* color: #ffc82d */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[148.88301997158067, -32.008343921172724],
+          [148.88301997158067, -32.02057046939955],
+          [148.90138773891465, -32.02057046939955],
+          [148.90138773891465, -32.008343921172724]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** Options for seasonal aggegation ***
+//**************************************************************************************************
+var ic = l8; 
+var var_name = "NPV_anom"
+var roi_name = "blue_mountains_1"
+var roi = blue_mountains_1
+var export_scale = 30;
+// var export_scale = ic.first().projection().nominalScale().toFloat();
+var start_year = 2014; 
+var end_year = 2019;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List([1,4,7,11]) // Central months of DJF season
+var years=ee.List.sequence(start_year,end_year);
+
+var file_name = "Landsat8_"+var_name+"_"+roi_name+"_mean_"+"_"+start_year+"_"+end_year
+print(file_name)
+print(export_scale)
+
+//*** MASK
+var nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses");
+var nvis_mask = nvis.lte(18); 
+Map.addLayer(nvis_mask, {min:0,max:1},"nvis_mask",false)
+var old_ba = ba.filterDate('2014-01-01','2019-06-30')
+               .max().select('BurnDate').unmask().eq(0).updateMask(nvis_mask)
+Map.addLayer(old_ba, {min:0,max:1},"old_ba",false)
+
+ba = ba.filterDate('2019-07-01','2020-01-31').max()
+       .updateMask(old_ba).updateMask(nvis_mask);
+
+firms = firms.filterDate('2019-07-01','2020-01-31').max()
+       .updateMask(old_ba).updateMask(nvis_mask);
+var terrain = ee.Algorithms.Terrain(dem)
+
+Map.addLayer(ba,{bands:['BurnDate'],min:0,max:366,palette:['blue', 'black','purple','yellow']},"BA",false)
+Map.addLayer(firms,{bands:['T21'],min:300,max:550,palette:['blue', 'black','purple','yellow']},"FIRMS",false)
+Map.addLayer(terrain,{bands:['slope'],min:0,max:30,palette:['green', 'yellow']},"slope",false)
+
+
+//**********************************************************************
+//*** FUNCTIONS ********************************************************
+//**********************************************************************
+
+// This example demonstrates the use of the Landsat 4, 5 or 7
+// surface reflectance QA band to mask clouds.
+
+var cloudMaskL457 = function(image) {
+  var qa = image.select('pixel_qa');
+  // If the cloud bit (5) is set and the cloud confidence (7) is high
+  // or the cloud shadow bit is set (3), then it's a bad pixel.
+  var cloud = qa.bitwiseAnd(1 << 5)
+          .and(qa.bitwiseAnd(1 << 7))
+          .or(qa.bitwiseAnd(1 << 3))
+  // Remove edge pixels that don't occur in all bands
+  var mask2 = image.mask().reduce(ee.Reducer.min());
+  return image.updateMask(cloud.not()).updateMask(mask2).divide(10000);
+};
+
+// Function to cloud mask from the pixel_qa band of Landsat 8 SR data.
+function maskL8sr(image) {
+  // Bits 3 and 5 are cloud shadow and cloud, respectively.
+  var cloudShadowBitMask = 1 << 3;
+  var cloudsBitMask = 1 << 5;
+
+  // Get the pixel QA band.
+  var qa = image.select('pixel_qa');
+
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
+
+  // Return the masked image, scaled to reflectance, without the QA bands.
+  return image.updateMask(mask).divide(10000)
+      .select("B[0-9]*")
+      .copyProperties(image, ["system:time_start"]);
+}
+
+// Function to mask clouds using the Sentinel-2 QA band.
+function maskS2clouds(image) {
+  var qa = image.select('QA60')
+
+  // Bits 10 and 11 are clouds and cirrus, respectively.
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0).and(
+             qa.bitwiseAnd(cirrusBitMask).eq(0))
+
+  // Return the masked and scaled data, without the QA bands.
+  return image.updateMask(mask).divide(10000)
+      .select("B.*")
+      .copyProperties(image, ["system:time_start"])
+}
+
+function unmix_S2a(i){
+  var GV =    [0.0639,	0.0698,	0.0544,	0.0884,	0.2002,	0.2395,	0.2486,	0.2648,	0.1256,	0.0631]
+  var NPV =   [0.0982,	0.1242,	0.1684,	0.1982,	0.2192,	0.2413,	0.2684,	0.283,	0.5075,	0.3846]
+  var Soil =  [0.1624,	0.2248,	0.2906,	0.328,	0.3404,	0.3616,	0.3614,	0.3741,	0.5055,	0.4203]
+  var Shade = [0.0772,	0.0696,	0.057,	0.0535,	0.0499,	0.0498,	0.0435,	0.0445,	0.0284,	0.0205]
+  var target = i.select(["B2","B3","B4","B5","B6","B7","B8","B8A","B11","B12"])
+  var sma = target.unmix([NPV,GV,Soil,Shade], false, false)
+                  .rename(["NPV","GV","Soil","Shade"])
+                  
+  var shadeMask = sma.select("Shade").lte(0.2); // 0.2 is arbitrary
+  sma = sma.updateMask(shadeMask); 
+  return(sma); 
+}
+
+function unmix_L8(i){
+  //150.4698, -33.68304
+  var GV =    [0.008299999870359898, 0.013199999928474426, 0.02810000069439411,
+               0.02889999933540821, 0.24279999732971191, 0.10840000212192535, 0.04430000111460686]
+  
+  // // 150.19313, -32.32017 // BURNED!
+  // var NPV =   [0.030300000682473183, 0.03359999880194664, 0.04230000078678131,
+  //             0.053599998354911804, 0.08869999647140503, 0.19580000638961792,0.17630000412464142]
+
+  // 150.552277, -33.736269
+  var NPV =   [ 0.020800000056624413, 0.024900000542402267,  0.03530000150203705,
+ 0.04050000011920929, 0.13619999587535858,  0.19519999623298645, 0.11670000106096268]
+
+  // 150.159611, -33.579042
+  var Soil =  [0.08290000259876251, 0.10620000213384628,
+                0.17870000004768372, 0.21879999339580536,  0.25540000200271606, 0.2978000044822693,
+               0.20999999344348907]
+
+  //151.16258, -33.51971
+  var Shade = [0.019899999722838402, 0.02419999986886978, 0.03579999879002571, 0.040300000458955765,
+                 0.013700000010430813, 0.0038999998942017555, 0.002300000051036477]
+                 
+                 
+  var target = i.select(["B1","B2","B3","B4","B5","B6","B7"])
+  var sma = target.unmix([NPV,GV,Soil,Shade], false, false)
+                  .rename(["NPV","GV","Soil","Shade"])
+  sma = sma.copyProperties(i, ["system:time_start"])                  
+  // var shadeMask = sma.select("Shade").lte(0.2); // 0.2 is arbitrary
+  // sma = sma.updateMask(shadeMask); 
+  return(ee.Image(sma)); 
+}
+
+
+//**********************************************************************
+//*** END SECTION 
+//**********************************************************************
+var tmp = ee.ImageCollection.fromImages(
+  years.map(function(y){    // --- YEARS ---  //
+  
+  return months.map(function(m){   // --- MONTHS --- //
+   var seasonal_date = ee.Date.fromYMD(y, m, 01)
+   var seasonal_date_range = ee.DateRange(seasonal_date.advance(-1,'months'), 
+                                       seasonal_date.advance(1.999,'months'))
+   var orig_prop = ic.filterDate(seasonal_date_range).first()
+    return ic.filterDate(seasonal_date_range)
+            // .filter(ee.Filter.calendarRange(y, y, 'year'))
+            // .filter(ee.Filter.calendarRange(m, m, 'month'))
+            .map(maskL8sr)
+            .map(unmix_L8)
+            // .map(function(i){return(i.select("NPV"))})
+            .median()
+            .copyProperties(orig_prop,["system:time_start","system:index"])
+            .set('year',y)
+            .set('month',m)
+            .set('day', 1)
+            // .set('system:time_start', ee.Date.fromYMD(y, m, 1));
+            }) // END MONTHS SECTION
+          }).flatten() // END YEARS SECTION
+        )
+
+var norms = months.map(function(m){
+  return(
+    tmp.filter(ee.Filter.eq('month',m))
+       .filter(ee.Filter.lte('year',2016)) // Not using 2017 onwards 
+      // .map(function(i){
+      //       return(i.select("NPV"))
+      // })
+    .mean()
+    .set('month',m)
+)
+}).flatten(); 
+
+norms = ee.ImageCollection.fromImages(norms)
+// print(norms.first())
+
+// Define an inner join.
+var innerJoin = ee.Join.inner();
+
+// Specify an equals filter for image timestamps.
+var filterTimeEq = ee.Filter.equals({
+  leftField: 'month',
+  rightField: 'month'
+});
+
+// Apply the join.
+var innerJoined = innerJoin.apply(tmp, norms, filterTimeEq);
+print("innerJoined",innerJoined)
+
+// Map a function to merge the results in the output FeatureCollection.
+var joined_landsat = innerJoined.map(function(feature) {
+  return ee.Image.cat(feature.get('primary'), feature.get('secondary'));
+});
+print("joined_landsat", joined_landsat)
+// print(ee.Image(joined_landsat.first()).select("NIRV"))
+
+
+// // Aggregate to monthly sums
+// var joined_landsat_2 = ee.ImageCollection.fromImages(
+//             months.map(function (m) {
+//                 var w = joined_landsat.filter(ee.Filter.eq('month', m))
+//                 var out = w.first()
+//                 // var out = ee.Image(w.mean().select("NDVI_1"))
+//                 //           .subtract(w.mean().select("NDVI")).rename("NDVI_anom");
+//                 //     // .mean();
+//                 return out.set('month', m);
+//             }).flatten());
+// print(joined_landsat_2)
+
+// var anoms_landsat = joined_landsat.map(function(i){
+//   var out_npv = ee.Image(i).select(["NPV","NPV_1"]).rename("NPV_anom")
+//   var out_gv = ee.Image(i).select(["GV","GV_1"]).rename("GV_anom")
+//   var out_soil = ee.Image(i).select(["Soil","Soil_1"]).rename("Soil_anom")
+//   var out_shade = ee.Image(i).select(["Shade","Shade_1"]).rename("Shade_anom")
+//   var out = out_npv.addBands(out_gv).addBands(out_soil).addBands(out_shade)
+//   out = out.copyProperties(i)
+//   // out = out.select("NIRV_1").subtract(i.select("NIRV")).rename("NIRV_anom");
+//   return(out);
+// })
+
+var anoms_landsat = ee.ImageCollection(joined_landsat).map(function(i){
+  var out1 = i.select("NPV_1").subtract(i.select("NPV")).rename("NPV_anom");
+  var out2 = i.select("GV_1").subtract(i.select("GV")).rename("GV_anom");
+  var out3 = i.select("Shade_1").subtract(i.select("Shade")).rename("Shade_anom");
+  var out4 = i.select("Soil_1").subtract(i.select("Soil")).rename("Soil_anom");
+  var out = out1.addBands(out2).addBands(out3).addBands(out4)
+  out = out.copyProperties(i)
+
+  return(out)
+})
+print('anoms_landsat',anoms_landsat)
+
+Map.addLayer(anoms_landsat//.filter(ee.Filter.eq('month',7)) 
+                          //.filter(ee.Filter.eq('year',2019))
+                          , 
+   {min:-0.1,max:0.1,bands:['NPV_anom'],palette:['red','black','blue']}, 
+            "anoms_landsat",false)
+
+
+var multiband = anoms_landsat.toBands()
+multiband = ee.Image(multiband)
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:roi_name+"_"+var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:file_name,
+  region:roi,
+  scale:30,
+  crs:"EPSG:4326", 
+  // maxPixels:30000000
+  maxPixels:60328806
+  })
+

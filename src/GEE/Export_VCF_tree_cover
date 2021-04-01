@@ -1,0 +1,33 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var vcf = ee.ImageCollection("MODIS/006/MOD44B");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var start_year = 2000; 
+var end_year = 2018; 
+//// 
+
+var roi = ee.Geometry.Rectangle([112, -44, 154.5, -10.45])
+roi = roi.buffer(5000)
+Map.addLayer(vcf)
+vcf = vcf.filterDate(ee.Date.fromYMD(start_year,1,1), 
+                     ee.Date.fromYMD(end_year,12,31))
+  .map(function(i){
+  var out = i.select("Percent_Tree_Cover")
+             .clip(roi)
+  return(out)
+})
+
+print(vcf)
+var out = vcf.toBands();
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:out, 
+  description:"VCF_export",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MOD44B_C6_PercentTreeCover_"+start_year+"_"+end_year,
+  region:roi,
+  scale:250,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })

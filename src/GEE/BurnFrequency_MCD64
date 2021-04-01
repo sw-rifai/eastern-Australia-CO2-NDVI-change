@@ -1,0 +1,38 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2019_v1_7"),
+    lc = ee.ImageCollection("MODIS/006/MCD12Q1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var roi = ee.Geometry.Rectangle([112, -44, 154.5, -10.45])
+roi = roi.buffer(5000)
+
+var gfc_mask = gfc.select("datamask")
+var lc_mask = lc.first().select('LW').subtract(1)
+Map.addLayer(lc_mask,{min:0,max:1})
+
+var ba_freq = ba.filterDate("2001-01-01","2019-09-29") 
+       .map(function(i){
+         var out = i.select("BurnDate").gte(1).unmask()
+         return(out)
+       })
+       .sum()
+       .updateMask(lc_mask)
+
+ba_freq = ee.Image(ba_freq.toDouble())
+       
+Map.addLayer(ba_freq,{min:0,max:5,palette:["black",'purple','red','orange','yellow','pink']})
+
+
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:ba_freq, 
+  description:"BA_export",
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MCD64A1_C6_BurnFreq_20010101-20190930",
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })

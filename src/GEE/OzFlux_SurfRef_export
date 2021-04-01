@@ -1,0 +1,158 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mcd43 = ee.ImageCollection("MODIS/006/MCD43A3"),
+    mcd43_qa = ee.ImageCollection("MODIS/006/MCD43A2");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Options 
+var product_name = "MCD43"
+var roi_name = "OzFlux_HS_SP_DRU_DR_LF_TTE_AS"
+var start_date = "2000-03-18"
+var end_date = "2020-08-15"
+var point_buffer_size = 1000; // meters
+
+// Manually constructing feature collection because it's small
+// p1 // Howard Springs:  [-12.4943, 131.1523]
+// p2 // Sturt Plains: [-17.1507, 133.3502]
+// p3 // Daly River Uncleared [-14.1592, 131.3881]
+// p4 // Dry River [-15.2588, 132.3706]
+// p5 // Litchfield [-13.1790, 130.7945]
+// p6 // Ti Tree East [-22.2870, 133.6400]
+
+
+// var p1 = ee.Geometry.Point([131.1523,-12.4943]); 
+// var p2 = ee.Geometry.Point([133.3502, -17.1507])
+// p1 = ee.Feature(p1, {site:'Howard Springs'})
+// p2 = ee.Feature(p2, {site:'Sturt Plains'})
+var p1 = ee.Feature(ee.Geometry.Point([131.1523 ,-12.4943]),{site:'Howard Springs'})
+var p2 = ee.Feature(ee.Geometry.Point([133.3502 ,-17.1507]),{site:'Sturt Plains'})
+var p3 = ee.Feature(ee.Geometry.Point([131.3881 ,-14.1592]),{site:'Daly River Uncleared'})
+var p4 = ee.Feature(ee.Geometry.Point([132.3706 ,-15.2588]),{site:'Dry River'})
+var p5 = ee.Feature(ee.Geometry.Point([130.7945 ,-13.1790]),{site:'Litchfield'})
+var p6 = ee.Feature(ee.Geometry.Point([133.6400 ,-22.2870]),{site:'Ti Tree East'})
+var p7 = ee.Feature(ee.Geometry.Point([133.2493 ,-22.2828]),{site:'Alice Springs'})
+
+
+var roi = ee.FeatureCollection([p1,p2,p3,p4,p5,p6])
+roi = roi.map(function(f){
+  return(f.buffer(point_buffer_size))})
+
+Map.addLayer(roi,{color:'red'}); 
+Map.centerObject(roi)
+
+// Functions *********************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qa_flag_mcd(image){  // filtering for best quality retrievals 
+  var qa_red = getQABits(image.select("BRDF_Albedo_Band_Quality_Band1"),0,2,'valid_red')
+                        .select('valid_red').eq(0); 
+  var qa_nir = getQABits(image.select("BRDF_Albedo_Band_Quality_Band2"),0,2,'valid_nir')
+                        .select('valid_nir').eq(0);
+  var good = qa_red.add(qa_nir)
+  good = good.lte(0);
+  var out = image.updateMask(good).select(['red','nir']).multiply(0.0001); 
+  out = out.copyProperties(image,['system:time_start'])
+
+  return(out)
+}
+
+
+// Prep data ********************************************************
+var mcd43a4 = ee.ImageCollection('MODIS/006/MCD43A4')
+    .select(["Nadir_Reflectance_Band1","Nadir_Reflectance_Band2"],["red","nir"])
+    .filterDate(start_date, end_date);
+
+var mcd43a2 = ee.ImageCollection('MODIS/006/MCD43A2')     // Has the QA data for masking
+                .select(["BRDF_Albedo_Band_Quality_Band1",
+                "BRDF_Albedo_Band_Quality_Band2"])
+    .filterDate(start_date, end_date);
+
+// Define an inner join.
+var innerJoin = ee.Join.inner();
+
+// Specify an equals filter for image timestamps.
+var filterTimeEq = ee.Filter.equals({
+    leftField: 'system:time_start',
+    rightField: 'system:time_start'
+   });
+
+var innerJoinedMODIS = innerJoin.apply(mcd43a4, mcd43a2, filterTimeEq);
+
+var joinedMODIS = innerJoinedMODIS.map(function(feature) {
+  return ee.Image.cat(feature.get('primary'), feature.get('secondary'));
+});
+var sr = ee.ImageCollection(joinedMODIS)
+// print(sr)
+// print("sr.first()",ee.Image(sr.first()))
+
+
+// Why add an extra image to the beginning of the collection? 
+// It's basically needed to instantiate the columns for the reducer. 
+// If the first image is null, the reducer has nothing to 'reduce' on 
+// so it doesn't create the columns, and then proceeds to reduce the 
+// other values, but doesn't put them in the out put.  
+var blank = ee.ImageCollection(joinedMODIS)
+              .filterDate(start_date,end_date)
+              .first()
+              .unmask()
+              .copyProperties(ee.Image(ee.ImageCollection(joinedMODIS).first()),['system:time_start'])
+blank = ee.ImageCollection([blank])
+                                  // .map(function(i){
+                                  // var out = i.subtract(999)
+                                  // return(out)})
+// print("blank",blank)
+// print("sr.first()",ee.Image(sr.first()))
+
+
+// Processing ************************************************************
+var sr2 = sr.map(qa_flag_mcd) // apply masks
+sr2 = ee.ImageCollection(ee.ImageCollection(blank).merge(sr2));
+// print('sr2',sr2)
+
+var sr3 = sr2.map(function(i){
+        var out1 = i.normalizedDifference(['nir','red']).rename('ndvi')
+        var out2 = out1.select('ndvi').multiply(i.select('nir')).rename('nirv')
+        var out = i.addBands(out1.select('ndvi'))
+        out = out.addBands(out2.select('nirv'))
+        return(out);
+      })
+// print("sr3",sr3)
+// Map.addLayer(ee.Image(sr3.first()),null,"sr3")
+
+var data = sr3.map(function(image) {
+  return image.reduceRegions({
+    collection: roi, 
+    reducer: ee.Reducer.mean(), 
+    scale: 500
+  })
+    .map(function(f) {
+    return f.set({
+      date: image.date().format()
+    })
+  })
+}).flatten()
+
+// print(data)
+
+// Sets geoJSON column to null. Increases file size if kept
+// Reduces file size; important if working w/large feature collection
+data = data.map(function(f){return f.select(['.*'],null, false)}); 
+
+
+var fileNamePrefix = product_name+"_"+roi_name;
+Export.table.toDrive(//collection, description, folder, fileNamePrefix, fileFormat, selectors)
+{
+  collection:data,
+  description:product_name,
+  folder:"Oz_misc_data", // replace with the name of a folder in your google drive
+  fileNamePrefix:fileNamePrefix,
+  fileFormat:"csv"
+})

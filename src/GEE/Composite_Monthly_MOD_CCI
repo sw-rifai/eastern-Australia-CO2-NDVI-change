@@ -1,0 +1,192 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mod_2 = ee.ImageCollection("MODIS/006/MODOCGA"),
+    mod_1 = ee.ImageCollection("MODIS/006/MOD09GA"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[144.74606472188913, -38.65956147072381],
+          [145.60299831563913, -39.49534964722019],
+          [146.54782253438913, -39.20650424627326],
+          [150.08542019063913, -37.84861381953949],
+          [152.94186550313913, -31.41905178392264],
+          [150.48092800313913, -31.3627820092536],
+          [148.17379909688913, -31.56893948719329],
+          [147.84420925313913, -35.12866783661259],
+          [144.98776394063913, -36.9233262785569],
+          [144.74606472188913, -37.65751287379527]]]),
+    gfc = ee.Image("UMD/hansen/global_forest_change_2019_v1_7");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var scale_m = 1000; // 500m(native) to 5000(analysis)
+var roi_name = "SE_coastal"   //   "SE_Vic"
+var start_year = 2001; 
+var end_year = 2020; 
+var var_name = 'red_nir'
+var min_date = "2001-01-01" // Look for product start date
+var max_date = "2020-09-30" // Look for product end date
+var years = ee.List.sequence(start_year,end_year,1); 
+var months = ee.List.sequence(1,12,1); 
+// var dates = ee.List.sequence(ee.Date.fromYMD(years[0],months[0],1))
+// Map.addLayer(nvis.lte(15),{palette:['yellow','green'],min:0,max:1})
+
+var start_date = min_date; 
+var end_date = max_date;
+
+
+//***************************************************************************
+//*** FUNCTIONS 
+//***************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+var qa_flag_mod0CGA = function(image){  // filtering for best quality retrievals 
+  var mqa_b11 = getQABits(image
+                        .select("QC_b8_15_1km"),12,15,'valid')
+                        .select('valid').eq(0)                      
+  var good_b11 = image.select("sur_refl_b11").gt(0);
+  var high_b11 = image.select("sur_refl_b11").lt(1500)
+  var out = image//.updateMask(good)
+                 .select(['sur_refl_b.*']).multiply(0.0001)
+                .updateMask(good_b11)
+                .updateMask(high_b11)
+                .updateMask(mqa_b11)
+  out = out.copyProperties(image,['system:time_start'])
+  return(out)
+}
+
+
+var qa_flag_mod09ga = function(i){
+  var mqa = getQABits(i.select("QC_500m"),0,1,'valid')
+                        .select('valid').eq(0)                      
+  var out = i.select(['sur_refl_b.*']).multiply(0.0001)
+              .updateMask(mqa)
+  out = out.copyProperties(i,['system:time_start'])
+  return(out)
+  
+}
+
+var mod09ga = ee.ImageCollection('MODIS/006/MOD09GA')
+    .filterDate(start_date, end_date)
+    .map(qa_flag_mod09ga)
+    .select(["sur_refl_b01","sur_refl_b02","sur_refl_b06"],
+    ["red","nir","swir"])
+
+
+var modo = ee.ImageCollection("MODIS/006/MODOCGA")
+             .filterDate(start_date, end_date)
+             .map(qa_flag_mod0CGA)
+            // .select(["sur_refl_b11", "QC_b8_15_1km"])
+
+// print("modo",modo.first())
+// Map.addLayer(modo)
+// Define an inner join.
+var innerJoin = ee.Join.inner();
+
+// Specify an equals filter for image timestamps.
+var filterTimeEq = ee.Filter.equals({
+    leftField: 'system:time_start',
+    rightField: 'system:time_start'
+   });
+
+var innerJoinedMODIS = innerJoin.apply(mod09ga, modo, filterTimeEq);
+
+var joinedMODIS = innerJoinedMODIS.map(function(feature) {
+  return ee.Image.cat(feature.get('primary'), feature.get('secondary'));
+});
+var sr = ee.ImageCollection(joinedMODIS)
+
+var sr = sr.map(function(i){
+        var out1 = i.normalizedDifference(['nir','red']).rename('ndvi')
+        var out2 = out1.select('ndvi').multiply(i.select('nir')).rename('nirv')
+        var out = i.addBands(out1.select('ndvi'))
+        out = out.addBands(out2.select('nirv'))
+        var out3= i.normalizedDifference(['sur_refl_b11','red']).rename('cci')
+        out = out.addBands(out3)
+        var out4 = i.normalizedDifference(['nir','swir']).rename('ndmi')
+        out = out.addBands(out4)
+        return(out);
+      })
+
+var dates = years.map(function(y){
+  return(months.map(function(m){
+    return(ee.Date.fromYMD(y,m,1))
+  }))
+})
+dates = dates.flatten()
+dates = dates.filter(ee.Filter.lessThanOrEquals('item',ee.Date(max_date)))
+dates = dates.filter(ee.Filter.greaterThanOrEquals('item',ee.Date(min_date)))
+print(dates)
+
+
+
+var forest_mask = gfc.select("treecover2000").gte(25); 
+Map.addLayer(forest_mask,{min:0,max:1})
+var test = ee.ImageCollection.fromImages(dates.map(function(d){
+  var date_focal = ee.Date(d)
+  var dateFilter = ee.Filter.date(date_focal, date_focal.advance(1,'month'));
+
+  var im_dict = ee.Image(sr.filter(dateFilter).first());
+  var out = sr.filter(dateFilter)
+          .median()
+  out = ee.Image(out); 
+  // out = out.set('system:time_start', ee.Date(date_focal));
+  // out = out.set('system:time_end', ee.Date(date_focal).advance(28,'days'));
+  out = out.copyProperties(im_dict,["system:index"])
+  out = out.copyProperties(im_dict,["system:time_start"])
+  out = out.copyProperties(im_dict,["system:time_end"])
+  out = ee.Image(out); 
+  out = out.updateMask(forest_mask).clip(roi)
+  
+  return(out)
+}).flatten()); 
+
+Map.addLayer(test.first(),{bands:['cci'],min:-0.5,max:0.5,palette:['red','black','blue']})
+
+var multiband_cci = test.select(['cci']).toBands()
+var multiband_ndvi = test.select(['ndvi']).toBands()
+var multiband_ndmi = test.select(['ndmi']).toBands()
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband_cci, 
+  description:"CCI_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MOD_CCI_"+scale_m+"m_"+roi_name+min_date+"_to_"+max_date,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband_ndvi, 
+  description:"NDVI_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MOD_NDVI_"+scale_m+"m_"+roi_name+"_"+min_date+"_to_"+max_date,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband_ndmi, 
+  description:"NDMI_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"MOD_NDMI_"+scale_m+"m_"+roi_name+"_"+min_date+"_to_"+max_date,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })

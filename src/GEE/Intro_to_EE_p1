@@ -1,0 +1,88 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.27603610901508, -32.93197547903106],
+          [150.27603610901508, -33.3195558623333],
+          [150.88852390198383, -33.3195558623333],
+          [150.88852390198383, -32.93197547903106]]], null, false),
+    imageCollection = ee.ImageCollection("MODIS/006/MOD13A1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Functions *********************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qa_flag_mod(image){  // filtering for best quality retrievals 
+  var qa_mask = getQABits(image.select("DetailedQA"),0,1,'valid')
+                        .select('valid').eq(0); 
+  var out = image.updateMask(qa_mask).select(['EVI']).multiply(0.0001); 
+  out = out.copyProperties(image,['system:time_start'])
+
+  return(out)
+}
+
+
+var mod = ee.ImageCollection("MODIS/006/MOD13A1"); 
+
+
+var mod_pre = mod.filterDate("2001-01-01","2010-02-28") // filter to a date range 
+                 .filter(ee.Filter.calendarRange(1, 2, 'month')) // Filtering to Jan-Feb
+                .filterBounds(roi) // filtering to a geographic location
+                .map(function(i){
+                  var out = qa_flag_mod(i); 
+                  return(out)
+                })
+                .mean()
+
+var mod_post = mod.filterDate("2020-01-01","2020-02-28") // filter to a date range 
+                .filterBounds(roi) // filtering to a geographic location
+                .map(function(i){
+                  var out = qa_flag_mod(i); 
+                  return(out)
+                })
+                .mean()
+                
+
+var mod_diff = mod_post.subtract(mod_pre).clip(roi)
+
+Map.addLayer(mod_diff,{bands:["EVI"],min:-0.25,max:0.25,palette:['red','black','blue']},'difference')
+
+
+Export.image.toDrive(//image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions, 
+                     {image:mod_diff, 
+                       description:'export_mod_fire_diff',
+                       folder:'Oz_misc_data', 
+                       fileNamePrefix:"modis_pre_post_fire_example",
+                       region:roi, 
+                       scale:500, 
+                       crs:"EPSG:4326"
+                     })
+
+
+
+// print(mod_ss)   
+
+// var i1 = mod_ss.first().clip(roi)
+// var mod_evi = mod_ss.map(function(i){
+//   return(i.select("EVI").multiply(0.0001))
+// })
+
+
+// Map.addLayer(mod_evi, {bands:['EVI'], min:0, max:0.9, palette:["black","green"]}, 'mod_evi'); 
+// Map.addLayer(mod_ss, {bands:['EVI'], min:0, max:6000, palette:["black","green"]}, 'mod_ss'); 
+// Map.addLayer(i1, {bands:['EVI'], min:0, max:6000, palette:["black","green"]}, 'i1')

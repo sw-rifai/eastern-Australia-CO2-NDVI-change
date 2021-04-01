@@ -1,0 +1,188 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mod_ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    mod_vi = ee.ImageCollection("MODIS/006/MOD13A2"),
+    myd13a2 = ee.ImageCollection("MODIS/006/MYD13A2"),
+    mod13a2 = ee.ImageCollection("MODIS/006/MOD13A2"),
+    mcd43a4 = ee.ImageCollection("MODIS/006/MCD43A4"),
+    mcd43a2 = ee.ImageCollection("MODIS/006/MCD43A2"),
+    roi_se_vic = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[147.72624179419688, -36.851631153177266],
+          [147.72624179419688, -37.86024466689231],
+          [150.0828091770094, -37.86024466689231],
+          [150.0828091770094, -36.851631153177266]]], null, false),
+    mcd15 = ee.ImageCollection("MODIS/006/MCD15A3H"),
+    mod15 = ee.ImageCollection("MODIS/006/MOD15A2H"),
+    cdr = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var scale_m = 5000; // 500m(native) to 5000(analysis)
+var roi_name = "EastOz"   //   "SE_Vic"
+var start_year = 1981; 
+var end_year = 2019; 
+var min_date = "1981-07-01" // Look for product start date
+var max_date = "2019-12-01" // Look for product end date
+var var_name = 'ndvi_stdDev'
+var years = ee.List.sequence(start_year,end_year,1); 
+var months = ee.List.sequence(1,12,1); 
+// var dates = ee.List.sequence(ee.Date.fromYMD(years[0],months[0],1))
+// Map.addLayer(nvis.lte(15),{palette:['yellow','green'],min:0,max:1})
+
+var roi = ee.Geometry.Rectangle([136, -44, 154, -11])
+roi = roi.buffer(50000)
+
+var nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses");
+var nvis_mask = nvis.lte(12).add(nvis.eq(22)).add(nvis.eq(24)).gte(1)
+
+// band 1: red, band 2: nir (841-876 nm)
+
+
+//***************************************************************************
+//*** FUNCTIONS 
+//***************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+
+function qualityFlag_cdr_ndvi(image) {
+  var qa = image.select('QA');
+  
+  // Select bits
+  var cloudBitMask = Math.pow(2, 1);
+  var shadowBitMask = Math.pow(2, 2);
+  var brdfBitMask = Math.pow(2, 14);
+  var ch_1_5_BitMask = Math.pow(2, 7);
+  
+  // 
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+            .and(
+              qa.bitwiseAnd(shadowBitMask).eq(0))
+              // .and(
+              // qa.bitwiseAnd(ch_1_5_BitMask).eq(0));
+  // var mask_2 = qa.bitwiseAnd(ch_1_5_BitMask).neq(0)
+  image = image.updateMask(mask);
+  // image = image.updateMask(mask_2); 
+  // image = image.updateMask(brdfBitMask.eq(0))
+
+  // Return the masked data.
+  var out = image.multiply(0.0001)
+  out = out.select(["NDVI"],['ndvi'])
+  return(out); 
+  // return(qa.bitwiseAnd(brdfBitMask).eq(0));
+}
+
+//***************************************************************************
+//*** END SECTION 
+//***************************************************************************
+
+
+//***************************************************************************
+//*** MAIN
+//***************************************************************************
+// Cast dates to list and filter to min/max
+var dates = years.map(function(y){
+  return(months.map(function(m){
+    return(ee.Date.fromYMD(y,m,1))
+  }))
+})
+dates = dates.flatten()
+dates = dates.filter(ee.Filter.lessThan('item',ee.Date(max_date)))
+dates = dates.filter(ee.Filter.greaterThan('item',ee.Date(min_date)))
+
+
+var test = ee.ImageCollection.fromImages(dates.map(function(d){
+  var date_focal = ee.Date(d)
+
+  var dateFilter = ee.Filter.date(date_focal, date_focal.advance(1,'month'));
+  var im_dict = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5")
+                  .filter(dateFilter)
+                  .first()
+  
+  // Load a AVHRR collection with fapar data.
+  var out = ee.ImageCollection("NOAA/CDR/AVHRR/NDVI/V5")
+      .filter(dateFilter)
+      .map(qualityFlag_cdr_ndvi)
+      .reduce(ee.Reducer.stdDev())
+      .select("ndvi_stdDev")
+
+
+  out = ee.Image(out)//.addBands(bin_burn.rename("burn_mask"))
+  
+  // out = out.set('system:time_start', ee.Date(date_focal));
+  // out = out.set('system:time_end', ee.Date(date_focal).advance(28,'days'));
+  out = out.copyProperties(im_dict,["system:index"])
+  out = out.copyProperties(im_dict,["system:time_start"])
+  out = out.copyProperties(im_dict,["system:time_end"])
+  return(out)
+}).flatten()); 
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+//***************************************************************************
+//*** EXPORT
+//***************************************************************************
+// var multiband = ee.Image().select()
+// var multiband = ee.Image(test.iterate(function(image, result) {
+//   return ee.Image(result).addBands(image)
+// }, multiband))
+var multiband = test.toBands()
+
+
+
+// //* DEBUGGING **********************************************************************************************
+// var test_im = mod15.filterDate('2019-01-01','2019-01-09').first()
+// test_im = ee.Image(test_im)
+// var test_mask = mask_deforestation(test_im)
+// Map.addLayer(test_mask,{min:0,max:1,palette:['black','purple']},'test_mask',false)
+Map.addLayer(test.first(),{min:0,max:1},'test',true)
+// //***********************************************************************************************************
+
+
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"AVHRR_CDRv5_VI", 
+  fileNamePrefix:"AVHRR_CDRv5_"+var_name+"_"+scale_m+"m_"+roi_name+"_mSD_"+start_year+"_"+end_year,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+
+
+
+// Map.addLayer(test,{palette:['black','red']},'bin_burn')
+// Map.addLayer(test,{palette:['black','green'],
+//   bands:["nirv"]
+// },'nirv'); 
+// Map.addLayer(test,{palette:['red','black'],
+//   bands:["burn_mask"]
+// },'burn_mask'); 
+
+// Map.addLayer(mod_ba.filterDate("2014-01-01","2019-12-31"),
+// {bands:['BurnDate']},
+// 'mod_ba')

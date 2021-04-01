@@ -1,0 +1,80 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var vcf = ee.ImageCollection("MODIS/006/MOD44B"),
+    mcd64 = ee.ImageCollection("MODIS/006/MCD64A1"),
+    avhrr = ee.ImageCollection("NOAA/CDR/AVHRR/SR/V5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var start_year = 2001; 
+var end_year = 2019; 
+
+var roi = ee.Geometry.Rectangle([136, -44, 154, -11])
+roi = roi.buffer(50000)
+var avhrr_proj = avhrr.first().projection(); 
+print(avhrr_proj)
+
+var dat = ee.ImageCollection("users/potapovpeter/GEDI_V27"); 
+
+
+// Map.addLayer(mcd64)
+mcd64 = mcd64.filterDate(ee.Date.fromYMD(start_year,1,1), 
+                     ee.Date.fromYMD(end_year,12,31))
+  .map(function(i){
+  var out = i.select("BurnDate")
+              .gt(0)
+              .unmask()
+            // .clip(roi)
+  return(out)
+}).map(function(i){
+  var out = i.toDouble();
+  out = out.reduceResolution({
+    reducer: ee.Reducer.mean(), 
+    bestEffort: false, 
+    maxPixels: 1024})
+  out = out.multiply(ee.Image.pixelArea())
+  return(out)
+})
+
+// print(mcd64)
+var out = mcd64.toBands()
+              .reproject({
+       crs: avhrr_proj
+    });
+
+// out = out.toDouble();
+// out = out.reduceResolution('sum', true, 100)
+
+// //*** Debugging ***
+// Map.setCenter(145.90, -42.91, 12)
+// Map.addLayer(out.select('2007_02_01_BurnDate'),{min:0,max:772870.7672002375,
+//     palette:['black','red']
+// }); 
+// // ******************
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:out, 
+  description:"mcd64_export",
+  folder:"MCD64_Oz", 
+  fileNamePrefix:"MCD64A1_BurnArea_reducedToAVHRRres_"+start_year+"_"+end_year+"_",
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })
+
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:ee.Image(mcd64.first().select('BurnDate').unmask().gte(0).multiply(ee.Image.pixelArea())), 
+  description:"mcd64_pixel_area_export",
+  folder:"MCD64_Oz", 
+  fileNamePrefix:"MCD64A1_AVHRRres_pixel_area_",
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:401399299
+  // maxPixels:40000000
+  })
+
+
+

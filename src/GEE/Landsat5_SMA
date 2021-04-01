@@ -1,0 +1,172 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var cgls = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    coords = ee.FeatureCollection("users/srifai/Oz_coords_set_EA_lai_amp0p5_min0p5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var country = "Australia"
+var start_year = 2012; 
+var end_year = 2020;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(start_year,end_year);
+
+var var_name = "LST_Day_1km"
+
+
+//******************************************************************
+// Spectral signatures
+//******************************************************************
+var gv = [0.013300000000000001,
+0.0262,
+0.028200000000000003,
+0.1938,
+0.0959,
+0.050300000000000004]
+
+var npv = [0.045200000000000004,
+ 0.07640000000000001,
+ 0.08310000000000001,
+ 0.1454,
+ 0.26080000000000003,
+ 0.1812
+  ]
+
+var shade = [0.016900000000000002,
+0.028,
+0.0182,
+0.0175,
+0.0088,
+0.0091
+  ]
+
+var soil = [
+0.1332,
+0.19940000000000002,
+0.2341,
+0.37,
+0.4713,
+0.35350000000000004
+]
+//******************************************************************
+// MAIN
+//******************************************************************
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+var roi2 = ee.Geometry.Rectangle(//coords, proj, geodesic, evenOdd)
+                                 // xMin, yMin, xMax, yMax
+                                 [135,-43,154,-10],"EPSG:4326")
+
+var tcf = ee.Image(cgls.first()).select("tree-coverfraction")
+                                .clip(roi)
+                                .clip(roi2); 
+
+var tcf_int = tcf.toInt8()
+                 .updateMask(tcf.gte(75)); 
+
+// var ss = tcf_int.stratifiedSample( // numPoints, classBand, region, scale, projection, seed, classValues, classPoints, dropNulls, tileScale, geometries)
+//             {numPoints:30, 
+//               seed:3,
+//             classBand:"tree-coverfraction",
+//             region:roi2, 
+//             // scale:30
+//             geometries:true
+//               })
+
+
+
+
+
+/**
+ * Function to mask clouds based on the pixel_qa band of Landsat SR data.
+ * @param {ee.Image} image Input Landsat SR image
+ * @return {ee.Image} Cloudmasked Landsat image
+ */
+var cloudMaskL457 = function(image) {
+  var qa = image.select('pixel_qa');
+  // If the cloud bit (5) is set and the cloud confidence (7) is high
+  // or the cloud shadow bit is set (3), then it's a bad pixel.
+  var cloud = qa.bitwiseAnd(1 << 5)
+                  .and(qa.bitwiseAnd(1 << 7))
+                  .or(qa.bitwiseAnd(1 << 3));
+  // Remove edge pixels that don't occur in all bands
+  var mask2 = image.mask().reduce(ee.Reducer.min());
+  return image.updateMask(cloud.not()).updateMask(mask2);
+};
+
+var apply_sma = function(image){
+  var out = image.unmix([gv, npv, soil, shade],true,true);
+  out = out.rename(["gv","npv","soil","shade"])
+  return(out); 
+}
+
+
+var dataset = ee.ImageCollection('LANDSAT/LT05/C01/T1_SR')
+                  .filterDate('2011-01-01', '2011-12-31')
+                  .filterBounds(roi)
+                  .filterBounds(roi2)
+                  .map(cloudMaskL457)
+                  .map(function(i){
+                    return(i.select(["B1","B2","B3","B4","B5","B7"])
+                            .multiply(0.0001))
+                  }) 
+                  .map(apply_sma)
+
+
+var out = dataset.map(function(image) {
+  return image.reduceRegions({
+    collection: coords, 
+    reducer: ee.Reducer.mean(), 
+    scale: 30
+  })
+  }).flatten()
+//   .map(function(f) {
+//     return f.set({
+//       time: image.date().millis(),
+//       date: image.date().format()
+//     })
+//   })
+// }).flatten()
+
+Export.table.toDrive(out,
+    'Landsat5_SMA_Oz_coords_set_EA_lai_amp0p5_min0p5', //descrip
+    'Oz_misc_data', //folder
+    'Landsat5_SMA_Oz_coords_set_EA_lai_amp0p5_min0p5', //fileNamePrefix
+    'CSV'); //fileFormat
+
+
+
+// Map.addLayer(dataset, {bands:["npv",'gv','soil'], min:0, max:1},"dataset_sma")
+
+
+
+
+// Map.addLayer(dataset, {bands:["B5","B4","B3"], min:0, max:[0.25,0.3,0.3]},"dataset",false)
+
+// var test = ee.Image('LANDSAT/LT05/C01/T1_SR/LT05_090085_20090117')
+//               .select(["B1","B2","B3","B4","B5","B7"])
+//                             .multiply(0.0001)
+// var test_sma = apply_sma(test); 
+
+// Map.addLayer(test, {bands:["B5","B4","B3"], min:0, max:[0.25,0.3,0.3]})
+// Map.addLayer(test_sma, {bands:["npv",'gv','soil'], min:0, max:1},"test_sma")
+
+/*  lon        lat        scene_id
+gv: 149.54086, -36.74677, LT05_090085_20090117
+soil: 148.274938, -36.456875, LT05_090085_20090117
+shade: 149.93686, -36.7861, LT05_090085_20090117
+npv: 149.22126, -36.35481, LT05_090085_20090117
+**/
+
+
+
+
+// print(ss)
+Map.addLayer(tcf, {min:0, max:100,palette:['black','green']})
+Map.addLayer(coords, {color:'red'},"coords")

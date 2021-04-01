@@ -1,0 +1,88 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var slga = ee.ImageCollection("CSIRO/SLGA"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[152.93795284324688, -27.381025264607807],
+          [150.38912339281575, -27.391772988581643],
+          [148.38693768907672, -30.5018469657969],
+          [148.52468439849812, -31.989360332336613],
+          [142.75362667137185, -38.65076040587153],
+          [143.42697234917478, -38.98768897634071],
+          [146.15938839012185, -39.299865255495014],
+          [150.03756221824688, -37.62248945386535],
+          [151.44381221824688, -33.915547769883126],
+          [153.11373409324688, -32.62965075889003],
+          [153.81685909324688, -28.08117899050527]]]),
+    mtpi = ee.Image("CSP/ERGo/1_0/Global/ALOS_mTPI"),
+    dem = ee.Image("WWF/HydroSHEDS/03CONDEM");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var scale_m = 500; // 500m(native) to 5000(analysis)
+var roi_name = "SE_coastal"   //   "SE_Vic"
+
+// Export SLGA **************************************************************************
+slga = slga.toBands().select(".*EV"); 
+print(slga)
+var fnp_slga = "SLGA_"+scale_m+"m_"+roi_name;
+
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:slga, 
+  description:fnp_slga, //var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:fnp_slga,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+
+// Export multiTPI
+var fnp_mtpi = "mtpi_alos_"+scale_m+"m_"+roi_name;
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:mtpi, 
+  description:'mtpi', //var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:fnp_mtpi,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+// var swc = ee.Image("OpenLandMap/SOL/SOL_WATERCONTENT-33KPA_USDA-4B1C_M/v01");
+
+
+// print(slga)
+// Map.addLayer(slga)
+
+
+// Export slope
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:ee.Terrain.slope(dem), 
+  description:'slope', //var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"slope_wwfhydrosheds_"+scale_m+"m_"+roi_name,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })
+
+
+// Export aspect
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:ee.Terrain.aspect(dem), 
+  description:'aspect', //var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"aspect_wwfhydrosheds_"+scale_m+"m_"+roi_name,
+  region:roi,
+  scale:scale_m,
+  crs:"EPSG:4326", 
+  maxPixels:500000000
+  })

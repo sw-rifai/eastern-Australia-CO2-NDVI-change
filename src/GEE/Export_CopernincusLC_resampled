@@ -1,0 +1,41 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var lc = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    avhrr = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[149.48089130698588, -32.24804836801798],
+          [149.48089130698588, -34.43221951887352],
+          [151.77703388511088, -34.43221951887352],
+          [151.77703388511088, -32.24804836801798]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var grid_avhrr = avhrr.filterDate('2010-01-01','2010-03-01')
+                      .mean()
+                      .clip(roi); 
+Map.addLayer(grid_avhrr)
+
+// print(grid_avhrr.projection().crs()); 
+// print(grid_avhrr.projection().nominalScale()); 
+
+var avhrrProj = grid_avhrr.projection()
+
+var lc_clip = ee.Image(lc.first())
+                    .select('tree-coverfraction')
+                    .clip(roi)
+                  
+var lc_transform = lc_clip
+                    .reduceResolution({
+                      reducer: ee.Reducer.mean(),
+                      maxPixels: 25, 
+                      bestEffort: true
+                      // scale:grid_avhrr.projection().nominalScale()
+                    })
+                    .reproject({crs:avhrrProj})
+
+Map.addLayer(lc_transform,null,"transformed LC")

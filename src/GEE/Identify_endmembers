@@ -1,0 +1,77 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    roi = /* color: #d63000 */ee.Geometry.Point([150.36384726328018, -33.64947836516903]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Function to cloud mask from the pixel_qa band of Landsat 8 SR data.
+function maskL8sr(image) {
+  // Bits 3 and 5 are cloud shadow and cloud, respectively.
+  var cloudShadowBitMask = 1 << 3;
+  var cloudsBitMask = 1 << 5;
+
+  // Get the pixel QA band.
+  var qa = image.select('pixel_qa');
+
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
+
+  // Return the masked image, scaled to reflectance, without the QA bands.
+  return image.updateMask(mask).divide(10000)
+      .select("B[0-9]*")
+      .copyProperties(image, ["system:time_start"]);
+}
+
+function unmix_L8(i){
+  //150.4698, -33.68304
+  var GV =    [0.008299999870359898, 0.013199999928474426, 0.02810000069439411,
+               0.02889999933540821, 0.24279999732971191, 0.10840000212192535, 0.04430000111460686]
+  
+  // // 150.19313, -32.32017 // BURNED!
+  // var NPV =   [0.030300000682473183, 0.03359999880194664, 0.04230000078678131,
+  //             0.053599998354911804, 0.08869999647140503, 0.19580000638961792,0.17630000412464142]
+
+  // 150.552277, -33.736269
+  var NPV =   [ 0.020800000056624413, 0.024900000542402267,  0.03530000150203705,
+ 0.04050000011920929, 0.13619999587535858,  0.19519999623298645, 0.11670000106096268]
+
+  // 150.159611, -33.579042
+  var Soil =  [0.08290000259876251, 0.10620000213384628,
+                0.17870000004768372, 0.21879999339580536,  0.25540000200271606, 0.2978000044822693,
+               0.20999999344348907]
+
+  //151.16258, -33.51971
+  var Shade = [0.019899999722838402, 0.02419999986886978, 0.03579999879002571, 0.040300000458955765,
+                 0.013700000010430813, 0.0038999998942017555, 0.002300000051036477]
+                 
+                 
+  var target = i.select(["B1","B2","B3","B4","B5","B6","B7"])
+  var sma = target.unmix([NPV,GV,Soil,Shade], false, false)
+                  .rename(["NPV","GV","Soil","Shade"])
+                  
+  // var shadeMask = sma.select("Shade").lte(0.2); // 0.2 is arbitrary
+  // sma = sma.updateMask(shadeMask); 
+  return(ee.Image(sma)); 
+}
+
+var ss = l8.filterDate("2020-01-01","2020-02-28")
+           .filterBounds(roi)
+           .map(maskL8sr)
+           
+var image = ee.Image("LANDSAT/LC08/C01/T1_SR/LC08_091083_20200107")
+image = ee.Image(maskL8sr(image))
+
+Map.addLayer(ss, {bands:['B6','B5','B4'],min:0,max:0.25})
+
+
+
+var ss_unmixed = l8
+           .filterBounds(roi)
+           .map(maskL8sr)
+           .map(unmix_L8)
+
+Map.addLayer(ss_unmixed,
+  // .select('GV'),
+  // null,
+  {bands:['NPV','GV','Shade'],min:0,max:1},
+   'npv',false)
+

@@ -1,0 +1,152 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var mod_ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    mod_vi = ee.ImageCollection("MODIS/006/MOD13A2"),
+    viirs_vi = ee.ImageCollection("NOAA/VIIRS/001/VNP13A1");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var start_year = 2012; 
+var end_year = 2019; 
+var fire_buffer_years = 3
+var var_name = 'nirv'
+var years = ee.List.sequence(start_year,end_year,1); 
+var months = ee.List.sequence(1,12,1); 
+// var dates = ee.List.sequence(ee.Date.fromYMD(years[0],months[0],1))
+// Map.addLayer(nvis.lte(15),{palette:['yellow','green'],min:0,max:1})
+
+//***************************************************************************
+//*** FUNCTIONS 
+//***************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlagMOD13(image){
+  var qa = image.select('SummaryQA')
+  qa = getQABits(image, 0,1,"VI")
+  var good = qa.select("VI").eq(0); 
+  var i_out = image.updateMask(good); 
+  return(i_out); 
+}
+
+function qualityFlagVIIRS(image){
+  var qa = image.select('VI_Quality')
+  qa = getQABits(image, 0,1,"VI")
+  var good = qa.select("VI").eq(0); 
+  var i_out = image.updateMask(good); 
+  return(i_out); 
+}
+
+
+//***************************************************************************
+//*** END SECTION 
+//***************************************************************************
+
+
+//***************************************************************************
+//*** MAIN
+//***************************************************************************
+var dates = years.map(function(y){
+  return(months.map(function(m){
+    return(ee.Date.fromYMD(y,m,1))
+  }))
+})
+dates = dates.flatten()
+// print(ee.Date(dates.get(0)).advance(1,'year')); 
+
+
+
+var test = ee.ImageCollection.fromImages(dates.map(function(d){
+  var nvis_mask = nvis.lte(15)
+  var date_focal = ee.Date(d)
+  var date1 = ee.Date(d).advance(-fire_buffer_years,'year'); 
+  // var date2 = ee.Date(d)
+  var bin_burn = mod_ba.filterDate(date1,date_focal)
+            .map(function(i){
+              var out2 = i.select("BurnDate")
+                          .gte(1)
+              return(out2); 
+            })
+            .max()
+                      // .select("BurnDate")
+                      // .max()
+                      // .gte(1)
+  bin_burn = ee.Image(bin_burn).unmask().eq(0)                     
+
+  var im_dict = viirs_vi.filterDate(date_focal, date_focal.advance(1,'month'))
+                      .first()
+                      // .toDictionary()
+  
+  var nirv = viirs_vi.filterDate(date_focal, date_focal.advance(1,'month'))
+                   .map(qualityFlagMOD13)
+                   .map(function(i){
+                   var out2 = i.select("NDVI")
+                          .multiply(0.0001)
+                   var nir = i.select('NIR_reflectance')
+                               .multiply(0.0001)
+                   out2 = out2.multiply(nir).rename("nirv")
+                   return(out2); 
+                    })
+                    .mean()
+                    .updateMask(bin_burn)
+                    .updateMask(nvis_mask)
+
+  var out = ee.Image(nirv)//.addBands(bin_burn.rename("burn_mask"))
+  // out = out.set('system:time_start', ee.Date(date_focal));
+  // out = out.set('system:time_end', ee.Date(date_focal).advance(28,'days'));
+  out = out.copyProperties(im_dict,["system:index"])
+  out = out.copyProperties(im_dict,["system:time_start"])
+  out = out.copyProperties(im_dict,["system:time_end"])
+  return(out)
+}).flatten()); 
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+//***************************************************************************
+//*** EXPORT
+//***************************************************************************
+// var multiband = ee.Image().select()
+// var multiband = ee.Image(test.iterate(function(image, result) {
+//   return ee.Image(result).addBands(image)
+// }, multiband))
+var multiband = test.toBands()
+var roi = ee.Geometry.Rectangle([137, -44, 154, -10])
+Map.addLayer(roi)
+Export.image.toDrive(
+  // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+  {image:multiband, 
+  description:var_name+"_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  fileNamePrefix:"VNP13A1_NIRV_5km_EastOz_NVIStreeClassMask_"+start_year+"_"+end_year,
+  region:roi,
+  scale:5000,
+  crs:"EPSG:4326", 
+  maxPixels:100000000
+  })
+
+//***************************************************************************
+//*** END SECTION
+//***************************************************************************
+
+
+
+
+// Map.addLayer(test,{palette:['black','red']},'bin_burn')
+// Map.addLayer(test,{palette:['black','green'],
+//   bands:["nirv"]
+// },'nirv'); 
+// Map.addLayer(test,{palette:['red','black'],
+//   bands:["burn_mask"]
+// },'burn_mask'); 
+
+// Map.addLayer(mod_ba.filterDate("2014-01-01","2019-12-31"),
+// {bands:['BurnDate']},
+// 'mod_ba')

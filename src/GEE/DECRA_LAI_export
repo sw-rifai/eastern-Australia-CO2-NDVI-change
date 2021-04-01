@@ -1,0 +1,109 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ba = ee.ImageCollection("MODIS/006/MCD64A1"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([153.28439783139595, -29.60940923233875]),
+    l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    l5 = ee.ImageCollection("LANDSAT/LT05/C01/T1_SR"),
+    roi2 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.Point([145.63147623201422, -37.43766254148894]),
+    resolve = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"),
+    nvis = ee.Image("users/srifai/Oz/nvis5p1_majorVegClasses"),
+    roi_export = 
+    /* color: #0b4a8b */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[145.02662180124503, -37.25234147098301],
+          [145.02662180124503, -37.51967664140292],
+          [145.40084360300284, -37.51967664140292],
+          [145.40084360300284, -37.25234147098301]]], null, false),
+    mcd43a4 = ee.ImageCollection("MODIS/006/MCD43A4"),
+    lai = ee.ImageCollection("MODIS/006/MCD15A3H"),
+    ba_poly = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[145.14916704831688, -37.3518349830551],
+          [145.14916704831688, -37.41866957344985],
+          [145.24529741941063, -37.41866957344985],
+          [145.24529741941063, -37.3518349830551]]], null, false),
+    act = 
+    /* color: #ffc82d */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[148.82936813491833, -35.47896492653641],
+          [148.82936813491833, -35.64346733634119],
+          [149.07415725845348, -35.64346733634119],
+          [149.07415725845348, -35.47896492653641]]], null, false),
+    mod15 = ee.ImageCollection("MODIS/006/MOD15A2H");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
+//***************************************************************************
+//*** FUNCTIONS 
+//***************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlagMCD15(image){
+  var qa = image.select('FparLai_QC')
+  qa = getQABits(image, 0,1,"VI")
+  var good = qa.select("VI").eq(0); 
+  var i_out = image.updateMask(good); 
+  return(i_out); 
+}
+
+// END SECTION 
+//*****************************************************
+
+// MAIN ***********************************************
+mod15 = mod15.filterDate("2001-01-01","2010-12-31")
+        .map(qualityFlagMCD15)
+        .map(function(i){
+        var lai_s = i.select('Lai_500m')
+                    .multiply(0.1)
+                    .rename('lai_s')
+        i = i.addBands(lai_s)
+        return(i)})
+        .select(['lai_s'])
+// Map.addLayer(mod15.select(['lai_s']),{bands:['lai_s']})
+
+mod15 = mod15.toBands();
+// print(lai)
+
+
+Export.image.toDrive(// image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+{image:mod15,
+folder:"decra_figures",
+fileNamePrefix:"ACT_LAI_20010101_20071231",
+region:act,
+scale:500
+})
+

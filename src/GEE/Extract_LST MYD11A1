@@ -1,0 +1,198 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var aqua = ee.ImageCollection("MODIS/006/MYD11A2"),
+    lai = ee.ImageCollection("NOAA/CDR/AVHRR/LAI_FAPAR/V5"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017"),
+    aqua_daily = ee.ImageCollection("MODIS/006/MYD11A1"),
+    cgls = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    coords = ee.FeatureCollection("users/srifai/Oz_coords_set_EA_lai_amp0p5_min0p5"),
+    junk = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[150.56652580327435, -33.238769020527364],
+          [150.56652580327435, -33.32257745962163],
+          [150.60909782475872, -33.32257745962163],
+          [150.60909782475872, -33.238769020527364]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+coords = coords.select(["id"])
+// coords = coords.filterBounds(junk) //delete
+
+    
+    
+    
+//**************************************************************************************************
+//*** Options for monthly aggegation ***
+//**************************************************************************************************
+var country = "Australia"
+var start_year = 2011; 
+var end_year = 2020;
+var start_date=ee.Date.fromYMD(start_year,01,01)
+var end_date=ee.Date.fromYMD(end_year+1,01,01)
+var months=ee.List.sequence(1,12)
+var years=ee.List.sequence(start_year,end_year);
+var ic = aqua; 
+var var_name = "LST_Day_1km"
+
+//**************************************************************************************************
+// FUNCTIONS
+//**************************************************************************************************
+var getQABits = function(image, start, end, newName) {
+    // Compute the bits we need to extract.
+    var pattern = 0;
+    for (var i = start; i <= end; i++) {
+       pattern += Math.pow(2, i);
+    }
+    var out = image.select([0], [newName])
+                  .bitwiseAnd(pattern)
+                  .rightShift(start);
+    return(image.addBands(out))
+};
+
+function qualityFlag_MYD11A2(image) {
+  var qa = getQABits(image.select('QC_Day'), 0,1,"good").eq(0);
+  var out = image.mask(qa.select('good'));
+  out = out.copyProperties(image,['system:time_start']); 
+  return(out); 
+}
+
+var mask_non_trees = function(i){
+  var non_tree = ee.Image(cgls.first())
+                   .select('tree-coverfraction')
+                   .gte(75); // 50% is arbitrary;
+  var out = i.updateMask(non_tree); 
+  out = out.copyProperties(i); 
+  return(out); 
+}
+
+var rescale_lst = function(i){
+              var out = i.select("LST_Day_1km")
+                        .multiply(0.02)
+                        .subtract(273.15)
+                        // .copyProperties(i);
+              out = out.copyProperties(i, ['system:time_start']);
+              return(out)
+            }
+
+var mask_myd = function(i){
+  var quality = getQABits(i.select('QC_Day'), 0, 1, 'quality')
+  quality = quality.select('quality')
+  var out = i.select('LST_Day_1km')
+              .multiply(0.02)
+              .subtract(273.15)
+  out = out.addBands(quality).copyProperties(i,['system:time_start'])
+
+  return(out)
+}
+
+
+//******************************************************************
+// MAIN
+//******************************************************************
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+var roi2 = ee.Geometry.Rectangle(//coords, proj, geodesic, evenOdd)
+                                 // xMin, yMin, xMax, yMax
+                                 [135,-43,154,-10],"EPSG:4326")
+
+// Map.addLayer(aqua_daily.filterDate("2003-01-01","2003-01-30"),null,'raw',false)
+
+var blank = aqua_daily
+              .filterDate("2003-01-01","2003-12-31")
+              .max()
+              .select("LST_Day_1km")
+              .subtract(999)
+              .copyProperties(ee.Image(aqua_daily.first()),['system:time_start'])
+blank = ee.ImageCollection([blank])
+// print(blank)
+// Map.addLayer(blank,null,'blank')
+var ic = aqua_daily
+              // .filterBounds(roi2)
+              .filterDate(start_date,end_date)
+              // .map(mask_myd)
+              .map(qualityFlag_MYD11A2)
+              .map(function(i){
+               var out2 = i.select("LST_Day_1km")
+               out2 = out2.multiply(0.02).subtract(273.15); 
+               out2 = out2.copyProperties(i, ["system:time_start"])
+               return(out2)
+              })
+              // .map(mask_non_trees)
+              // .map(rescale_lst)
+            //   .map(function(i){
+            //   var out = i.select("LST_Day_1km")
+            //             .multiply(0.02)
+            //             .subtract(273.15)
+            //             .copyProperties(i);
+            //   // out = out.copyProperties(i);
+            //   return(out)
+            // })
+            //   .map(function(i){
+            //   var out = i.clip(roi).clip(roi2)
+            //   return(out); 
+            // })
+// print(ic)
+// Map.addLayer(ic, {palette:['black','orange','red','yellow'], bands:["LST_Day_1km"]},"Aqua")
+
+// var blank = ee.ImageCollection(
+//   ee.Image.constant(1).toUint16().select(['constant'],['LST_Day_1km'])
+//           .copyProperties(ee.Image(ic.first(),['system:time_start'])
+//                 ))
+// var blank = ee.Image(-999)
+//               .rename("LST_Day_1km")
+//               .copyProperties(ee.Image(ic.first()))
+
+// var blank = ic.map(function(image) {
+//   var out = image;
+//   return out.select("LST_Day_1km")
+//               // .multiply(0.02)
+//               // .subtract(273.15)
+//               .copyProperties(image, ['system:time_start'])
+//               })
+//               .first()
+// blank = ee.ImageCollection(blank)
+// print(blank)
+var ic2 = ee.ImageCollection(blank.merge(ic));
+// print(blank)
+// print("ic2", ic2)
+
+
+var data = ic2.map(function(image) {
+  return image//.select("LST_Day_1km")
+              // .multiply(0.02)
+              // .subtract(273.15)
+              .reduceRegions({
+    collection: coords, 
+    // reducer:'mean',
+    reducer: ee.Reducer.mean(), 
+    scale: 1000
+  })
+    .map(function(f) {
+    return f.set({
+      // time: image.date().millis(),
+      date: image.date().format()
+    })
+  })
+}).flatten()
+// print(data.first());
+// print(data)
+data = data.map(function(f){return f.select(['.*'],null, false)});
+// Map.addLayer(coords)
+// print(data)
+
+Export.table.toDrive(//collection, description, folder, fileNamePrefix, fileFormat, selectors)
+{
+  collection:data, 
+  description:"EOz_LST_MYD11A1_"+start_year+"_"+end_year,
+  folder:"Oz_misc_data", 
+  // fileNamePrefix:"LST_test",
+  fileNamePrefix:"EOz_LST_MYD11A1_"+start_year+"_"+end_year,
+  fileFormat:'csv'
+}
+)

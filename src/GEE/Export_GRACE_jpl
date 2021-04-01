@@ -1,0 +1,31 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ic = ee.ImageCollection("NASA/GRACE/MASS_GRIDS/LAND"),
+    lsib = ee.FeatureCollection("USDOS/LSIB_SIMPLE/2017");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var roi = lsib.filterMetadata("country_na","equals",country)
+              .first()
+              .geometry()
+              .bounds()
+
+var multiband = ee.Image().select()
+var multiband = ee.Image(tmp.iterate(function(image, result) {
+   return ee.Image(result).addBands(image)
+}, multiband))
+
+// Map.addLayer(tmp, {min:0, max:8, palette:['#7d6c31','green'],bands:["LAI"]})
+// Map.addLayer(multiband); 
+// Map.addLayer(roi)
+
+// Export.image.toDrive(
+//   // image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions
+//   {image:multiband, 
+//   description:var_name+"_"+start_year+"_"+end_year,
+//   folder:"AVHRR_LAI_FAPAR_CDR_V5", 
+//   fileNamePrefix:"AVHRR_LAI_monmean_"+"_"+start_year+"_"+end_year,
+//   region:roi,
+//   scale:5000,
+//   crs:"EPSG:4326", 
+//   maxPixels:15000000
+//   })
+
+// // 20020401_20020430

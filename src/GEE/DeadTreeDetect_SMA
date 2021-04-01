@@ -1,0 +1,229 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var l8 = ee.ImageCollection("LANDSAT/LC08/C01/T1_SR"),
+    s2a = ee.ImageCollection("COPERNICUS/S2_SR"),
+    cgls = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global"),
+    roi = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[144.85581605523723, -38.584286528375095],
+          [145.16343324273723, -38.70441672769257],
+          [146.24009339898723, -39.3360392204408],
+          [146.74546449273723, -39.08065623287946],
+          [147.36069886773723, -38.39510388509217],
+          [148.23960511773723, -38.03255950526436],
+          [149.99741761773723, -37.78986105671143],
+          [150.26108949273723, -37.12708180064347],
+          [150.43687074273723, -36.05091968662786],
+          [150.92026918023723, -35.2474582266153],
+          [151.24985902398723, -34.07272771371734],
+          [152.59019105523723, -32.5116608035813],
+          [152.98569886773723, -31.4118341438489],
+          [149.73374574273723, -31.33679451922948],
+          [149.55796449273723, -31.84214574884294],
+          [148.59116761773723, -34.77956548760297],
+          [147.71226136773723, -35.39088584024682],
+          [146.48179261773723, -36.2992331533702],
+          [145.03159730523723, -37.10956100242881],
+          [144.83384339898723, -37.82458126958293]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var coord = ee.Geometry.Point([149.5187,-33.3127],"EPSG:4326")
+var date_of_obs = "2020-02-06"
+
+
+var ic = l8.filterBounds(coord)
+              .filterDate("2020-01-01","2020-02-28")
+              .sort("CLOUD_COVER",true)
+// print(ic)
+var ss_l8 = ic.map(function(i){
+             var out = i.select(["B6","B5","B4"])
+                        .multiply(0.0001); 
+             return(out)
+              })
+              .first(); 
+              
+
+
+//*************************************************************************
+// Sentinel 2 Level A 
+//*************************************************************************
+var mask_non_trees = function(i){
+  var non_tree = ee.Image(cgls.first())
+                   .select('tree-coverfraction')
+                   .gte(75); // 50% is arbitrary;
+  var out = i.mask(non_tree); 
+  return(out); 
+}
+
+var erode = function(img, distance) {
+  var d = img.not().unmask(1).fastDistanceTransform(distance).sqrt()
+      // .multiply(ee.Image.pixelArea().sqrt()) // for meters
+  return d.gt(distance);
+}
+
+var dilate = function(img, distance) {
+  var d = img.fastDistanceTransform(distance).sqrt()
+      // .multiply(ee.Image.pixelArea().sqrt()) // for meters
+  return d.lt(distance).selfMask();
+}
+
+/**
+ * Function to mask clouds using the Sentinel-2 QA band
+ * @param {ee.Image} image Sentinel-2 image
+ * @return {ee.Image} cloud masked Sentinel-2 image
+ */
+function maskS2clouds(image) {
+  var qa = image.select('QA60');
+
+  // Bits 10 and 11 are clouds and cirrus, respectively.
+  var cloudBitMask = 1 << 10;
+  var cirrusBitMask = 1 << 11;
+  var highAerosolMask = image.select("B1").lte(2000); // 0.2 is an arbitrary threshod
+  highAerosolMask = erode(highAerosolMask, 5); // dilate the mask
+  
+  // Both flags should be set to zero, indicating clear conditions.
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+      .and(qa.bitwiseAnd(cirrusBitMask).eq(0));
+
+  return image.updateMask(mask).updateMask(highAerosolMask).divide(10000);
+}
+
+function unmix_S2a(i){
+  var GV =    [0.0639,	0.0698,	0.0544,	0.0884,	0.2002,	0.2395,	0.2486,	0.2648,	0.1256,	0.0631]
+  var NPV =   [0.0982,	0.1242,	0.1684,	0.1982,	0.2192,	0.2413,	0.2684,	0.283,	0.5075,	0.3846]
+  var Soil =  [0.1624,	0.2248,	0.2906,	0.328,	0.3404,	0.3616,	0.3614,	0.3741,	0.5055,	0.4203]
+  var Shade = [0.0772,	0.0696,	0.057,	0.0535,	0.0499,	0.0498,	0.0435,	0.0445,	0.0284,	0.0205]
+  var target = i.select(["B2","B3","B4","B5","B6","B7","B8","B8A","B11","B12"])
+  var sma = target.unmix([NPV,GV,Soil,Shade], false, false)
+                  .rename(["NPV","GV","Soil","Shade"])
+                  
+  var shadeMask = sma.select("Shade").lte(0.2); // 0.2 is arbitrary
+  sma = sma.updateMask(shadeMask); 
+  return(sma); 
+}
+
+print(s2a.filterDate("2018-12-01","2019-03-01")
+            .filterBounds(coord)
+ )            
+var s2a_prior = s2a.filterDate("2018-12-01","2019-03-01")
+            // .filterBounds(coord)
+            // .sort("CLOUDY_PIXEL_PERCENTAGE",true) 
+             .map(mask_non_trees)
+             .map(maskS2clouds)
+             .mean()
+
+var s2a_post = s2a.filterDate("2019-12-01","2020-03-01")
+            // .filterBounds(coord)
+             .map(mask_non_trees)
+             .map(maskS2clouds) 
+             .mean()
+            // .sort("CLOUDY_PIXEL_PERCENTAGE",true); 
+// print("s2a",s2a); 
+
+// var s2a_prior_sma = s2a_prior.map(unmix_S2a); 
+// var s2a_post_sma = s2a_post.map(unmix_S2a); 
+var s2a_prior_sma = unmix_S2a(s2a_prior); 
+var s2a_post_sma = unmix_S2a(s2a_post); 
+
+var delta_npv = s2a_post_sma.select("NPV").subtract(s2a_prior_sma.select("NPV"))
+
+//*************************************************************************
+// Default Map Stuff
+//*************************************************************************
+Map.addLayer(cgls.first().select('tree-coverfraction'), 
+             {min:0, max:100, palette:['brown','turquoise']}, 
+             "tree-coverfraction",false); 
+
+Map.addLayer(ss_l8, {bands:["B6","B5","B4"], 
+                  min:[0,0,0],
+                  max:[0.4,0.4,04]
+                   },"l8",false)
+
+Map.addLayer(s2a_prior, 
+             {bands:["B11","B8","B4"], 
+                  min:[0,0,0],
+                  max:[0.4,0.4,04]
+            },"s2a_prior",false)
+Map.addLayer(s2a_post, 
+             {bands:["B11","B8","B4"], 
+                  min:[0,0,0],
+                  max:[0.4,0.4,04]
+            },"s2a_post",false)
+
+Map.addLayer(s2a_prior_sma, 
+            {bands:["NPV","GV","Shade"],
+            min:[0,0,0],
+            max:[1,1,1]},
+            "s2a_prior_sma",false)
+Map.addLayer(s2a_post_sma, 
+            {bands:["NPV","GV","Shade"],
+            min:[0,0,0],
+            max:[1,1,1]},
+            "s2a_post_sma",false)
+
+Map.addLayer(delta_npv, 
+    {min:-0.5,max:0.5,palette:["blue","black","red"]}, 
+    "delta_NPV", false)
+
+
+Map.addLayer(coord,{color:'red'},"coord")
+// Map.centerObject(coord, 14)
+
+Export.image.toAsset(//, description, assetId, pyramidingPolicy, dimensions, region, scale, crs, crsTransform, maxPixels)
+  {
+    image:delta_npv, 
+    description:"testing_delta_npv_s2a",
+    // folder:"Oz_misc_data",
+    assetId:"Oz_dNPV_s2a_oct2019_oct2018",
+    region:roi, 
+    scale:20, 
+    crs:"EPSG:4326", 
+    maxPixels: 3020277350
+  }
+)
+
+
+// Export.image.toDrive( //image, description, folder, fileNamePrefix, dimensions, region, scale, crs, crsTransform, maxPixels, shardSize, fileDimensions, skipEmptyTiles, fileFormat, formatOptions)
+//   {
+//     image:delta_npv, 
+//     description:"testing_delta_npv_s2a",
+//     folder:"Oz_misc_data",
+//     fileNamePrefix:"Oz_dNPV_s2a_oct2019_oct2018",
+//     region:roi, 
+//     scale:20, 
+//     crs:"EPSG:4326", 
+//     maxPixels: 3020277350
+//   }
+// )
+
+
+/*
+	GV				Shade				NPV – impure			Soil	
+B1:	0.0625				B1:	0.0737			B1:	0.0773		B1:	0.1261
+B2:	0.0639				B2:	0.0772			B2:	0.0982		B2:	0.1624
+B3:	0.0698				B3:	0.0696			B3:	0.1242		B3:	0.2248
+B4:	0.0544				B4:	0.057			B4:	0.1684		B4:	0.2906
+B5:	0.0884				B5:	0.0535			B5:	0.1982		B5:	0.328
+B6:	0.2002				B6:	0.0499			B6:	0.2192		B6:	0.3404
+B7:	0.2395				B7:	0.0498			B7:	0.2413		B7:	0.3616
+B8:	0.2486				B8:	0.0435			B8:	0.2684		B8:	0.3614
+B8A:	0.2648				B8A:	0.0445			B8A:	0.283		B8A:	0.3741
+B9:	0.2601				B9:	0.043			B9:	0.2787		B9:	0.3535
+B11:	0.1256				B11:	0.0284			B11:	0.5075		B11:	0.5055
+B12:	0.0631				B12:	0.0205			B12:	0.3846		B12:	0.4203
+AOT:	0.017				AOT:	0.0173			AOT:	0.0105		AOT:	0.0176
+WVP:	0.2102				WVP:	0.2046			WVP:	0.0768		WVP:	0.2098
+SCL:	0.0004				SCL:	0.0006			SCL:	0.0005		SCL:	0.0005
+TCI_R:	0.0056				TCI_R:	0.0057			TCI_R:	0.0172		TCI_R:	0.0255
+TCI_G:	0.0071				TCI_G:	0.0071			TCI_G:	0.0126		TCI_G:	0.0229
+TCI_B:	0.0065				TCI_B:	0.0079			TCI_B:	0.0099		TCI_B:	0.0165
+MSK_CLDPRB:	0				MSK_CLDPRB:	0			MSK_CLDPRB:	0		MSK_CLDPRB:	0
+MSK_SNWPRB:	0				MSK_SNWPRB:	0			MSK_SNWPRB:	0		MSK_SNWPRB:	0
+QA10:	0				QA10:	0			QA10:	0		QA10:	0
+QA20:	0				QA20:	0			QA20:	0		QA20:	0
+QA60:	0				QA60:	0			QA60:	0		QA60:	0
+													
+coord	149.840588, -33.305467					149.9988, -33.43138				149.524514, -33.310616			150.110218, -33.386182
+image	20200105T000239_20200105T000235_T55HGD					20200105T000239_20200105T000235_T55HGD				20200204T000239_20200204T000233_T55HGD			20200105T000239_20200105T000235_T55HGD
+
+**/ 
