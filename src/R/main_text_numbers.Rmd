@@ -1,0 +1,1348 @@
+---
+title: "Main text numbers"
+output: html_notebook
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, cache = TRUE, message = F, warning = F)
+```
+
+## Data Import
+```{r Data Import, message=FALSE, warning=FALSE, cache=TRUE}
+#* Description:
+#* Plot Climate stuff
+#*
+#*
+#*
+library(tidyverse); library(sf)
+library(data.table); setDTthreads(threads = 0)
+library(lubridate); 
+library(mgcv); #library(mgcViz); 
+library(dtplyr); 
+library(RcppArmadillo); library(patchwork)
+library(stars)
+library(foreach); library(doParallel)
+library(zyp)
+options(pillar.sigfig = 5)
+# IMPORT DATA ###################################################################
+
+kop <- arrow::read_parquet("../data_general/Koppen_climate/BOM_Koppen_simplified7.parquet")
+# vegetation index record
+vi <- arrow::read_parquet("../data_general/MCD43/MCD43_AVHRR_NDVI_hybrid_2020-10-12.parquet" 
+                          # col_select = c("x","y","date",
+                          #                "ndvi_c","ndvi_mcd","ndvi_hyb", 
+                          #                "evi2_hyb","evi2_mcd","sz")
+) %>% 
+  as.data.table()
+vi <- vi %>% lazy_dt() %>% 
+  mutate(ndvi_hyb_e1 = coalesce(ndvi_mcd_nm_pred, NA_real_),
+         ndvi_hyb_e2 = coalesce(ndvi_mcd, NA_real_)) %>% 
+  mutate(ndvi_hyb = coalesce(ndvi_hyb_e2, ndvi_hyb_e1)) %>% 
+  mutate(ndvi_hyb = ifelse(between(ndvi_hyb,0,1),ndvi_hyb,NA_real_)) %>% 
+  as.data.table()
+norms_vi <- vi[,`:=`(month=month(date))] %>% 
+  .[,.(ndvi_u = mean(ndvi_hyb,na.rm=TRUE), 
+       ndvi_sd = sd(ndvi_hyb,na.rm=TRUE)),keyby=.(x,y,month)]
+vi <- norms_vi[vi,on=.(x,y,month)] %>% 
+  .[,`:=`(ndvi_anom = ndvi_hyb - ndvi_u)] %>% 
+  .[,`:=`(ndvi_anom_sd = ndvi_anom/ndvi_sd)]
+
+
+# Load climate data 
+dat <- arrow::read_parquet("/home/sami/scratch/ARD_ndvi_aclim_anoms.parquet",
+                           col_select = c(
+                             "date", "hydro_year", "id",
+                             # "season",
+                             "precip",  "precip_anom", 
+                             "precip_anom_3mo","precip_anom_36mo",
+                             "precip_anom_12mo",
+                             "map",
+                             "precip_12mo","precip_36mo",
+                             "tmax","tmax_anom","tmax_anom_sd", "matmax",
+                             "tmin","tmin_anom",
+                             "vpd15","vpd15_anom","vpd15_anom_sd","mavpd15",
+                             "vpd15_12mo",
+                             "vpd15_u",
+                             "pet","mapet","pet_anom","pet_anom_3mo","pet_u","pet_sd",
+                             "pet_anom_sd", "pet_12mo","pet_36mo",
+                             "pe","mape",
+                             # "ndvi_u",
+                             # "ndvi_anom",
+                             # "ndvi_anom_12mo",
+                             # "ndvi_anom_sd",
+                             # "ndvi_mcd",
+                             'vc','veg_class',
+                             'month',
+                             "x", "y", "year")) %>% 
+  as.data.table() %>% 
+  .[is.infinite(mape)==F]
+dat <- dat[order(x,y,date)][, vpd15_12mo := frollmean(vpd15,n = 12,fill = NA,align='right',na.rm=TRUE), by=.(x,y)]
+dat <- dat[,`:=`(pe = precip/pet, 
+                 pe_12mo = precip_12mo/pet_12mo)]
+dat <- merge(dat, 
+             vi,
+             by=c("x","y","date"), 
+             all=TRUE,allow.cartesian=TRUE)
+dat <- dat[order(x,y,date)][, ndvi_3mo := frollmean(ndvi_hyb,n = 3,fill = NA,align='center',na.rm=TRUE), by=.(x,y)]
+rm(vi); gc(full=TRUE)
+
+# Attach season
+dat[,`:=`(year=year(date),month=month(date))] %>%
+  .[,`:=`(season = case_when(month%in%c(3:5)~'MAM',
+                             month%in%c(6:8)~'JJA',
+                             month%in%c(9:11)~'SON',
+                             month%in%c(12,1,2)~'DJF'))]
+dat[,`:=`(season = factor(season, levels = c('SON','DJF','MAM','JJA'),ordered = TRUE))]
+dat[,`:=`(hydro_year=year(date+months(1)))]
+
+# FILTER TO LON >= 140 !!! **********
+dat <- dat[x>=140]
+
+coords_keep <- dat %>% lazy_dt() %>% 
+  group_by(x,y) %>% 
+  summarize(nobs_total = sum(is.na(ndvi_hyb)==F)) %>% 
+  ungroup() %>% 
+  as.data.table()
+dat <- merge(dat, coords_keep, by=c("x","y"))
+
+# Load Mauna Loa CO2 record
+mlo <- readr::read_table("../data_general/CO2_growth_rate/co2_mm_mlo_20200405.txt", 
+                         skip = 72, col_names = F) %>% 
+  set_names(
+    c("year","month","ddate","co2_avg","co2_int","co2_trend","ndays")
+  ) %>% 
+  mutate(date = ymd(paste(year,month,1))) %>% 
+  select(date,co2_int,co2_trend) %>% 
+  as.data.table()
+dat <- merge(mlo,dat,by="date",all = TRUE)
+
+dat <- merge(dat, as.data.table(kop %>% select(x,y,zone)),by=c("x","y"))
+ldat <- dat %>% lazy_dt()
+# END Load awap clim dat *****************************************************************
+
+# MODIS Vegetation continuous cover data ----------------------------------------
+mod_tree <- stars::read_stars("../data_general/Oz_misc_data/MOD44BPercent_Tree_Cover_5000m_East_Oz_noMask_2000_2019.tif") %>% 
+  st_set_dimensions(., 3, 
+                    values=seq(ymd("2000-01-01"),ymd("2019-01-01"),by="1 year"), 
+                    names = 'date') %>% 
+  set_names(c("tree_cover")) %>% 
+  as_tibble() %>% 
+  as.data.table()
+
+mod_nontree <- stars::read_stars("../data_general/Oz_misc_data/MOD44BPercent_NonTree_Vegetation_5000m_East_Oz_noMask_2000_2019.tif") %>% 
+  st_set_dimensions(., 3, 
+                    values=seq(ymd("2000-01-01"),ymd("2019-01-01"),by="1 year"), 
+                    names = 'date') %>% 
+  set_names(c("nontree_cover")) %>% 
+  as_tibble() %>% 
+  as.data.table()
+
+mod_nonveg <- stars::read_stars("../data_general/Oz_misc_data/MOD44BPercent_NonVegetated_5000m_East_Oz_noMask_2000_2019.tif") %>% 
+  st_set_dimensions(., 3, 
+                    values=seq(ymd("2000-01-01"),ymd("2019-01-01"),by="1 year"), 
+                    names = 'date') %>% 
+  set_names(c("nonveg_cover")) %>% 
+  as_tibble() %>% 
+  as.data.table()
+
+mod <- merge(mod_tree, mod_nontree, by = c("x","y","date"))
+mod <- merge(mod, mod_nonveg, by = c("x","y","date"))
+rm(mod_tree, mod_nontree, mod_nonveg); gc()
+
+# add the NVIS vegetation classes
+# base <- stars::read_stars('../data_general/AVHRR_CDRv5_VI/AVHRR_SR_median_EastOz_1982_2019.tif', 
+#                           RasterIO = list(bands=1))
+base <- stars::read_stars("../data_general/Oz_misc_data/MOD44BPercent_Tree_Cover_5000m_East_Oz_noMask_2000_2019.tif", 
+                          RasterIO = list(bands=1))
+nvis <- stars::read_stars("../data_general/NVIS/nvis51_majorVegClass_0p05.tif")
+nvis2 <- st_warp(src=nvis, dest=base[,,], use_gdal = T)
+names(nvis2) <- "veg_class"
+nvis <- nvis2 %>% as_tibble() %>% as.data.table()
+codes <- readr::read_fwf("../data_general/NVIS/nvis51_majorVegClass_codes.txt", 
+                         fwf_widths(c(2,100)), skip = 1) %>% 
+  set_names(c("veg_class","veg_class_descrip")) %>% 
+  mutate(vc = as.factor(veg_class_descrip)) 
+vc <- left_join(nvis, codes, by='veg_class')
+mod <- vc[mod, on=.(x,y)]
+mod[,`:=`(year=year(date))]
+
+# mod <- svi[mod, on=.(x,y,year)]
+# end section ******************************************************************
+# END DATA IMPORT SECTION ******************************************************
+
+
+```
+
+## Regressions: Vegetation cover
+```{r Regressions, message=FALSE, warning=FALSE, cache=TRUE}
+# Linear change in MODIS VCF  ---------------------------------------------------
+library(zyp)
+system.time(
+  lt_tree_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+    .[,.(beta = list(unname(zyp.sen(tree_cover~year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]), by=.(x,y)]  
+)
+system.time(
+  lt_nontree_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+    .[,.(beta = list(unname(zyp.sen(nontree_cover~year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]), by=.(x,y)]  
+)
+system.time(
+  lt_nonveg_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+    .[,.(beta = list(unname(zyp.sen(nonveg_cover~year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]), by=.(x,y)]  
+)
+
+
+vcf_sen <- inner_join(lt_nontree_sen %>% rename(grass_u=b0, grass_b=b1) %>% select(-beta), 
+                      lt_nonveg_sen %>% rename(nonveg_u=b0, nonveg_b=b1) %>% select(-beta))
+vcf_sen <- lt_tree_sen %>% lazy_dt() %>% 
+  select(-beta) %>% 
+  rename(tree_u=b0, 
+         tree_b=b1) %>% 
+  as.data.table() %>% 
+  inner_join(., vcf_sen)
+
+```
+## Regressions: NDVI~time+epoch
+```{r RLM Regression: NDVI~time+epoch, message=FALSE, warning=FALSE, cache=TRUE}
+# RLM 
+tmp <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-30")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982, 
+          epoch = ifelse(date<=ymd("2000-12-31"),0,1))] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE), 
+       epoch=mean(epoch,na.rm=TRUE)),
+    by=.(x,y,hydro_year_c)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  lazy_dt() %>% 
+  select(x,y,hydro_year_c,ndvi_hyb,epoch) %>% 
+  as.data.table() %>% 
+  group_by(x,y) %>% 
+  mutate(id = cur_group_id()) %>% 
+  ungroup()
+tmp <- tmp %>% distinct()  
+tmp <- tmp %>% as.data.table()
+
+# filter out pixels that only have data for one satellite epoch
+vec_rlm <- tmp %>% group_by(x,y,id) %>% 
+  summarize(nobs=n()) %>% 
+  ungroup() %>% 
+  filter(nobs > 19)
+tmp <- tmp[id %in% unique(vec_rlm$id)]
+rlm_ndvi_annual <-  tmp %>% 
+  as.data.table() %>% 
+  .[,.(beta = list(coef(MASS::rlm(ndvi_hyb~hydro_year_c+epoch)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3]), by=.(x,y)]
+rlm_ndvi_annual
+
+```
+
+## Regressions: NDVI~time Thiel-Sen
+```{r Thiel-Sen Regressions: NDVI~time, message=FALSE, warning=FALSE, cache=TRUE}
+# NDVI trend using Theil-Sen --------------------------------------------------------
+sen_ndvi_annual <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-31")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE)),by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+sen_ndvi_annual %>% 
+  filter(b0>0) %>% 
+  mutate(val = 100*b1*38/b0) %>% 
+  pull(val) %>% na.omit() %>% 
+  quantile(., c(0.05,0.5,0.95))
+
+sen_ndvi_season <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-31")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y,season)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y,season)]
+sen_ndvi_annual_e1 <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2000-12-31")] %>% 
+  .[hydro_year %in% c(1982:2000)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE)),by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+sen_ndvi_season_e1 <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2000-12-31")] %>% 
+  .[hydro_year %in% c(1982:2000)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y,season)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y,season)]
+sen_ndvi_annual_e2 <- dat %>% 
+  .[date >= ymd("2001-01-01") & date <= ymd("2019-08-30")] %>% 
+  .[hydro_year %in% c(2001:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-2001)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE)),by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+sen_ndvi_season_e2 <- dat %>% 
+  .[date >= ymd("2001-01-01") & date <= ymd("2019-08-30")] %>% 
+  .[hydro_year %in% c(2001:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-2001)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(beta = list(coef(zyp.sen(ndvi_hyb~hydro_year_c)))),by=.(x,y,season)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y,season)]
+
+sen_ndvi_season_e1$epoch <- "AVHRR NDVI 1982-2000"
+sen_ndvi_season_e2$epoch <- "MODIS NDVI 2001-2019"
+
+sen_ndvi_annual_e1$b1 %>% na.omit() %>% quantile(., c(0.05,0.5,0.95))
+sen_ndvi_annual_e2$b1 %>% na.omit() %>% quantile(., c(0.05,0.5,0.95))
+
+```
+## Regressions: Climate
+```{r Climate Regressions, message=FALSE, warning=FALSE, cache=TRUE}
+# P:PET annual mean trend w/Thiel Sen ------------------------------------------
+sen_ppet_annual <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-31")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(pe_12mo)==F] %>% 
+  .[,.(ppet = mean(pe_12mo,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+sen_ppet_annual_e1 <- dat %>% 
+  .[date >= ymd("1981-12-01") & date <= ymd("2000-11-30")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(pe_12mo)==F] %>% 
+  .[,.(ppet = mean(pe_12mo,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+sen_ppet_annual_e2 <- dat %>% 
+  .[date >= ymd("2000-12-01") & date <= ymd("2019-11-30")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(pe_12mo)==F] %>% 
+  .[,.(ppet = mean(pe_12mo,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+# PET annual mean trend w/Thiel Sen ------------------------------------------
+sen_pet_annual <- dat %>% 
+  .[date >= ymd("1981-12-01") & date <= ymd("2019-11-30")] %>% # need full year for total
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(pet)==F] %>% 
+  .[,.(pet_tot = sum(pet,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(pet_tot~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+# Precip annual mean trend w/Thiel Sen ------------------------------------------
+sen_p_annual <- dat %>% 
+  .[date >= ymd("1981-12-01") & date <= ymd("2019-11-30")] %>% # need full year for total
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+  .[is.na(precip)==F] %>% 
+  .[,.(p_tot = sum(precip,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+  .[,.(beta = list(coef(zyp.sen(p_tot~hydro_year_c)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2]), by=.(x,y)]
+
+```
+
+## Regressions for WUE model
+```{r Regressions for WUE model cerca Donohue 2013, , message=FALSE, warning=FALSE, cache=TRUE}
+## RLM on annual ndvi -----------------------------------------------
+tmp <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-31")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982, 
+          epoch = ifelse(date<=ymd("2000-12-31"),0,1))] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE), 
+       epoch=mean(epoch,na.rm=TRUE)),
+    by=.(x,y,hydro_year_c)] %>% 
+  .[is.na(ndvi_hyb)==F] %>% 
+  lazy_dt() %>% 
+  select(x,y,hydro_year_c,ndvi_hyb,epoch) %>% 
+  as.data.table() %>% 
+  group_by(x,y) %>% 
+  mutate(id = cur_group_id()) %>% 
+  ungroup()
+tmp <- tmp %>% distinct()  
+tmp <- tmp %>% as.data.table()
+
+# filter out pixels that only have data for one satellite epoch
+vec_rlm <- tmp %>% group_by(x,y,id) %>% 
+  summarize(nobs=n()) %>% 
+  ungroup() %>% 
+  filter(nobs > 19)
+tmp <- tmp[id %in% unique(vec_rlm$id)]
+rlm_ndvi_annual <-  tmp %>% 
+  as.data.table() %>% 
+  .[,.(beta = list(coef(MASS::rlm(ndvi_hyb~hydro_year_c+epoch)))),by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3]), by=.(x,y)]
+rlm_ndvi_annual
+
+
+# Summarize annual data by epoch -------------------------------
+tmp_ndvi_e1 <- dat %>% 
+  .[date >= ymd("1981-12-01") & date <= ymd("2000-11-30")] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982, 
+          epoch = ifelse(date<=ymd("2000-12-31"),0,1),
+          frac_p = precip_12mo/map,
+          frac_p_anom = precip_anom_12mo/map,
+          frac_pet_anom = (pet_12mo-mapet)/mapet,
+          frac_vpd_anom = vpd15_anom/mavpd15,
+          frac_ppet_anom = (pe_12mo-mape)/mape)] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE), 
+       co2 = mean(co2_trend,na.rm=TRUE),
+       epoch=mean(epoch,na.rm=TRUE), 
+       nobs = sum(is.na(ndvi_hyb)==F), 
+       p_anom = mean(precip_anom_12mo,na.rm=TRUE),
+       pet_anom = mean(pet_12mo-mapet,na.rm=TRUE),
+       ppet_anom = mean(pe_12mo,na.rm=TRUE),
+       frac_p = mean(frac_p, na.rm=TRUE),
+       frac_p_anom = mean(frac_p_anom,na.rm=TRUE), 
+       frac_vpd_anom = mean(frac_vpd_anom,na.rm=TRUE),
+       frac_pet_anom = mean(frac_pet_anom, na.rm=TRUE),
+       frac_ppet_anom = mean(frac_ppet_anom,na.rm=TRUE)),
+    by=.(x,y,hydro_year, hydro_year_c)] %>% 
+  group_by(x,y) %>% 
+  mutate(id = cur_group_id()) %>%
+  ungroup() %>% 
+  as.data.table()
+
+tmp_ndvi_e2 <- dat %>% 
+  .[date >= ymd("2001-01-01") & date <= ymd("2019-08-30")] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-2001, 
+          epoch = ifelse(date<=ymd("2000-12-31"),0,1),
+          frac_p = precip_12mo/map,
+          frac_p_anom = precip_anom_12mo/map,
+          frac_pet_anom = (pet_12mo-mapet)/mapet,
+          frac_vpd_anom = vpd15_anom/mavpd15,
+          frac_ppet_anom = (pe_12mo-mape)/mape)] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE), 
+       co2 = mean(co2_trend,na.rm=TRUE),
+       epoch=mean(epoch,na.rm=TRUE), 
+       nobs = sum(is.na(ndvi_hyb)==F), 
+       p_anom = mean(precip_anom_12mo,na.rm=TRUE),
+       pet_anom = mean(pet_12mo-mapet,na.rm=TRUE),
+       ppet_anom = mean(pe_12mo,na.rm=TRUE),
+       frac_p = mean(frac_p, na.rm=TRUE),
+       frac_p_anom = mean(frac_p_anom,na.rm=TRUE), 
+       frac_vpd_anom = mean(frac_vpd_anom,na.rm=TRUE),
+       frac_pet_anom = mean(frac_pet_anom, na.rm=TRUE),
+       frac_ppet_anom = mean(frac_ppet_anom,na.rm=TRUE)),
+    by=.(x,y,hydro_year, hydro_year_c)] %>% 
+  group_by(x,y) %>% 
+  mutate(id = cur_group_id()) %>%
+  ungroup() %>% 
+  as.data.table()
+
+tmp_ndvi <- dat %>% 
+  .[date >= ymd("1981-11-01") & date <= ymd("2019-08-30")] %>% 
+  .[hydro_year %in% c(1982:2019)] %>% 
+  .[,`:=`(hydro_year_c = hydro_year-1982, 
+          epoch = ifelse(date<=ymd("2000-12-31"),0,1),
+          frac_p = precip_12mo/map,
+          frac_p_anom = precip_anom_12mo/map,
+          frac_pet_anom = (pet_12mo-mapet)/mapet,
+          frac_vpd_anom = vpd15_anom/mavpd15,
+          frac_ppet_anom = (pe_12mo-mape)/mape)] %>% 
+  .[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE), 
+       co2 = mean(co2_trend,na.rm=TRUE),
+       epoch=mean(epoch,na.rm=TRUE), 
+       nobs = sum(is.na(ndvi_hyb)==F), 
+       p_anom = mean(precip_anom_12mo,na.rm=TRUE),
+       pet_anom = mean(pet_12mo-mapet,na.rm=TRUE),
+       ppet_anom = mean(pe_12mo,na.rm=TRUE),
+       frac_p = mean(frac_p, na.rm=TRUE),
+       frac_p_anom = mean(frac_p_anom,na.rm=TRUE), 
+       frac_vpd_anom = mean(frac_vpd_anom,na.rm=TRUE),
+       frac_pet_anom = mean(frac_pet_anom, na.rm=TRUE),
+       frac_ppet_anom = mean(frac_ppet_anom,na.rm=TRUE)),
+    by=.(x,y,hydro_year, hydro_year_c)] %>% 
+  group_by(x,y) %>% 
+  mutate(id = cur_group_id()) %>%
+  ungroup() %>% 
+  as.data.table()
+tmp_annual_nobs <- tmp_ndvi %>%
+  mutate(epoch=round(epoch)) %>% 
+  lazy_dt() %>% 
+  group_by(id,epoch) %>% 
+  summarize(obs_annual = sum(nobs >= 4)) %>% 
+  as.data.table()
+tmp_epoch_nobs <- tmp_annual_nobs %>% group_by(id) %>% 
+  summarize(obs_epoch = sum(obs_annual > 5)) %>% 
+  ungroup()
+  # pull(obs_epoch) %>% table
+# tmp_epoch_nobs %>% 
+#   inner_join(., tmp_ndvi %>% select(x,y,id) %>% distinct(), by='id') %>% 
+#   ggplot(data=.,aes(x,y,fill=obs_epoch))+geom_tile()+scale_fill_viridis_c()
+vec_ids <- tmp_epoch_nobs %>% 
+  filter(obs_epoch >= 1.9) %>% 
+  pull(id)
+
+# Percent increase in NDVI after effects of ppet were removed
+min_co2 <- min(tmp_ndvi[hydro_year==1982]$co2)
+max_co2 <- max(tmp_ndvi[hydro_year==2019]$co2)
+mid_co2 <- max(tmp_ndvi[hydro_year==2000]$co2)
+
+rlm_ndvi_annual_co2_ppet_epoch <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - min_co2)] %>% 
+  .[,.(beta = list(coef(MASS::rlm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)+
+      jitter(epoch)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5], 
+          b5=unlist(beta)[6]
+  ), by=.(x,y)]
+
+
+rlm_ndvi_annual_co2_ppet_e1 <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[hydro_year %in% 1982:2000] %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - min_co2)] %>% 
+  .[,.(beta = list(coef(MASS::rlm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5]
+  ), by=.(x,y)]
+
+rlm_ndvi_annual_co2_ppet_e2 <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[hydro_year %in% 2001:2019] %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - mid_co2)] %>% 
+  .[,.(beta = list(coef(MASS::rlm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5]
+  ), by=.(x,y)]
+
+## Regression VPD Thiel Sen regression ---------------------------------------
+system.time(
+  lt_v_sen <- dat[date>=ymd("1981-12-01")][date<=ymd("2019-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+    .[is.na(vpd15)==F] %>% 
+    .[,.(vpd15 = mean(vpd15,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(vpd15~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+## Regression VPD Thiel Sen epoch1 ---------------------------------------
+system.time(
+  lt_v_sen_e1 <- dat[date>=ymd("1981-12-01")][date<=ymd("2000-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+    .[is.na(vpd15)==F] %>% 
+    .[,.(vpd15 = mean(vpd15,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(vpd15~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+## Regression VPD Thiel Sen epoch 2 ---------------------------------------
+system.time(
+  lt_v_sen_e2 <- dat[date>=ymd("2000-12-01")][date<=ymd("2019-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-2000)] %>% 
+    .[is.na(vpd15)==F] %>% 
+    .[,.(vpd15 = mean(vpd15,na.rm=TRUE)), by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(vpd15~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+# Regression: NDVI by epoch -----------------------------------------------
+system.time(
+  lt_ndvi_sen_e1 <- tmp_ndvi_e1[id%in%vec_ids] %>% 
+    .[,.(beta = list(unname(zyp.sen(ndvi_hyb~hydro_year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]
+    ), by=.(x,y)]
+)
+system.time(
+  lt_ndvi_sen_e2 <- tmp_ndvi_e2[id%in%vec_ids] %>% 
+    .[,.(beta = list(unname(zyp.sen(ndvi_hyb~hydro_year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]
+    ), by=.(x,y)]
+)
+
+## Regression: Precip Thiel Sen --------------------------------------------
+system.time(
+  lt_p_sen <- dat[date>=ymd("1981-12-01")][date<=ymd("2019-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+    .[is.na(precip_anom_12mo)==F] %>%
+    .[,.(p_tot = mean(precip_anom_12mo+map,na.rm=TRUE)), 
+      by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(p_tot~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+## Regression: Precip Thiel Sen by epoch -------------------------------------------------
+system.time(
+  lt_fp_sen_e1 <- tmp_ndvi_e1[id%in%vec_ids] %>% 
+    .[,.(beta = list(unname(zyp.sen(frac_p~hydro_year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]
+    ), by=.(x,y)]
+)
+system.time(
+  lt_fp_sen_e2 <- tmp_ndvi_e2[id%in%vec_ids] %>% 
+    .[,.(beta = list(unname(zyp.sen(frac_p~hydro_year_c, 
+                                    data=.SD)$coefficients))), 
+      by=.(x,y)] %>% 
+    .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]
+    ), by=.(x,y)]
+)
+
+## Regression: P:PET Thiel Sen -------------------------------------------------
+system.time(
+  lt_ppet_sen <- dat[date>=ymd("1981-12-01")][date<=ymd("2019-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+    .[is.na(pe_12mo)==F] %>%
+    .[,.(ppet = mean(pe_12mo,na.rm=TRUE)), 
+      by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+## Regression: P:PET Thiel Sen epoch 1 -------------------------------------------------
+system.time(
+  lt_ppet_sen_e1 <- dat[date>=ymd("1981-12-01")][date<=ymd("2000-11-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-1982)] %>% 
+    .[is.na(pe_12mo)==F] %>%
+    .[,.(ppet = median(pe_12mo,na.rm=TRUE)), 
+      by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+## Regression: P:PET Thiel Sen epoch 2 -------------------------------------------------
+system.time(
+  lt_ppet_sen_e2 <- dat[date>=ymd("2000-12-01")][date<=ymd("2019-08-30")] %>% 
+    .[,`:=`(hydro_year_c = hydro_year-2001)] %>% 
+    .[is.na(pe_12mo)==F] %>%
+    .[,.(ppet = median(pe_12mo,na.rm=TRUE)), 
+      by=.(x,y,hydro_year_c)] %>% 
+    .[,.(beta = list(coef(zyp.sen(ppet~hydro_year_c)))),by=.(x,y)] %>%
+    .[,`:=`(b0=unlist(beta)[1], 
+            b1=unlist(beta)[2]), by=.(x,y)]
+)
+
+
+
+```
+
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+lm_ndvi_annual_co2_ppet_epoch <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - min_co2)] %>% 
+  .[,.(beta = list(coef(lm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)+
+      jitter(epoch)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5], 
+          b5=unlist(beta)[6]
+  ), by=.(x,y)]
+
+
+lm_ndvi_annual_co2_ppet_e1 <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[hydro_year %in% 1982:2000] %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - min_co2)] %>% 
+  .[,.(beta = list(coef(lm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5]
+  ), by=.(x,y)]
+
+lm_ndvi_annual_co2_ppet_e2 <-  tmp_ndvi[id%in%vec_ids] %>% # filter out pixels that only have data for one satellite epoch
+  as.data.table() %>% 
+  .[hydro_year %in% 2001:2019] %>% 
+  .[is.na(ndvi_hyb)==F & is.na(frac_p_anom)==F] %>% 
+  .[,`:=`(co2_start = co2 - mid_co2)] %>% 
+  .[,.(beta = list(coef(lm(
+    ndvi_hyb~
+      co2_start+
+      scale(ppet_anom)+
+      scale(p_anom)+
+      scale(pet_anom)))))
+    ,
+    by=.(x,y)] %>%
+  .[,`:=`(b0=unlist(beta)[1], 
+          b1=unlist(beta)[2], 
+          b2=unlist(beta)[3], 
+          b3=unlist(beta)[4],
+          b4=unlist(beta)[5]
+  ), by=.(x,y)]
+
+```
+
+
+#QUESTIONS *** ---------------------------------------------------------------------
+
+### Actual percent increase in NDVI between 1982-2019
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+rlm_ndvi_annual <- rlm_ndvi_annual[b0 > 0][b1> -0.05 & b1 < 0.05]
+vec_dNDVI <- (37*rlm_ndvi_annual$b1)/(rlm_ndvi_annual$b0)
+# dNDVI_NDVI_rlm <- median(100*vec_dNDVI)
+print(quantile(100*vec_dNDVI, c(0.05,0.5,0.95)))
+```
+
+### Actual percent increasei in NDVI during AVHRR 1982-2000
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+lt_ndvi_sen_e1 %>% as_tibble() %>% 
+  filter(between(b0,0.05, 0.95)) %>% 
+  mutate(pred = b1*18/b0) %>% 
+  pull(pred) %>% 
+  quantile(., c(0.05,0.5,0.95))
+
+```
+
+### Actual percent increasei in NDVI during MODIS 2001-2019
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+lt_ndvi_sen_e2 %>% as_tibble() %>% 
+  filter(between(b0,0.05, 0.95)) %>% 
+  mutate(pred = b1*18/b0) %>% 
+  pull(pred) %>% 
+  quantile(., c(0.05,0.5,0.95))
+
+```
+
+
+```{r WUE model cerca Donohoue 2013, message=FALSE, warning=FALSE, cache=TRUE}
+# Percent increase of VPD
+lt_v_sen <- lt_v_sen[b0 > 0]
+# dVPD_VPD_sen <- mean(37*lt_v_sen$b1,na.rm=TRUE)/mean(lt_v_sen$b0,na.rm=TRUE)
+
+# Percent increase of PPET
+lt_ppet_sen <- lt_ppet_sen[b0 > 0]
+dPPET_PPET_sen <- mean(37*lt_ppet_sen$b1,na.rm=TRUE)/mean(lt_ppet_sen$b0,na.rm=TRUE)
+
+
+# Percent increase in NDVI after effects of ppet were removed
+rlm_ndvi_annual_co2_ppet_epoch <- rlm_ndvi_annual_co2_ppet_epoch[b0 > 0 & b0 <1]
+dNDVI_NDVI_rlm_rmClimEfect <- mean(37*rlm_ndvi_annual_co2_ppet_epoch$b1,na.rm=TRUE)/mean(rlm_ndvi_annual_co2_ppet_epoch$b0,na.rm=TRUE)
+
+
+# Percent increase in Ca
+dCa_Ca <- 
+  diff(range(mlo[date>=ymd("1981-12-01") & date <= ymd("2019-08-30")]$co2_trend))/
+  mean(mlo[date>=ymd("1981-12-01") & date <= ymd("1982-11-01")]$co2_trend)
+dCa_Ca_e1 <- 
+  diff(range(mlo[date>=ymd("1981-12-01") & date <= ymd("2000-11-30")]$co2_trend))/
+  mean(mlo[date>=ymd("1981-12-01") & date <= ymd("1982-11-01")]$co2_trend)
+dCa_Ca_e2 <- 
+  diff(range(mlo[date>=ymd("2000-12-01") & date <= ymd("2019-08-30")]$co2_trend))/
+  mean(mlo[date>=ymd("2000-12-01") & date <= ymd("2001-11-01")]$co2_trend)
+
+
+# Expected WUE related increase (Donohue 2013)
+lt_v_sen %>% as_tibble() %>% 
+  mutate(wue_pred = 0.5*(dCa_Ca - 0.5*37*b1/b0)) %>% 
+  pull(wue_pred) %>% quantile(., c(0.05,0.5,0.95))
+
+# Actual percent relative increase in NDVI
+# dNDVI_NDVI_rlm
+
+# Percent of NDVI increase attributable to CO2 after P:PET effect was removed
+rlm_ndvi_annual_co2_ppet_epoch <- rlm_ndvi_annual_co2_ppet_epoch[b0 > 0.1 & b1 <1][b1> -0.05 & b1 < 0.05]
+vec_dNDVI_co2_rm_ppet <- (37*rlm_ndvi_annual_co2_ppet_epoch$b1)/(rlm_ndvi_annual_co2_ppet_epoch$b0)
+quantile(100*vec_dNDVI_co2_rm_ppet, c(0.05,0.5,0.95))
+
+```
+
+### How much was NDVI expected to increase overall?
+```{r}
+lt_v_sen %>% as_tibble() %>% 
+  mutate(wue_pred = 0.5*(dCa_Ca - 0.5*37*b1/b0)) %>% 
+  pull(wue_pred) %>% quantile(., c(0.05,0.5,0.95))
+```
+
+### How much was NDVI expected to increase between 1982-2000?
+```{r}
+dCa_Ca_e1 <- 
+  diff(range(mlo[date>=ymd("1981-12-01") & date <= ymd("2000-11-30")]$co2_trend))/
+  mean(mlo[date>=ymd("1981-12-01") & date <= ymd("1982-11-01")]$co2_trend)
+lt_v_sen_e1 %>% as_tibble() %>% 
+  mutate(wue_pred = 0.5*(dCa_Ca_e1 - 0.5*18*b1/b0)) %>% 
+  pull(wue_pred) %>% quantile(., c(0.05,0.5,0.95))
+
+```
+
+### How much was NDVI expected to increase between 2001-2019?
+```{r}
+dCa_Ca_e2 <- 
+  diff(range(mlo[date>=ymd("2000-12-01") & date <= ymd("2019-08-30")]$co2_trend))/
+  mean(mlo[date>=ymd("2000-12-01") & date <= ymd("2001-11-01")]$co2_trend)
+lt_v_sen_e2 %>% as_tibble() %>% 
+  mutate(wue_pred = 0.5*(dCa_Ca_e2 - 0.5*18*b1/b0)) %>% 
+  pull(wue_pred) %>% quantile(., c(0.05,0.5,0.95))
+
+```
+
+### How does the rate of VPD compare between the two epochs?
+AVHRR epoch (1982-2000)
+```{r}
+lt_v_sen_e1 %>% filter(b0>0) %>% 
+  mutate(val = 100*18*b1/b0) %>% 
+  pull(val) %>% quantile(., c(0.05,0.5,0.95))
+```
+
+
+MODIS epoch (2001-2019)
+```{r}
+lt_v_sen_e2 %>% filter(b0>0) %>% 
+  mutate(val = 100*18*b1/b0) %>% 
+  pull(val) %>% quantile(., c(0.05,0.5,0.95))
+```
+
+```{r}
+lt_v_sen %>% filter(b0>0) %>% 
+  mutate(val = 100*37*b1/b0) %>% 
+  inner_join(., kop %>% select(x,y,zone)) %>% 
+  group_by(zone) %>% 
+  summarize(p05 = quantile(val,0.05), 
+            p50 = quantile(val,0.5), 
+            p95 = quantile(val,0.95)) %>% 
+  ungroup() %>% 
+  knitr::kable(digits = 2)
+
+```
+
+
+```{r}
+bind_rows(lt_v_sen_e1 %>% mutate(epoch='avhrr'), 
+          lt_v_sen_e2 %>% mutate(epoch='modis')) %>% 
+  ggplot(data=.,aes(b1, color=epoch,fill=epoch))+
+  geom_density(alpha=0.2)
+```
+
+### How does the rate of annual NDVI change compare between the two epochs?
+```{r}
+bind_rows(lt_ndvi_sen_e1 %>% mutate(epoch='avhrr'), 
+          lt_ndvi_sen_e2 %>% mutate(epoch='modis')) %>% 
+  filter(b0>0.01 & b0<0.95) %>% 
+  filter(b1> -0.025 & b1 < 0.025) %>% 
+  ggplot(data=.,aes(b1, color=epoch,fill=epoch))+
+  geom_density(alpha=0.2)
+```
+
+
+### How much of the %NDVI increase was attributable to CO2 after factoring out linear effects of P:PET, P, and PET? 
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+# Percent increase in NDVI after effects of ppet were removed
+min_co2 <- min(tmp_ndvi[hydro_year==1982]$co2)
+max_co2 <- max(tmp_ndvi[hydro_year==2019]$co2)
+mid_co2 <- max(tmp_ndvi[hydro_year==2000]$co2)
+
+rlm_ndvi_annual_co2_ppet_epoch <- rlm_ndvi_annual_co2_ppet_epoch[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+rlm_ndvi_annual_co2_ppet_e1 <- rlm_ndvi_annual_co2_ppet_e1[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+rlm_ndvi_annual_co2_ppet_e2 <- rlm_ndvi_annual_co2_ppet_e2[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+
+vec_overall <- (max_co2-min_co2)*rlm_ndvi_annual_co2_ppet_epoch$b1/
+  (rlm_ndvi_annual_co2_ppet_epoch$b0)
+vec_e1 <- (mid_co2-min_co2)*rlm_ndvi_annual_co2_ppet_e1$b1/
+  (rlm_ndvi_annual_co2_ppet_e1$b0)
+vec_e2 <- (max_co2-mid_co2)*rlm_ndvi_annual_co2_ppet_e2$b1/
+  (rlm_ndvi_annual_co2_ppet_e2$b0)
+
+quantile(100*vec_overall, c(0.1,0.5,0.9)) # overall increase
+```
+
+### CO2 attributable greening between 1982-2000
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+quantile(100*vec_e1, c(0.1,0.5,0.9)) 
+```
+
+### CO2 attributable greening between 2001-2019
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+quantile(100*vec_e2, c(0.1,0.5,0.9)) # CO2 attributable between 2001-2019
+```
+
+
+### 1982-2000 NDVI increase per unit CO2 ppm
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+quantile(rlm_ndvi_annual_co2_ppet_e1$b1, c(0.05,0.5,0.95))
+```
+
+### 2001-2019 NDVI increase per unit CO2 ppm
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+quantile(rlm_ndvi_annual_co2_ppet_e2$b1, c(0.05,0.5,0.95))
+```
+
+### CO2 attributable effect using LM
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+# Percent increase in NDVI after effects of ppet were removed
+min_co2 <- min(tmp_ndvi[hydro_year==1982]$co2)
+max_co2 <- max(tmp_ndvi[hydro_year==2019]$co2)
+mid_co2 <- max(tmp_ndvi[hydro_year==2000]$co2)
+
+lm_ndvi_annual_co2_ppet_epoch <- lm_ndvi_annual_co2_ppet_epoch[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+
+vec_overall <- (max_co2-min_co2)*lm_ndvi_annual_co2_ppet_epoch$b1/
+  (rlm_ndvi_annual_co2_ppet_epoch$b0)
+quantile(100*vec_overall, c(0.1,0.5,0.9)) # overall increase
+```
+
+### CO2 attributable effect using LM, epoch 1
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+lm_ndvi_annual_co2_ppet_e1 <- lm_ndvi_annual_co2_ppet_e1[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+vec_e1 <- (mid_co2-min_co2)*lm_ndvi_annual_co2_ppet_e1$b1/
+  (rlm_ndvi_annual_co2_ppet_e1$b0)
+quantile(100*vec_e1, c(0.1,0.5,0.9)) # overall increase
+```
+
+### CO2 attributable effect using LM, epoch 2
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+lm_ndvi_annual_co2_ppet_e2 <- lm_ndvi_annual_co2_ppet_e2[b0>0.05 & b0<0.95][b1 > -0.01 & b1 < 0.01]
+
+vec_e2 <- (max_co2-mid_co2)*lm_ndvi_annual_co2_ppet_e2$b1/
+  (rlm_ndvi_annual_co2_ppet_e2$b0)
+quantile(100*vec_e2, c(0.1,0.5,0.9)) # overall increase
+```
+
+
+
+
+
+### Compare NDVI between epochs
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+inner_join(as_tibble(rlm_ndvi_annual_co2_ppet_e1), 
+           as_tibble(rlm_ndvi_annual_co2_ppet_e2), 
+           by=c("x","y"), suffix=c("_e1","_e2")) %>% 
+  mutate(ratio_diff = b1_e2/b1_e1) %>% 
+  filter(between(b1_e1,-0.005,0.005)&
+           between(b1_e2,-0.005,0.005)) %>% 
+  ggplot(data=.,aes(b0_e1, b0_e2))+
+  geom_point()+
+  geom_smooth()+
+  geom_abline(col='red')
+```
+
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+inner_join(as_tibble(rlm_ndvi_annual_co2_ppet_e1), 
+           as_tibble(rlm_ndvi_annual_co2_ppet_e2), 
+           by=c("x","y"), suffix=c("_e1","_e2")) %>% 
+  summarize(ratio_diff = median(b1_e2)/median(b1_e1))
+```
+
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+bind_rows(as_tibble(rlm_ndvi_annual_co2_ppet_e1) %>% mutate(epoch='AVHRR'), 
+           as_tibble(rlm_ndvi_annual_co2_ppet_e2) %>% mutate(epoch='MODIS'), 
+           ) %>% 
+  inner_join(., as_tibble(kop %>% select(x,y,zone)), by=c("x","y")) %>% 
+  ggplot(data=.,aes())
+```
+
+# Q: % of pixels exper. greater aridity? 
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+# overall 1982-2019
+sen_ppet_annual %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(arid_frac = 100*neg/nobs)
+
+
+```
+
+# Q: % of pixels exper. greater aridity 1982-2000? 
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+# 1982-2000 
+sen_ppet_annual_e1 %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(arid_frac = 100*neg/nobs)
+
+```
+
+# Q: % of pixels exper. greater aridity 2001-2019? 
+```{r, message=FALSE, warning=FALSE, cache=TRUE}
+# 2001-2019
+sen_ppet_annual_e2 %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(arid_frac = 100*neg/nobs)
+
+```
+
+# How much did relative P:PET change? 
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ppet_annual %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  mutate(rel_change = 100*(b1*37)/b0) %>% 
+  pull(rel_change) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+
+# relative P:PET change epoch 1 
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ppet_annual_e1 %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  mutate(rel_change = 100*(b1*18)/b0) %>% 
+  pull(rel_change) %>% 
+  quantile(., c(0.05,0.5,0.95))
+
+```
+
+# relative P:PET change epoch 2
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ppet_annual_e2 %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  mutate(rel_change = 100*(b1*18)/b0) %>% 
+  pull(rel_change) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+
+# How many pixels experienced less rainfall?
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_p_annual %>% 
+  as_tibble() %>% 
+  filter(b0>0) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(frac = 100*neg/nobs)
+
+```
+
+# What % of pixels experienced greater PET?
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_pet_annual %>% 
+ as_tibble() %>% 
+  filter(b0>0) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(frac = 100*pos/nobs)
+```
+
+# Rate of PET increase
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_pet_annual %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(b0>100) %>% 
+  mutate(rel_change = 100*(b1*37)/b0) %>% 
+  pull(rel_change) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+
+# Q: What percent of pixels experienced greening? --------------------------
+
+# % of pixels experienced greening during AVHRR epoch?
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ndvi_annual_e1 %>% # AVHRR epoch
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+
+```
+
+# % of pixels experiencing greening during MODIS epoch
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ndvi_annual_e2 %>% # MODIS epoch
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+```
+
+# 1982-2019 using rlm and accounting for the change in sensor
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+rlm_ndvi_annual %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+```
+
+# Greening 1982-2019 using Thiel Sen, although this doesn't work because it 
+# does not account for the sensor difference
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ndvi_annual %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+```
+
+# Fraction experienced greening during epoch 1
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+# AHVRR epoch
+sen_ndvi_annual_e1 %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+```
+
+# Fraction experienced greening during epoch 2
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+# MODIS epoch 
+sen_ndvi_annual_e2 %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  summarize(pos = sum(b1>0), 
+            neg = sum(b1<0), 
+            nobs = sum(is.na(b1)==F)) %>% 
+  mutate(green_frac = 100*pos/nobs)
+```
+
+#Q: How much relative greening? --------------------------
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+rlm_ndvi_annual %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.05,1)) %>% 
+  filter(between(b1,-0.1,0.1)) %>% 
+  mutate(val = 100*(b1*37)/b0) %>% 
+  pull(val) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+
+#Q: How much relative greening during epoch 1? 
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ndvi_annual_e1 %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  mutate(val = 100*(b1*18)/b0) %>% 
+  pull(val) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+#Q: How much relative greening during epoch 2? 
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+sen_ndvi_annual_e2 %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,0.1,1)) %>% 
+  mutate(val = 100*(b1*18)/b0) %>% 
+  pull(val) %>% 
+  quantile(., c(0.05,0.5,0.95))
+```
+
+```{r , message=FALSE, warning=FALSE, cache=TRUE}
+
+
+
+```
+
+#Q: rate of increase in PET 
+```{r}
+sen_pet_annual %>% 
+  as_tibble() %>% 
+  filter(is.na(b0)==F) %>% 
+  filter(between(b0,100,3500)) %>% 
+  mutate(val = 100*(b1*37)/b0) %>% 
+  pull(val) %>% 
+  quantile(., c(0.05,0.5,0.95))
+
+```
+
+### Treecover change by climate zone
+```{r, message=F, warning=F, cache=T}
+merge(vcf_sen,kop,by=c('x','y')) %>% 
+  .[is.na(cz)==F] %>% 
+  .[is.na(tree_u)==F] %>% 
+  lazy_dt() %>% 
+  group_by(zone) %>% 
+  summarize(delta_tree = mean(100*((tree_b*18+tree_u)/tree_u -1),na.rm=T), 
+            delta_grass = mean(100*((grass_b*18+grass_u)/grass_u -1),na.rm=T), 
+            delta_bare = mean(100*((nonveg_b*18+nonveg_u)/nonveg_u -1),na.rm=T)) %>% 
+  as_tibble() %>% 
+  knitr::kable(digits = 2)
+```
+### Treecover change over 18 years
+```{r, message=F, warning=F, cache=T}
+merge(vcf_sen,kop,by=c('x','y')) %>% 
+  .[is.na(cz)==F] %>% 
+  .[is.na(tree_u)==F] %>% 
+  lazy_dt() %>% 
+  group_by(zone) %>% 
+  summarize(trend_tree = mean(tree_b*18)) %>% 
+  # summarize(delta_tree = mean(100*((tree_b*18+tree_u)/tree_u -1),na.rm=T), 
+  #           delta_grass = mean(100*((grass_b*18+grass_u)/grass_u -1),na.rm=T), 
+  #           delta_bare = mean(100*((nonveg_b*18+nonveg_u)/nonveg_u -1),na.rm=T)) %>% 
+  as_tibble() %>% 
+  knitr::kable(digits=3)
+```
+
+
+## Equations 
+### Eq 1: NDVI calibration model 
+$$NDVI_{MCD64} = s(NDVI_{AVHRR})+s(month) + s(SZA) + s(TOD) + s(x,y)$$
+
+### Eq 2: Weibull function for CO2 effect
+$$NDVI=V_a-V_d[exp(-exp(c_{ln})\,(MI_{MA})^{q})]+\eta$$
+
+$$\eta = \beta_{1}\frac{MI_{anom}}{MI_{MA}}+\beta_{2}\,CO_2\,MI_{MA} +\beta_{3}\,CO_2\,\frac{MI_{anom}}{MI_{MA}}+sensor$$
+
+### Eq 3: Water use efficiency at leaf level
+$$W_{leaf} = \frac{A_{leaf}}{E_{leaf}} = \frac{C_a}{1.6D}(1 - \chi)$$
+
+### Eq 4: derivative of W_leaf
+$$\frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{dD}{D} + \frac{d(1-\chi)}{(1-\chi)}$$
+  
+### Eq 5: 
+$$\frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}$$ 
+  
+  
+
+### Eq 6: 
+$$E_{canopy}=E_{leaf}\,L$$
+$$\frac{dE_{canopy}}{E_{canopy}} \approx \frac{dL}{L}$$  
+### Eq 6.1: 
+$$\frac{dE_{canopy}}{E_{canopy}} \approx \frac{dE_{leaf}}{E_{leaf}}+\frac{dL}{L}$$
+$$-\frac{dE_{leaf}}{E_{leaf}} \approx \frac{dL}{L}$$
+
+### Eq 7: 
+$$\frac{dW_{leaf}}{W_{leaf}} \approx  \frac{dA_{leaf}}{A_{leaf}} + \frac{dF}{F} \approx \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}$$  
+
+### Eq 8: 
+$$\frac{dNDVI}{NDVI} \approx \frac{1}{2}[\frac{dCa}{Ca}-\frac{dD}{2\,D}]$$  
+  
+
+
+### Eq : Linear model for overall greening trend
+$$NDVI=\beta_0+ \beta_1\,year+\beta_2\,sensor$$
+
+### Eq 10: 
+$$NDVI=\beta_0+ \beta_1\,CO_2+\beta_2\,\frac{P_{anom}}{P_{MA}}+\beta_3\,\frac{PET_{anom}}{PET_{MA}}+\beta_4\,\frac{VPD_{anom}}{{VPD_{MA}}}+\beta_5\,sensor$$
+
+### Eq 11: 
+$$100*[\frac{\beta_1(2019-1982)}{\beta_0}]$$ 
+
+
+### SM Eq 1: 128 linear models
+$$NDVI = \beta_0+\beta_1\,CO_2 + \beta_2\,MI_{anom}+\beta_3\,Veg.\,Class+\beta_4\,sensor$$
+
+
+### SM Eq 2: Logistic model
+$$NDVI = \frac{V_A}{(1+exp((m-MI_{12mo})/s))}$$
+
+### SM Eq 3: Richards growth model
+$$NDVI=(V_A+\beta_1\,CO_2+\beta_2\,G)\,\frac{(1+exp(m+\beta_3\,CO_2+\beta_4\,G - MI_{MA}))}{(s+\beta_5\,CO_2+\beta_6\,G)^{(-exp(-(q+\beta_7\,CO_2+\beta_8\,F)))}}$$
+
+$$G = \frac{MI_{anom}}{MI_{MA}}$$
+
+
+
+### Eq 13: 
+$$NDVI = s(MI_{MA},CO_2) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},PET_{MA})+sensor$$
+
+
+
