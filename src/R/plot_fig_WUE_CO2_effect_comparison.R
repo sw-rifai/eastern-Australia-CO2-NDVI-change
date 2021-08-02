@@ -12,7 +12,7 @@ set.seed(333)
 oz_poly <- sf::read_sf("../data_general/GADM/gadm36_AUS.gpkg", 
                        layer="gadm36_AUS_1")
 oz_poly <- st_as_sf(oz_poly)
-oz_poly <- st_simplify(oz_poly, dTolerance = 0.05)
+oz_poly <- st_simplify(oz_poly, dTolerance = 1000)
 
 # vegetation index record
 vi <- arrow::read_parquet("../data_general/MCD43/MCD43_AVHRR_NDVI_hybrid_2020-10-12.parquet" 
@@ -119,6 +119,7 @@ kop <- arrow::read_parquet("../data_general/Koppen_climate/BOM_Koppen_simplified
 kop <- setDT(kop)
 kop <- kop[,.(x,y,zone)]
 dat <- merge(dat, kop, by=c("x","y"),all = T)
+setDT(dat)
 #*******************************************************************************
 
 
@@ -132,7 +133,8 @@ coords_keep <- coords_keep %>%
   filter(nobs >= 6) %>% 
   group_by(x,y) %>% 
   summarize(nobs_annual = n()) %>% 
-  ungroup()
+  ungroup() %>% 
+  as.data.table()
 
 # summarize to annual -----------------------------------------------------
 dat_annual <- dat[ndvi_anom_sd >= -3.5 & ndvi_anom_sd <= 3.5] %>%
@@ -142,17 +144,21 @@ dat_annual <- dat[ndvi_anom_sd >= -3.5 & ndvi_anom_sd <= 3.5] %>%
   .[is.na(ndvi_hyb)==F] %>% 
   .[is.na(pe_anom_12mo)==F] %>% 
   merge(., coords_keep,by=c('x','y'))
+
 dat_annual <- dat_annual[,`:=`(hydro_year_c = hydro_year-1982, 
                                frac_p_anom = precip_anom_12mo/map, 
                                frac_ppet_anom = pe_anom_12mo/mappet, 
                                frac_pet_anom = pet_anom_12mo/mapet, 
                                frac_vpd_anom = vpd15_anom_12mo/mavpd15)]
+
 dat_annual <- dat_annual %>% 
   select(x,y,date,ndvi_hyb,co2_trend,
          hydro_year,hydro_year_c,
          frac_p_anom,frac_ppet_anom,frac_pet_anom,frac_vpd_anom,
          map,mappet,mapet,mavpd15,
-         epoch,nobs_annual)
+         epoch,nobs_annual) %>% 
+  as.data.table()
+
 dat_annual <- dat_annual[nobs_annual>=10]
 dat_annual <- dat_annual[,.(ndvi_hyb = mean(ndvi_hyb,na.rm=TRUE),
                             co2 = mean(co2_trend,na.rm=TRUE),
@@ -208,6 +214,7 @@ system.time(
     .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2],b2=unlist(beta)[3],b3=unlist(beta)[4]
     ), by=.(x,y)]
 )
+
 # % increase in annual NDVI ------
 lt_ndvi_year %>% as_tibble() %>% 
   mutate(val = 100*(37*b1)/(b0)) %>% 
@@ -229,7 +236,9 @@ system.time(
             b1=unlist(beta)[2]), by=.(x,y)]
 )
 
-pred_vpd_e1 <- merge(unique(dat_annual[,.(x,y,mavpd15)]), lt_v_sen[,.(x,y,b0)], by=c("x","y")) %>% 
+pred_vpd_e1 <- merge(unique(dat_annual[,.(x,y,mavpd15)]), 
+  lt_v_sen[,.(x,y,b0)], 
+  by=c("x","y")) %>% 
   .[,`:=`(e='e1', 
           frac_vpd_anom = (b0-mavpd15)/mavpd15)]
 
@@ -324,13 +333,15 @@ p_vpd_sen <- lt_v_sen %>%
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
-  labs(x=NULL,y=NULL)+
-  scico::scale_fill_scico(expression(paste(Delta,"VPD(%)")),
-                          palette ='romaO', direction=-1,
-                          limits=c(-20,20), 
-                          oob=scales::squish)+
-  # scale_fill_viridis_c(expression(paste(Delta,"VPD(%)")),
-  #   option='A', limits=c(0,20), oob=scales::squish)+
+  labs(x=NULL,y=NULL,
+    title=expression(paste(Delta,"VPD")), 
+    fill="%")+
+  # scico::scale_fill_scico(
+  #                         palette ='romaO', direction=-1,
+  #                         limits=c(-20,20), 
+  #                         oob=scales::squish)+
+  scale_fill_viridis_b('%',
+    option='F', limits=c(0,20), oob=scales::squish, n.breaks=8)+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
@@ -351,18 +362,24 @@ p_wue_sen <- lt_v_sen %>%
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
-  labs(x=NULL,y=NULL)+
-  scico::scale_fill_scico(expression(paste(Delta*NDVI[WUE~Pred.]("%"))),
-                          palette = 'bamako', 
-                          direction = -1,
-                          limits=c(5,15), #na.value = 'red',
-                          oob=scales::squish
-  )+
+  scale_fill_binned_sequential(
+    palette='ag_GrnYl',rev=T,n.breaks=10, limits=c(5,15),oob=scales::squish)+
+  labs(x=NULL,y=NULL, 
+    title=expression(paste(Delta*NDVI[WUE~Pred.])), 
+    fill='%')+
+  # scico::scale_fill_scico("%",
+  #                         palette = 'bamako', 
+  #                         direction = -1,
+  #                         limits=c(5,15), #na.value = 'red',
+  #                         oob=scales::squish
+  # )+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
         legend.position = c(1,1), 
-        legend.justification = c(1,1)); p_wue_sen
+        legend.justification = c(1,1),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()); p_wue_sen
 
 
 
@@ -389,23 +406,24 @@ p_gam_pred <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
-  labs(x=NULL,y=NULL)+
-  scico::scale_fill_scico(expression(paste(Delta*NDVI[GAM~Pred.]("%"))),
-                          palette = 'bamako', 
-                          direction = -1,
-                          limits=c(5,15), #na.value = 'red',
-                          oob=scales::squish
-  )+
+  scale_fill_binned_sequential(
+    palette='ag_GrnYl',rev=T,n.breaks=10, limits=c(5,15),oob=scales::squish)+
+  # scico::scale_fill_scico("%",
+  #                         palette = 'bamako', 
+  #                         direction = -1,
+  #                         limits=c(5,15), #na.value = 'red',
+  #                         oob=scales::squish
+  # )+
+  labs(x=NULL,y=NULL, 
+    title=expression(paste(Delta*NDVI[GAM~Pred.])), 
+    fill='%')+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
         legend.position = c(1,1), 
-        legend.justification = c(1,1)); p_gam_pred
-
-
-
-
-
+        legend.justification = c(1,1),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()); p_gam_pred
 
 p_res <- inner_join({lt_v_sen %>% 
   as_tibble() %>% 
@@ -438,7 +456,9 @@ p_res <- inner_join({lt_v_sen %>%
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
-  labs(x=NULL,y=NULL,fill=expression(paste(Pred[WUE]-Pred[GAM]~('%'))))+
+  labs(x=NULL,y=NULL,
+    title=expression(paste(Delta~Pred[WUE]-Delta~Pred[GAM])), 
+    fill='%')+
   scale_fill_binned_diverging(palette='Blue-Red',rev=F,n.breaks=10,
                               # cmax=90,
                               p1=1.5,p2=1.5)+
@@ -453,7 +473,9 @@ p_res <- inner_join({lt_v_sen %>%
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
         legend.position = c(1,1), 
-        legend.justification = c(1,1)); p_res
+        legend.justification = c(1,1),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()); p_res
 
 
 vec_cols <- scico::scico(n=4, palette = 'bamako', 
@@ -541,21 +563,40 @@ p_box <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
         panel.grid = element_blank());
 p_box
 
-library(cowplot)
-p_left <- ggdraw(p_vpd_sen)+draw_label(label='(a)', x=0.07,y=0.985,size = 25)
-p_mid1 <- ggdraw(p_gam_pred)+draw_label(label='(b)',x=0.05,y=0.985,size=25)
-p_mid2 <- ggdraw(p_wue_sen)+draw_label(label='(c)', x=0.05,y=0.985, size=25)
-p_right <- ggdraw(p_res)+draw_label(label = '(d)', x=0.05,y=0.985,size=25)
-p_bottom <- ggdraw(p_box)+draw_label(label = '(e)', x=0.015,y=0.95,size=25)
-cp_r <- cowplot::plot_grid(p_left,p_mid1,p_mid2,p_right,
-                           nrow = 1,
-                           rel_widths = c(1,1,1,1))
-ggsave(plot=cp_r/p_bottom+patchwork::plot_layout(heights = c(1,0.5)),
-       # filename='figures/delete.png',
-       filename = "figures/Fig6_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png",
-       width = 30, height=30, units='cm', dpi=350, type='cairo')
+# library(cowplot)
+# p_left <- ggdraw(p_vpd_sen)+draw_label(label='(a)', x=0.07,y=0.985,size = 25)
+# p_mid1 <- ggdraw(p_gam_pred)+draw_label(label='(b)',x=0.05,y=0.985,size=25)
+# p_mid2 <- ggdraw(p_wue_sen)+draw_label(label='(c)', x=0.05,y=0.985, size=25)
+# p_right <- ggdraw(p_res)+draw_label(label = '(d)', x=0.05,y=0.985,size=25)
+# p_bottom <- ggdraw(p_box)+draw_label(label = '(e)', x=0.015,y=0.95,size=25)
+# cp_r <- cowplot::plot_grid(p_left,p_mid1,p_mid2,p_right,
+#                            nrow = 1,
+#                            rel_widths = c(1,1,1,1))
+# cp_r
+# ggsave(plot=cp_r/p_bottom+patchwork::plot_layout(heights = c(1,0.5)),
+#        # filename='figures/delete.png',
+#        filename = "figures/Fig6_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png",
+#   width = 30,
+#   height=30, 
+#   units='cm', 
+#   dpi=350,
+#   type='cairo')
 
-  
-  
-  
-  
+p_out <- (p_vpd_sen+theme(plot.margin=margin(t=0,r = -20,b=0,l=-10))|
+    p_gam_pred+theme(plot.margin=margin(t=0,r = -20,b=0,l=-20))|
+    p_wue_sen+theme(plot.margin=margin(t=0,r = -20,b=0,l=-20))|
+    p_res+theme(plot.margin=margin(t=0,r = -10,b=0,l=-20)))/
+  p_box+
+  plot_annotation(tag_levels = 'a',
+  tag_prefix = '(',
+  tag_suffix=')', 
+  theme=theme(plot.margin=margin(t=0,r = -10,b=0,l=-10))
+    )+
+  plot_layout(heights=c(1,0.4))&theme(plot.margin = margin(0,5,0,5))
+ggsave(p_out,
+  filename = "figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png",
+  device=grDevices::png,
+  width = 32.5,
+  height=35, 
+  units='cm',
+  dpi=350)
