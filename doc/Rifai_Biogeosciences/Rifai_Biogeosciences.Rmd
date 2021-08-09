@@ -1,0 +1,252 @@
+---
+title: Thirty-eight years of CO~2~ fertilization have outpaced growing aridity to drive greening of  Australian woody ecosystems
+journal: "`r rticles::copernicus_journal_abbreviations(journal_name = 'communication')`"
+author:
+    # authors can have multiple affiliations, which can also be used to mark deceased coauthors
+  - given_name: Sami W.
+    surname: Rifai
+    affiliation: "1, *"
+    email: s.rifai@unsw.edu.au
+    corresponding: true
+  - given_name: Martin G. 
+    surname: De Kauwe
+    affiliation: "1,2,3,4"
+    email: mdekauwe@gmail.com
+  - given_name: Anna M.
+    surname: Ukkola
+    affiliation: "1,5"
+    email: a.ukkola@unsw.edu.au
+  - given_name: Lucas A.
+    surname: Cernusak
+    affiliation: "6"
+    email: lucas.cernusak@jcu.edu.au
+  - given_name: Patrick
+    surname: Meir
+    affiliation: "7,8"
+    email: patrick.meir@anu.edu.au
+  - given_name: Belinda E. 
+    surname: Medlyn
+    affiliation: "9"
+    email: B.Medlyn@westernsydney.edu.au
+  - given_name: Andy J.
+    surname: Pitman
+    affiliation: "1,2"
+    email: a.pitman@unsw.edu.au
+# If you have more than one corresponding author, add them manually using the following structure (note the commas):
+# Two authors: Daniel Nüst (daniel.nuest@uni-muenster.de) and Josiah Carberry (j.carberry@orcid.org)
+# Three authors or more: Daniel Nüst (daniel.nuest@uni-muenster.de), Josiah Carberry (j.carberry@orcid.org), and Markus Konkol (m.konkol@wwu.de)
+# If the following line is uncommented, the "corresponding: true" above are ignored
+#correspongdingauthors: Daniel Nüst (daniel.nuest@uni-muenster.de) and Josiah Carberry (j.carberry@orcid.org)
+# If authors contributed equally, please mark the respective author names with an asterisk '*' and add a further affiliation: 'These authors contributed equally to this work.'", see template.
+affiliation:
+  - code: 1
+    address: ARC Centre of Excellence for Climate Extremes, University of New South Wales, Sydney, NSW 2052, Australia
+  - code: 2
+    address: Climate Change Research Centre, University of New South Wales, Sydney, NSW 2052, Australia
+  - code: 3
+    address: Evolution & Ecology Research Centre, University of New South Wales, Sydney, NSW 2052, Australia
+  - code: 4
+    address: School of Biological Sciences, University of Bristol, Bristol, BS8 1TQ, United Kingdom
+  - code: 5
+    address: Research School of Earth Sciences, Australian National University, Canberra, ACT 0200, Australia
+  - code: 6
+    address: College of Science and Engineering, James Cook University, Cairns, QLD 4188, Australia
+  - code: 7
+    address: Research School of Biology, The Australian National University, Acton, ACT 2601, Australia
+  - code: 8
+    address: School of Geosciences, University of Edinburgh, Edinburgh EH89XP, UK
+  - code: 9
+    address: Hawkesbury Institute for the Environment, Western Sydney University, Penrith, NSW 2753, Australia
+abstract: |
+  Climate change is projected to increase the imbalance between the supply (precipitation) and atmospheric demand for water (i.e. increased potential evapotranspiration), stressing plants in water-limited environments. Plants may be able to offset increasing aridity because rising CO~2~ increases water-use-efficiency. CO~2~ fertilization has also been cited as one of the drivers of the widespread 'greening' phenomenon. However, attributing the size of this CO~2~ fertilization effect is complicated, due in part to a lack of long-term vegetation monitoring and interannual to decadal-scale climate variability. In this study we asked the question, how much has CO~2~ contributed towards greening? We focused our analysis on a broad aridity gradient spanning eastern Australia's woody ecosystems. Next we analysed 38-years of satellite remote sensing estimates of vegetation greenness (normalized difference vegetation index, NDVI) to examine the role of CO~2~ in ameliorating climate change impacts. Multiple statistical techniques were applied to separate the CO~2~-attributable effects on greening from the changes in water supply and atmospheric aridity. Widespread vegetation greening occurred despite a warming climate, increases in vapor pressure deficit, and repeated record-breaking droughts and heatwaves. Between 1982-2019 we found that NDVI increased (median 11.3%) across 90.5% of the woody regions. After masking disturbance effects (e.g. fire), we statistically estimated an 11.7% increase in NDVI attributable to CO~2~, broadly consistent with a hypothesized theoretical expectation of an 8.6% increase in water-use-efficiency due to rising CO~2~. In contrast to reports of a weakening CO~2~ fertilization effect, we found no consistent temporal change in the CO~2~ effect. We conclude rising CO~2~ has mitigated the effects of increasing aridity, repeated record-breaking droughts, and record-breaking heat waves in eastern Australia. However, we were unable to determine whether trees or grasses were the primary beneficiary of the CO~2~ induced change in water-use-efficiency, which has implications for projecting future ecosystem resilience. A more complete understanding of how CO~2~ induced changes in water-use-efficiency affect trees and non-tree vegetation is needed.
+bibliography: Oz_PPET_CO2.bib
+running:
+  title: R Markdown Template for Copernicus
+  author: Nüst et al.
+competinginterests: |
+  The authors declare no competing interests.
+# See https://publications.copernicus.org/for_authors/licence_and_copyright.html, normally used for transferring the copyright, if needed. 
+# Note: additional copyright statements for affiliated software or data need to be placed in the data availability section. 
+copyrightstatement: |
+  The author's copyright for this publication is transferred to institution/company. 
+### Note: unless stated otherwise, software and data affiliated with the manuscript are assumed to be published under the same licence as the article (currently Creative Commons 4.0)
+availability:
+  #  use this to add a statement when having only software code available
+  #  use this to add a statement when having only data sets available
+  #code: |
+  #data: |
+  codedata: |
+    use this to add a statement when having data sets and software code available
+  sample: |
+    use this section when having geoscientific samples available
+videosupplement: |
+  use this section when having video supplements available
+authorcontribution: |
+  Daniel wrote the package. Josiah thought about poterry. Markus filled in for a second author.
+disclaimer: |
+  We like Copernicus.
+acknowledgements: |
+  Thanks to the rticles contributors!
+appendix: |
+  \section{Figures and tables in appendices}
+  \subsection{Option 1}
+  If you sorted all figures and tables into the sections of the text, please also sort the appendix figures and appendix tables into the respective appendix sections.
+  They will be correctly named automatically.
+  \subsection{Option 2}
+  If you put all figures after the reference list, please insert appendix tables and figures after the normal tables and figures.
+  
+  `\appendixfigures` needs to be added in front of appendix figures
+  `\appendixtables` needs to be added in front of appendix tables
+  
+  Please add `\clearpage` between each table and/or figure. Further guidelines on figures and tables can be found below.
+  Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
+  To rename them correctly to A1, A2, etc., please add the following commands in front of them:
+output:
+  rticles::copernicus_article: 
+    highlight: NULL
+    keep_tex: true
+  bookdown::pdf_book:
+    base_format: rticles::copernicus_article # for using bookdown features like \@ref()
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+\introduction[Introduction]
+Australia is the world's driest inhabited continent. Predicting how climate change will affect ecosystem resilience and alter Australia’s terrestrial hydrological cycle is of paramount importance. Australia's woody ecosystems are mostly concentrated in the east, where there are large gradients of precipitation (P) (300 - >2000 mm yr-1) and potential evapotranspiration (PET) (800-2100 mm yr-1). Most eastern Australian woodlands occupy water-limited regions where annual PET far exceeds P (Fig. S1), and tree species have evolved to cope with water-limited conditions (Peters et al. 2021) and high interannual rainfall variability. However, the climate is warming: eight of Australia’s ten warmest years on record have occurred since 2005 (CSIRO & Bureau of Meteorology, 2020) and Australia’s climate has warmed by ~ 1.5℃ since records began in 1910. The warming has likely increased atmospheric demand for water (e.g. PET or vapor pressure deficit, VPD). In most woody ecosystems, the ratio of water supply (i.e. P) to water demand (i.e. PET) has declined in recent decades (Figs. 1,2a). 
+Eastern Australia has also been impacted by several multi-year droughts, episodic deluges of rainfall [@king_role_2020], and an increasing frequency of severe heatwaves (Perkins et al., 2012) in the last few decades. Precipitation changes have been spatially variable over eastern Australia, where northern Queensland grew wetter and southeast Australia grew drier (Fig. S2). In the last two decades, southeast Australia experienced the two worst droughts in the observational record (2001-2009; van Dijk et al., 2013 and 2017-2019; Bureau of Meteorology). Yet between these two droughts, Eastern Australia experienced record breaking rainfall in 2011 associated with a strong La Niña event. This caused marked vegetation ‘greening’ (e.g. increased foliar cover), even in the arid interior (Bastos et al., 2013; Poulter et al., 2014; Ahlstrom et al., 2015). However, this greening contributed to record-breaking fires in the following year (Harris et al., 2018). 
+
+Theory suggests that plant physiological responses to atmospheric carbon dioxide (CO2) may mitigate some of the negative effects of an aridifying climate. However,  the magnitude of plant responses to increased atmospheric CO2 has been challenging to establish in field experiments (Jiang et al., 2020b), from observations (Zhu et al., 2016; Walker et al., 2020), or to separate from other drivers (e.g. climate variability, disturbances, and changes in land management). Studies have used data from the Advanced Very High Resolution Radiometer (AVHRR) satellites to show positive trends in the normalized difference vegetation index (NDVI) over Australia (Donohue et al., 2009). The greening trend is caused by increased leaf area, which has resulted from increased atmospheric CO2 concentrations (Donohue et al., 2013; Ukkola et al., 2016). The evidence for increases in leaf area from rising CO2 have also been supported by observations of reduced runoff in Australia’s drainage basins (Trancoso et al., 2017; Ukkola et al., 2016).   
+
+Yet disentangling the CO2 fertilization effect from other drivers of climate variability and global change has been particularly challenging for satellite based analyses. It is challenging to attribute causes of greening because of co-occurring changes in climate, land-use, and disturbance are confounded with the effect of CO2 fertilization. Furthermore, the time series of even the longest systematically collected optical vegetation index records from a single sensor is 20 years (e.g. MODIS Terra). Analysis of trends extending beyond 20 years requires merging satellite records across sensors and platforms. But this requires care to address changes in radiometric and spatial resolution of the sensor, as well as drift in the solar zenith angle (Ji & Brown, 2017; Frankenberg et al., 2021) and the time of retrieval. Thus different analytical methodologies have produced disagreements over where greening has occurred (Cortés et al., 2021). One often-used method to provide additional constraint on greening trends has been to compare remote sensing derived trends with modeled changes in leaf area index (LAI) from ensembles of dynamic global models (Zhu et al., 2016; Wang et al., 2020). However these model attribution approaches rely on a set of  key assumptions. None of the models can accurately predict LAI changes in response to rising CO2 (De Kauwe et al., 2014; Medlyn et al., 2016). Vegetation models have been shown to diverge in their simulation of LAI over Australia (Medlyn et al., 2016; Zhu et al., 2016; Teckentrup et al., in review), and have bioclimatic rules for determining phenology which may not be appropriate for the highly variable Australian climate and the evergreen Eucalyptus forests (Teckentrup et al., 2021). These model simulations are typically compared with modeled LAI products derived from the red and near infrared wavelengths of multispectral satellite sensors, of which each product carries specific algorithmic assumptions about canopy-light interception which are conditional upon estimated land cover types. In comparison, NDVI carries no ecosystem specific assumption, and is an effective proxy of leaf area in ecosystems with low-to-moderate canopy cover (Carlson & Ripley, 1997), a characteristic of eastern Australian woody ecosystems (Specht, 1972; Yang et al., 2018).  
+
+Here we ask, how much can greening trends be explained by rising CO2? Using eastern Australia as a model system, we used a multi satellite derived NDVI record encompassing 38 years to isolate the influence of CO2 from simultaneous effects of meteorological change and disturbance. Next we contrasted CO2 effects with theoretical predictions based on water-use-efficiency (WUE) theory for plants and the observed rise in CO2. Finally, we examined whether recent NDVI greening trends have co-occurred with changes in tree or grass cover over the last two decades.
+
+# Methods
+## Study area
+The study region encompasses the dominant woody ecosystems of eastern Australia (Fig. S1b). We used the National Vegetation Information System 5.1 land cover dataset (Table S1) to select locations designated as "Acacia Forests and Woodlands", "Acacia Open Woodlands", "Callitris Forests and Woodlands", "Casuarina Forests and Woodlands", "Eucalypt Low Open Forests", "Eucalypt Open Forests", "Eucalypt Open Woodlands", "Eucalypt Tall Open Forests",  "Eucalypt Woodlands", "Low Closed Forests and Tall Closed Shrublands", "Mallee Open Woodlands and Sparse Mallee Shrublands", "Mallee Woodlands and Shrublands", "Melaleuca Forests and Woodlands", "Other Forests and Woodlands", "Other Open Woodlands", "Rainforests and Vine Thickets", and "Tropical Eucalypt Woodlands/Grasslands".
+
+## Climate and remote sensing datasets
+We used the atmospheric CO2 record from the deseasonalized Mauna Loa record (https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html), and extracted climate data (Table S1) from the Australian Bureau of Meteorology's Australian Water Availability Project (AWAP; Jones, et al. 2009).  AWAP is a gridded climate product interpolated to 0.05° from a large network of meteorological stations distributed across Australia. Vapor pressure deficit was calculated using daily estimates of maximum temperature and vapor pressure at 15:00 hours. PET was calculated from shortwave radiation and mean air temperature using the Priestley-Taylor method (Davis et al., 2017). The Priestley-Taylor method has been shown to be appropriate for estimating large-scale PET (Raupach, 2000) and is more suited for use in long-term analysis where CO2 increased than other common formulations such as the Penman-Monteith equation (Milly & Dunne, 2016; Greve et al., 2019), which explicitly imposes a fixed stomatal resistance that is incompatible with plant physiology theory (Medlyn et al., 2001). AWAP measurements of shortwave radiation only extend back to 1990, so we extended the PET record to 1982 by calibrating the ERA5-Land PET record (1980-2019) to the AWAP PET record (1990-2019) by linear regression for each grid-cell, and then gap-filled the years 1982-1989 with the calibrated ERA5 PET. PET from the Climate Research Unit record (Harris et al., 2014) was highly correlated with both the recalibrated ERA5 PET  (r = 0.91; 1982-1989) and the original AWAP PET (r = 0.97; 1990-2019). Next, we calculated a 30-year climatology of the meteorological variables using the period of 1982-2011 to be close to current standards (World Meteorological Organization, 2017). We used this climatology to define the mean annual P:PET (MIMA), and as the reference to calculate a 12-month running anomaly of annual P:PET (MIanom). Zonal statistics for each meteorological variable were calculated using simplified Köppen climate zones, derived from the Australian Bureau of Meteorology (Fig. 2b, Table S1). 
+
+We used surface reflectance from two satellite products to generate the NDVI record: National Oceanic and Atmospheric Administration's Climate Data Record v5 Advanced Very High Radiometric Resolution (AVHRR) Surface Reflectance (NOAA-CDR) record and the National Space and Aeronautical Administration's MCD43A4 Nadir Bidirectional Reflectance Distribution Function Adjusted Reflectance (MODIS-MCD43) (Table S1; Schaaf & Wang, 2015). NDVI data was extracted from 1982-2019 at 0.05° resolution from the NOAA-CDR AVHRR version 5 product (Vermote & NOAA CDR Program, 2018). The surface reflectance record of AVHRR extends through 2019, but the quality of the record starts to degrade in 2017 because of an increase in the solar zenith angle (Ji & Brown, 2017), causing a sensor-produced decline in NDVI during 2017-2019. For this reason we only use AVHRR surface reflectance data between 1982-2016. We composited monthly mean AVHRR NDVI (NDVIAVHRR) estimates using only daily pixel retrievals with no detected cloud cover (Quality Assurance band, bit 1). Monthly NDVIAVHRR estimates aggregated from less than three daily retrievals were removed. They were also removed when the coefficient of variation of daily retrievals for a given month was greater than 25%. We also removed NDVIAVHRR monthly estimates where NDVIAVHRR, solar zenith angle, or time of acquisition deviated beyond 3.5 standard deviations from the monthly mean, calculated from a climatology spanning 1982-2016. 
+
+We used the MODIS-MCD43 surface reflectance at 500 m resolution to derive NDVI for 2001-2019 (NDVIMODIS). Monthly mean estimates of the surface reflectance were produced by compositing pixels flagged as "ideal-quality" (Quality Assurance, bits 0-1). We also masked disturbances to have greater confidence in our attribution of the targeted drivers of NDVIMODIS change (climate & CO2). The Global Forest Change product v1.7 (Hansen et al., 2013) was used to mask pixels from 2001 onwards that had experienced forest loss due to deforestation or severe stand clearing disturbance. We masked pixel locations that experienced bushfires from the year 2001 onwards. Specifically, these pixels were masked for the year of burning and the following three years using the 500 m resolution MODIS-MCD64 monthly burned-area product (Giglio et al., 2018). We terminated the NDVIMODIS time series in August of 2019, prior to the widespread bushfires of late 2019/2020. Both NDVIAVHRR and NDVIMODIS datasets were processed using Google Earth Engine (Gorelick et al., 2017), and exported at 5 km spatial resolution, which best approximated the native resolution of the NOAA-CDR AVHRR and AWAP products. Further post-processing used the 'stars' (Pebesma, 2020) and 'data.table' (Dowle & Srinivasan, 2019) R packages (see code availability section). 
+
+We merged the processed 1982-2016 NDVI~AVHRR~ with the 2001-2019 NDVIMODIS by recalibrating the NDVIAVHRR with a generalized additive model (GAM). Specifically, we used one million observations from the overlapping 2001-2016 portion of both records to fit a GAM using the 'mgcv' R package (Wood, 2017) to model NDVIMCD64 from AVHRR derived covariates as: 
+\begin{equation}
+NDVI_{MOD} = s(NDVI_{AVHRR})+s(month) + s(SZA) + s(TOD) + s(x,y)
+\end{equation}
+
+where 's' represents a penalized smoothing function using a thin-plate regression spline, SZA is the solar zenith angle, NDVIAVHRR is the uncalibrated NDVI from AVHRR, TOD is time of day of retrieval, and x and y represent longitude and latitude, respectively. The  fit GAM was then used to generate the recalibrated AVHRR NDVI. The merged NDVI dataset was created by joining the 1982-2000 recalibrated AVHRR NDVI with the 2001-2019 NDVIMODIS. We further reduced monthly temporal variability of NDVI by calculating a three month rolling mean of NDVI which we used for subsequent statistical model fitting.
+
+##Estimating NDVI and climate trends
+We estimated the relative increase in NDVI between 1982-2019 with respect to time (equation 2) for each grid cell with an iteratively weighted least squares robust linear model via the 'rlm' function in R's MASS package (Venables & Ripley, 2002) as follows.
+\begin{equation}
+NDVI=\beta_0+ \beta_1\,year+\beta_2\,sensor
+\end{equation}
+
+Here $\beta_0$ represents the estimated NDVI in 1982, the year term starts at 1982, and the sensor term is a binary covariate that accounts for residual offset differences between the recalibrated AVHRR NDVI , and the NDVIMOD. The relative temporal trends for climate variables and the MODIS vegetation continuous fractions were fit for each grid cell location using the Theil-Sen estimator, a form of robust pairwise regression, with the 'zyp' R package (Bronaugh & Consortium, 2019). The temporal covariate was recentered to start with the first hydrological year (where the year starts one month earlier in December) of the data so that the intercept term represents the mean at the start of the time series. The relative rate of change for each variable was reconstructed by calculating 
+\begin{equation}
+100*[\frac{\beta_1(year_{end}-year_{start})}{\beta_0}]
+\end{equation}
+
+where $\beta_0$ and $\beta_1$ are the intercept and trend derived from Theil-Sen regression. 
+
+
+## Estimating contribution of CO2 and climate toward NDVI trends 
+We used the merged NDVI observations to fit multiple statistical models to quantify the impact of changes in CO2 and meteorological variables on NDVI. The relationship between NDVI and the running 12-month mean of P:PET was strongly nonlinear and followed a monotonic saturating sigmoidal relationship as indicated by GAM fits (methods equation 6, see below). GAMs can characterize a nonlinear response without specifying a functional form, yet the underlying spline parameters are not easily interpreted as the parameters of a fixed nonlinear function. Therefore we used nonlinear least squares (nls_multstart function (Padfield & Matheson, 2020) in R v4.01) to compare model fits to a set of fixed nonlinear functional forms including the Weibull function (equation 4; Fig. 4), the logistic function (equation 5; Fig. S5), and the Richards growth function (equation 6; Fig. S6). The focus on the Weibull models because they showed equivalent goodness of fit with fewer parameters than the Richards function models. Next we added a linear modifier to the Weibull function using the covariates of CO2 (ppm) and the ratio of the anomaly of P:PET (MIanom) to the mean annual P:PET (MIMA) as follows: 
+\begin{align}
+NDVI=V_a-V_d[exp(-exp(c_{ln})\,(MI_{MA})^{q})]+\eta\\
+\eta = \beta_{1}\frac{MI_{anom}}{MI_{MA}}+\beta_{2}\,CO_2\,MI_{MA} +\beta_{3}\,CO_2\,\frac{MI_{anom}}{MI_{MA}}+sensor\nonumber
+\end{align}
+
+Here the sensor term is a binary covariate indicating the AVHRR or MODIS platform. Model-fitted parameters Va and Vd correspond to the asymptote, and the asymptote's difference from the minimum NDVI, while cln is the logarithm of the rate constant, and q is the power to which MIMA is raised. The model was fit by individual season with one million observations per model fit. Corresponding goodness-of fit metrics were calculated by season (R2 and root mean square error; Fig. 5) with one million randomly sampled observations. Alternative nonlinear functional forms were also fit to characterize the effect of CO2 upon NDVI. A logistic model was fit across space for each hydrological year as
+
+\begin{equation}
+NDVI = \frac{V_A}{(1+exp((m-MI_{12mo})/s))}
+\end{equation}
+
+where NDVI is the hydrological year mean value of NDVI for a grid cell location, m is the midpoint, s is a scale parameter, and VA is the asymptote (plotted in Fig. S5). We also used a modified Richards growth function to characterize the CO2 effect upon seasonal NDVI (Fig. S6) as 
+
+\begin{align}
+NDVI=(V_A+\beta_1\,CO_2+\beta_2\,MI_{f.anom})\,\frac{(1+exp(m+\beta_3\,CO_2+\beta_4\,MI_{f.anom} - MI_{MA}))}{(s+\beta_5\,CO_2+\beta_6\,MI_{f.anom})^{(-exp(-(q+\beta_7\,CO_2+\beta_8\,F)))}}\\
+MI_{f.anom} = \frac{MI_{anom}}{MI_{MA}}\nonumber
+\end{align}
+
+Here the $\beta$ terms act to linearly modify the core nonlinear parameters (VA, m, s, q) with the effects of CO2 and MIFanom. Each seasonal model component was fit across space with one million random samples from the total merged NDVI record (approx 14.3 million observations). 
+
+To ensure consistent interpretation of the nonlinear response across P:PET, we also fit linear models explaining NDVI with CO2 and MIanom by season in MIMA bin-widths of 0.2 (equation 7; Fig. S4). Separate linear models were fit for increments of 0.15 of MIMA for each season using the merged 1982-2019 NDVI record. NDVI was modeled as
+
+\begin{equation}
+NDVI = \beta_0+\beta_1\,CO_2 + \beta_2\,MI_{anom}+\beta_3\,Veg.\,Class+\beta_4\,sensor
+\end{equation}
+
+where MIanom is the annual anomaly of P:PET, Veg. Class is the NVIS 5.1 vegetation class, and sensor is a binary variable used to account for residual differences between the recalibrated AVHRR NDVI and NDVIMOD records. To aid the comparison of model effects, we centered and standardized the continuous model before regression. The standardized CO2 and P:PETanom. effects ($\beta$) are presented in Fig. S4.
+
+Next, we fit robust multiple linear regression models to the time series of NDVI for each of the 39,463 pixel locations. The CO2 effect for each grid cell location was simultaneously estimated with the linear effects of the anomalies (anom) of P, PET, VPD, and MI as fractions of their mean annual values (MA) as follows.
+
+\begin{equation}
+NDVI=\beta_0+ \beta_1\,CO_2+\beta_2\,\frac{P_{anom}}{P_{MA}}+\beta_3\,\frac{PET_{anom}}{PET_{MA}}+\beta_4\,\frac{VPD_{anom}}{{VPD_{MA}}}+\beta_5\,sensor
+\end{equation}
+
+Finally we estimated the CO2 effect across the study region using a GAM with a penalized smoothing function (s) characterizing the effect of the anomalies and mean annual values of VPD, P, and PET and sensor epoch as follows.
+
+\begin{equation}
+NDVI = s(MI_{MA},CO_2) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},PET_{MA})+sensor
+\end{equation}  
+
+
+## A simplified theoretical water use efficiency model
+We compared the statistically attributed CO2 amplification of NDVI with the expectation from a simple theoretical model of WUE. Following Donohue et al. (2013), WUE (W) is defined as: 
+\begin{equation}
+W_{leaf} = \frac{A_{leaf}}{E_{leaf}} = \frac{C_a}{1.6D}(1 - \chi)
+\end{equation}
+
+where A is leaf level assimilation \(umol\,m^{2}\,s^{-1}\), E is leaf level transpiration \(mol\,m^{2}\,s^{-1}\), Ca is atmospheric CO2 \(umol\,umol^{-1}\), Ci is intercellular CO2 \(umol\,umol^{-1}\), $\chi$ is Ci/Ca, and D is atmospheric vapor pressure deficit \(mol\,mol^{-1}\). The relative rate of change in W with respect to a change in Ca can be calculated as:
+
+\begin{equation}
+\frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{dD}{D} + \frac{d(1-\chi)}{(1-\chi)}
+\end{equation}
+
+
+If temperature increases without a corresponding increase in humidity, D increases which also causes transpiration to rise and thus reduces W. However, W is predicted to increase with CO2 which may offset increases in D. Experiments suggest that $\chi$ does not change with Ca  but is sensitive to D (Wong et al., 1985; Drake et al., 1997) and can be estimated as being proportional to the square root of D (Medlyn et al., 2011). By substituting $$(1-\chi) \approx \sqrt(D)$$ into equation (11) we can estimate the theoretical combined effect of Ca and D upon Wleaf as: 
+\begin{equation}
+\frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}
+\end{equation}
+
+Transpiration per unit ground area is strongly controlled by water supply in warm, water limited environments with relatively low leaf area such as eastern Australia (Specht, 1972) therefore we approximate canopy transpiration (Ecanopy) as:
+\begin{equation}
+E_{canopy}=E_{leaf}\,L
+\end{equation}
+
+The change in Ecanopy can then be defined as:
+\begin{equation}
+\frac{dE_{canopy}}{E_{canopy}} \approx \frac{dE_{leaf}}{E_{leaf}}+\frac{dL}{L}
+\end{equation}
+
+If we assume there is no long-term overall change in precipitation then we can assume change in Ecanopy is tightly coupled to the water supply, therefore we have:
+\begin{equation}
+-\frac{dE_{leaf}}{E_{leaf}} \approx \frac{dL}{L}
+\end{equation}
+
+NDVI is linearly related to foliar cover (F) until LAI $\approx$ 3 \(m^2\,m^{-2}\) (Carlson & Ripley, 1997), which is the predominantly the case when P:PET < 1. Most woody ecosystems of eastern Australia are strongly water limited with LAI <= 1 \(m^2\,m^{-2}\), where NDVI is approximately proportional with the fraction of foliar cover:
+\begin{equation}
+\frac{dL}{L}\approx\frac{dF}{F}\approx\frac{d NDVI}{NDVI}
+\end{equation}
+
+Then substituting equation (15) into equation (12) gives:
+\begin{equation}
+\frac{dW_{leaf}}{W_{leaf}} \approx  \frac{dA_{leaf}}{A_{leaf}} + \frac{dF}{F} \approx \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}
+\end{equation}
+
+If we assume that the benefit towards Wleaf from rising Ca is split evenly between the relative changes in Aleaf and F, we can predict the change towards NDVI to be
+\begin{equation}
+\frac{dNDVI}{NDVI} \approx \frac{1}{2}[\frac{dCa}{Ca}-\frac{dD}{2\,D}]
+\end{equation}
+
+We compared the WUE theoretical model with the robust linear models fit for each pixel location (equation 8), and the GAM (equation 9) fit across the study region. The WUE theoretical model assumes no change in P, but does account for changes in VPD. Therefore in using the statistical models to compare with the WUE predictions, we generated counterfactual predictions from the statistical models with no precipitation anomaly but with the observed increases in CO2 and VPD. One weakness with the application of this WUE theoretical model is the uncertainty regarding the assumed allocation of the Wleaf benefit towards either Aleaf or F (e.g. LAI; see above). Donohue et al., (2017) proposed a similar model to eq (18), the Partitioning of Equilibrium Transpiration and Assimilation (PETA) hypothesis where the relative allocation to leaf area is predicted to decline with increasing resource availability (which could be inferred from growing season LAI). We calculated the expectation from the PETA hypothesis as another point of comparison with the CO2 attributable effect on NDVI. 
+
+
+\conclusions[Conclusions]
+
