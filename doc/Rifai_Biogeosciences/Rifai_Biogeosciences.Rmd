@@ -111,8 +111,8 @@ Australia is the world's driest inhabited continent. Predicting how
 climate change will affect ecosystem resilience and alter Australia's
 terrestrial hydrological cycle is of paramount importance. Australia's
 woody ecosystems are mostly concentrated in the east, where there are
-large gradients of precipitation (P) (300 - \>2000 mm yr-1) and
-potential evapotranspiration (PET) (800-2100 mm yr-1). Most eastern
+large gradients of precipitation (P) (300 - 2000+ mm yr^-1^) and
+potential evapotranspiration (PET) (800-2100 mm yr^-1^). Most eastern
 Australian woodlands occupy water-limited regions where annual PET far
 exceeds P (Fig. S1), and tree species have evolved to cope with
 water-limited conditions [@petersLivingEdgeContinentalscale2021] and high interannual
@@ -194,7 +194,7 @@ decades.
 
 The study region encompasses the dominant woody ecosystems of eastern
 Australia (Fig. S1b). We used the National Vegetation Information System
-5.1 land cover dataset (Table S1) to select locations designated as
+5.1 land cover dataset (@DepartmentAgricultureWater; Table S1) to select locations designated as
 "Acacia Forests and Woodlands", "Acacia Open Woodlands", "Callitris
 Forests and Woodlands", "Casuarina Forests and Woodlands", "Eucalypt Low
 Open Forests", "Eucalypt Open Forests", "Eucalypt Open Woodlands",
@@ -211,7 +211,7 @@ Woodlands/Grasslands".
 We used the atmospheric CO~2~ record from the deseasonalized Mauna Loa
 record (<https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html>), and
 extracted climate data (Table S1) from the Australian Bureau of
-Meteorology's Australian Water Availability Project [AWAP; @jonesHighqualitySpatialClimate2009]. AWAP is a gridded climate product interpolated to 0.05° from a
+Meteorology's Australian Water Availability Project (AWAP; @jonesHighqualitySpatialClimate2009). AWAP is a gridded climate product interpolated to 0.05° from a
 large network of meteorological stations distributed across Australia.
 Vapor pressure deficit was calculated using daily estimates of maximum
 temperature and vapor pressure at 15:00 hours. PET was calculated from
@@ -230,9 +230,9 @@ ERA5 PET (r = 0.91; 1982-1989) and the original AWAP PET (r = 0.97;
 1990-2019). Next, we calculated a 30-year climatology of the
 meteorological variables using the period of 1982-2011 to be close to
 current standards [@worldmeteorologicalorganizationWMOGuidelinesCalculation2017]. We used
-this climatology to define the mean annual P:PET (MIMA), and as the
+this climatology to define the mean annual P:PET (MI~MA~), and as the
 reference to calculate a 12-month running anomaly of annual P:PET
-(MIanom). Zonal statistics for each meteorological variable were
+(MI~anom~). Zonal statistics for each meteorological variable were
 calculated using simplified Köppen climate zones, derived from the
 Australian Bureau of Meteorology (Fig. 2b, Table S1).
 
@@ -283,27 +283,24 @@ We merged the processed 1982-2016 NDVI~AVHRR~ with the 2001-2019
 NDVI~MODIS~ by recalibrating the NDVI~AVHRR~ with a generalized additive
 model (GAM). Specifically, we used one million observations from the
 overlapping 2001-2016 portion of both records to fit a GAM using the
-'mgcv' R package [@woodGeneralizedAdditiveModels2017b] to model NDVIMCD64 from AVHRR derived
+'mgcv' R package [@woodGeneralizedAdditiveModels2017b] to model NDVI~MODIS~ from AVHRR derived
 covariates as: 
 \begin{equation}
-NDVI_{MOD} = s(NDVI_{AVHRR})+s(month) + s(SZA) + s(TOD) + s(x,y)
+NDVI_{MODIS} = s(NDVI_{AVHRR})+s(month) + s(SZA) + s(TOD) + s(x,y)
 \end{equation}
 
-where 's' represents a penalized smoothing function using a thin-plate
-regression spline, SZA is the solar zenith angle, NDVI~AVHRR~ is the
-uncalibrated NDVI from AVHRR, TOD is time of day of retrieval, and x and
-y represent longitude and latitude, respectively. The fit GAM was then
+where '$s$' represents a penalized smoothing function using a thin-plate
+regression spline, $SZA$ is the solar zenith angle, $NDVI_{AVHRR}$ is the
+uncalibrated NDVI from AVHRR, $TOD$ is time of day of retrieval, and $x$ and
+$y$ represent longitude and latitude, respectively. The fit GAM was then
 used to generate the recalibrated AVHRR NDVI. The merged NDVI dataset
 was created by joining the 1982-2000 recalibrated AVHRR NDVI with the
 2001-2019 NDVI~MODIS~. We further reduced monthly temporal variability of
 NDVI by calculating a three month rolling mean of NDVI which we used for
 subsequent statistical model fitting.
 
-##Estimating NDVI and climate trends  
-We estimated the relative
-increase in NDVI between 1982-2019 with respect to time (equation 2) for
-each grid cell with an iteratively weighted least squares robust linear
-model via the 'rlm' function in R's MASS package [@venablesModernAppliedStatistics2002] as follows. 
+## Estimating NDVI and climate trends  
+We estimated the relative increase in NDVI between 1982-2019 with respect to time (equation 2) for each grid cell with an iteratively weighted least squares robust linear model via the 'rlm' function in R's MASS package [@venablesModernAppliedStatistics2002] as follows. 
 \begin{equation}
 NDVI=\beta_0+ \beta_1\,year+\beta_2\,sensor
 \end{equation}
@@ -337,14 +334,14 @@ sigmoidal relationship as indicated by GAM fits (methods equation 6, see
 below). GAMs can characterize a nonlinear response without specifying a
 functional form, yet the underlying spline parameters are not easily
 interpreted as the parameters of a fixed nonlinear function. Therefore
-we used nonlinear least squares (nls_multstart function [@padfield_matheson20] in R v4.01) to compare model fits to a set of fixed
+we used nonlinear least squares (nls.multstart package [@padfield_matheson20] in R v4.01) to compare model fits to a set of fixed
 nonlinear functional forms including the Weibull function (equation 4;
 Fig. 4), the logistic function (equation 5; Fig. S5), and the Richards
 growth function (equation 6; Fig. S6). The focus on the Weibull models
 because they showed equivalent goodness of fit with fewer parameters
 than the Richards function models. Next we added a linear modifier to
 the Weibull function using the covariates of CO~2~ (ppm) and the ratio of
-the anomaly of P:PET (MIanom) to the mean annual P:PET (MIMA) as
+the anomaly of P:PET (MI~anom~) to the mean annual P:PET (MI~MA~) as
 follows: 
 \begin{align}
 NDVI=V_a-V_d[exp(-exp(c_{ln})\,(MI_{MA})^{q})]+\eta\\
@@ -352,12 +349,11 @@ NDVI=V_a-V_d[exp(-exp(c_{ln})\,(MI_{MA})^{q})]+\eta\\
 \end{align}
 
 Here the sensor term is a binary covariate indicating the AVHRR or MODIS
-platform. Model-fitted parameters Va and Vd correspond to the asymptote,
-and the asymptote's difference from the minimum NDVI, while cln is the
-logarithm of the rate constant, and q is the power to which MIMA is
+platform. Model-fitted parameters $V_a$ and $V_d$ correspond to the asymptote,
+and the asymptote's difference from the minimum NDVI, while $c_{ln}$ is the
+logarithm of the rate constant, and $q$ is the power to which MI~MA~ is
 raised. The model was fit by individual season with one million
-observations per model fit. Corresponding goodness-of fit metrics were
-calculated by season (R2 and root mean square error; Fig. 5) with one
+observations per model fit. Corresponding goodness-of fit metrics ($R^2$ and root mean square error) were calculated by season (Fig. 5) with one
 million randomly sampled observations. Alternative nonlinear functional
 forms were also fit to characterize the effect of CO~2~ upon NDVI. A
 logistic model was fit across space for each hydrological year as
@@ -367,8 +363,8 @@ logistic model was fit across space for each hydrological year as
 NDVI = \frac{V_A}{(1+exp((m-MI_{12mo})/s))}
 \end{equation}
 ```
-where NDVI is the hydrological year mean value of NDVI for a grid cell
-location, m is the midpoint, s is a scale parameter, and VA is the
+where $NDVI$ is the hydrological year mean value of NDVI for a grid cell
+location, $m$ is the midpoint, $s$ is a scale parameter, and $V_A$ is the
 asymptote (plotted in Fig. S5). We also used a modified Richards growth
 function to characterize the CO~2~ effect upon seasonal NDVI (Fig. S6) as
 
@@ -379,15 +375,15 @@ MI_{f.anom} = \frac{MI_{anom}}{MI_{MA}}\nonumber
 \end{align}
 ```
 Here the $\beta$ terms act to linearly modify the core nonlinear
-parameters (VA, m, s, q) with the effects of CO~2~ and MIFanom. Each
+parameters ($V_A, m, s, q$) with the effects of CO~2~ and $MI_{f.anom}$. Each
 seasonal model component was fit across space with one million random
 samples from the total merged NDVI record (approx 14.3 million
 observations).
 
 To ensure consistent interpretation of the nonlinear response across
-P:PET, we also fit linear models explaining NDVI with CO~2~ and MIanom by
-season in MIMA bin-widths of 0.2 (equation 7; Fig. S4). Separate linear
-models were fit for increments of 0.15 of MIMA for each season using the
+P:PET, we also fit linear models explaining NDVI with CO~2~ and MI~anom~ by
+season in MI~MA~ bin-widths of 0.2 (equation 7; Fig. S4). Separate linear
+models were fit for increments of 0.15 of MI~MA~ for each season using the
 merged 1982-2019 NDVI record. NDVI was modeled as
 
 ```{=tex}
@@ -395,12 +391,12 @@ merged 1982-2019 NDVI record. NDVI was modeled as
 NDVI = \beta_0+\beta_1\,CO_2 + \beta_2\,MI_{anom}+\beta_3\,Veg.\,Class+\beta_4\,sensor
 \end{equation}
 ```
-where MIanom is the annual anomaly of P:PET, Veg. Class is the NVIS 5.1
-vegetation class, and sensor is a binary variable used to account for
-residual differences between the recalibrated AVHRR NDVI and NDVIMOD
+where MI~anom~ is the annual anomaly of P:PET, Veg. Class is the NVIS 5.1
+vegetation class, and $sensor$ is a binary variable used to account for
+residual differences between the recalibrated AVHRR NDVI and NDVI~MODIS~
 records. To aid the comparison of model effects, we centered and
 standardized the continuous model before regression. The standardized
-CO~2~ and P:PETanom. effects ($\beta$) are presented in Fig. S4.
+CO~2~ and P:PET~anom~. effects ($\beta$) are presented in Fig. S4.
 
 Next, we fit robust multiple linear regression models to the time series
 of NDVI for each of the 39,463 pixel locations. The CO~2~ effect for each
@@ -414,7 +410,7 @@ NDVI=\beta_0+ \beta_1\,CO_2+\beta_2\,\frac{P_{anom}}{P_{MA}}+\beta_3\,\frac{PET_
 \end{equation}
 ```
 Finally we estimated the CO~2~ effect across the study region using a GAM
-with a penalized smoothing function (s) characterizing the effect of the
+with a penalized smoothing function ($s$) characterizing the effect of the
 anomalies and mean annual values of VPD, P, and PET and sensor epoch as
 follows.
 
@@ -426,29 +422,26 @@ NDVI = s(MI_{MA},CO_2) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},
 ## A simplified theoretical water use efficiency model
 
 We compared the statistically attributed CO~2~ amplification of NDVI with
-the expectation from a simple theoretical model of WUE. [Following @\cite{donohueImpactCOFertilization2013b}], WUE (W) is defined as: \begin{equation}
+the expectation from a simple theoretical model of WUE. Following @donohueImpactCOFertilization2013b, WUE ($W$) is defined as: \begin{equation}
 W_{leaf} = \frac{A_{leaf}}{E_{leaf}} = \frac{C_a}{1.6D}(1 - \chi)
 \end{equation}
 
-where A is leaf level assimilation $umol\,m^{2}\,s^{-1}$, E is leaf
-level transpiration $mol\,m^{2}\,s^{-1}$, Ca is atmospheric CO~2~
-$umol\,umol^{-1}$, Ci is intercellular CO~2~ $umol\,umol^{-1}$, $\chi$ is
-Ci/Ca, and D is atmospheric vapor pressure deficit $mol\,mol^{-1}$. The
-relative rate of change in W with respect to a change in Ca can be
-calculated as:
+where $A$ is leaf level assimilation ($umol\,m^{2}\,s^{-1}$), E is leaf
+level transpiration ($mol\,m^{2}\,s^{-1}$), $C_a$ is atmospheric CO~2~
+($umol\,umol^{-1}$), $C_i$ is intercellular CO~2~ ($umol\,umol^{-1}$), $\chi$ is $\frac{C_i}{C_a}$, and $D$ is atmospheric vapor pressure deficit ($mol\,mol^{-1}$). The relative rate of change in $W$ with respect to a change in $C_a$ can be calculated as:
 
 ```{=tex}
 \begin{equation}
 \frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{dD}{D} + \frac{d(1-\chi)}{(1-\chi)}
 \end{equation}
 ```
-If temperature increases without a corresponding increase in humidity, D
-increases which also causes transpiration to rise and thus reduces W.
-However, W is predicted to increase with CO~2~ which may offset increases
-in D. Experiments suggest that $\chi$ does not change with Ca but is
-sensitive to D [@wong_etal85; @drake_etal97] and can be
-estimated as being proportional to the square root of D [@medlynReconcilingOptimalEmpirical2011d]. By substituting $$(1-\chi) \approx \sqrt(D)$$ into equation (11)
-we can estimate the theoretical combined effect of Ca and D upon Wleaf
+If temperature increases without a corresponding increase in humidity, $D$
+increases which also causes transpiration to rise and thus reduces $W$.
+However, $W$ is predicted to increase with CO~2~ which may offset increases
+in $D$. Experiments suggest that $\chi$ does not change with $C_a$ but is
+sensitive to $D$ [@wong_etal85; @drake_etal97] and can be
+estimated as being proportional to the square root of $D$ [@medlynReconcilingOptimalEmpirical2011d]. By substituting $$(1-\chi) \approx \sqrt(D)$$ into equation (11)
+we can estimate the theoretical combined effect of $C_a$ and $D$ upon $W_{leaf}$
 as: 
 \begin{equation}
 \frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}
@@ -457,24 +450,27 @@ as:
 Transpiration per unit ground area is strongly controlled by water
 supply in warm, water limited environments with relatively low leaf area
 such as eastern Australia [@spechtWaterUsePerennial1972] therefore we approximate canopy
-transpiration (Ecanopy) as: \begin{equation}
+transpiration ($E_{canopy}$) as: 
+\begin{equation}
 E_{canopy}=E_{leaf}\,L
 \end{equation}
 
-The change in Ecanopy can then be defined as: \begin{equation}
+The change in $E_{canopy}$ can then be defined as: 
+\begin{equation}
 \frac{dE_{canopy}}{E_{canopy}} \approx \frac{dE_{leaf}}{E_{leaf}}+\frac{dL}{L}
 \end{equation}
 
 If we assume there is no long-term overall change in precipitation then
-we can assume change in Ecanopy is tightly coupled to the water supply,
-therefore we have: \begin{equation}
+we can assume change in $E_{canopy}$ is tightly coupled to the water supply,
+therefore we have: 
+\begin{equation}
 -\frac{dE_{leaf}}{E_{leaf}} \approx \frac{dL}{L}
 \end{equation}
 
-NDVI is linearly related to foliar cover (F) until LAI $\approx$ 3
-$m^2\,m^{-2}$ [@carlsonRelationNDVIFractional1997a], which is the predominantly the
+NDVI is linearly related to foliar cover ($F$) until LAI $\approx$ 3
+($m^2\,m^{-2}$) [@carlsonRelationNDVIFractional1997a], which is the predominantly the
 case when P:PET \< 1. Most woody ecosystems of eastern Australia are
-strongly water limited with LAI \<= 1 $m^2\,m^{-2}$, where NDVI is
+strongly water limited with LAI $\leq$ 1 ($m^2\,m^{-2}$), where NDVI is
 approximately proportional with the fraction of foliar cover:
 \begin{equation}
 \frac{dL}{L}\approx\frac{dF}{F}\approx\frac{d NDVI}{NDVI}
@@ -485,9 +481,10 @@ Then substituting equation (15) into equation (12) gives:
 \frac{dW_{leaf}}{W_{leaf}} \approx  \frac{dA_{leaf}}{A_{leaf}} + \frac{dF}{F} \approx \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}
 \end{equation}
 
-If we assume that the benefit towards Wleaf from rising Ca is split
-evenly between the relative changes in Aleaf and F, we can predict the
-change towards NDVI to be \begin{equation}
+If we assume that the benefit towards $W_{leaf}$ from rising $C_a$ is split
+evenly between the relative changes in $A_{leaf}$ and $F$, we can predict the
+change towards NDVI to be 
+\begin{equation}
 \frac{dNDVI}{NDVI} \approx \frac{1}{2}[\frac{dCa}{Ca}-\frac{dD}{2\,D}]
 \end{equation}
 
@@ -499,8 +496,8 @@ statistical models to compare with the WUE predictions, we generated
 counterfactual predictions from the statistical models with no
 precipitation anomaly but with the observed increases in CO~2~ and VPD.
 One weakness with the application of this WUE theoretical model is the
-uncertainty regarding the assumed allocation of the Wleaf benefit
-towards either Aleaf or F (e.g. LAI; see above). [@donohue_etal17]
+uncertainty regarding the assumed allocation of the $W_{leaf}$ benefit
+towards either $A_{leaf}$ or $F$ (e.g. LAI; see above). [@donohue_etal17]
 proposed a similar model to eq (18), the Partitioning of Equilibrium
 Transpiration and Assimilation (PETA) hypothesis where the relative
 allocation to leaf area is predicted to decline with increasing resource
@@ -540,7 +537,7 @@ knitr::include_graphics("../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_model
 ```
 \clearpage
 
-A recent study found the global CO~2~ fertilization effect was halved between the 1980s and 2000s [@wangRecentGlobalDecline2020]. In contrast to the estimates over eastern Australia from Wang et al., (2020) over, we found no consistent evidence of a decline in the effect of CO~2~ on NDVI through time. Neither the GAM estimates nor the robust linear model estimates of the CO~2~ effect showed any consistent evidence of a weakening CO~2~ effect between 1982-2000 and 2001-2019 (Fig. 6). The central 25-75% percentiles of the distribution of robust linear model effect sizes overlapped in all regions between epochs. The central 25-75% of the GAM estimated distributions also overlapped, with the exception of the Grassland and Arid regions where the CO~2~ effect was larger during 2001-2019. Consistent with the finding of a greater CO~2~ effect in wetter regions (Fig. 5), the robust linear models and the GAM estimated the CO~2~ effect to be greatest in the Equatorial and Tropical regions, and lowest in the Arid region (Fig. 6).  
+A recent study found the global CO~2~ fertilization effect was halved between the 1980s and 2000s [@wangRecentGlobalDecline2020]. In contrast to the estimates over eastern Australia from wangRecentGlobalDecline2020 over, we found no consistent evidence of a decline in the effect of CO~2~ on NDVI through time. Neither the GAM estimates nor the robust linear model estimates of the CO~2~ effect showed any consistent evidence of a weakening CO~2~ effect between 1982-2000 and 2001-2019 (Fig. 6). The central 25-75% percentiles of the distribution of robust linear model effect sizes overlapped in all regions between epochs. The central 25-75% of the GAM estimated distributions also overlapped, with the exception of the Grassland and Arid regions where the CO~2~ effect was larger during 2001-2019. Consistent with the finding of a greater CO~2~ effect in wetter regions (Fig. 5), the robust linear models and the GAM estimated the CO~2~ effect to be greatest in the Equatorial and Tropical regions, and lowest in the Arid region (Fig. 6).  
   
 \clearpage
 ```{r, out.width = "14cm", echo = FALSE, fig.cap = "Boxplot representation of the $CO_2$ attributable effect upon changing NDVI. Here the 25th, 50th, and 75th percentiles of the $CO_2$ attributable effect on NDVI are shown. The robust linear models (RLM; methods - eq 13) were fit for each individual grid cell location, whereas the generalized additive model (GAM; methods - eq 14) was fit using all grid cell locations. The distribution of RLMs yielded a median $R^2$ of 0.58 and RMSE of 0.025 over the merged period. The GAM had an overall $R^2$ of 0.91 and RMSE of 0.049."}
@@ -581,7 +578,7 @@ It should be noted not all regions experienced consistent greening trends throug
 Plants increase their rates of photosynthesis in response to rising atmospheric CO~2~, whilst also reducing stomatal conductance, which reduces evaporative losses and combined, the two responses lead to greater WUE [@ainsworthResponsePhotosynthesisStomatal2007; @morisonSensitivityStomataWater1985]. In water-limited ecosystems, it has been hypothesized that this physiological response by plants to CO~2~ should result in increased leaf biomass [@donohueImpactCOFertilization2013b; @ukkolaReducedStreamflowWaterstressed2016b]. While all our statistical approaches indicated a year round positive CO~2~ effect, in contrast to theory the effect was consistently greater in regions with higher P:PET (Figs. 5-7;S4-7). Our analysis also diverges with a global coarse-scale analysis that found weakening of the CO~2~ fertilization effect across both southeastern and northern Australia [@wangRecentGlobalDecline2020]. We found no meaningful difference in the CO~2~ attributable effect towards greening between the AVHRR 1982-2000 and MODIS 2001-2019 epochs to support the finding of temporally weakening CO~2~ effect (Fig. 6). The WUE model predicted similar relative rates of NDVI increase between the two epochs (4.5% and 4.7% for AVHRR and MODIS), yet for different reasons. CO~2~ increased by 30 ppm between 1982-2000 while VPD changed minimally and precipitation increased in Queensland and the Arid region (Fig. S8); all of which are favorable to increasing NDVI. In contrast, the larger CO~2~ increase between 2001-2019 (40 ppm) was offset by a spatially ubiquitous increase of VPD (3.7%, CI=[-0.4%,8.6%]; Fig. S8) and the occurrence of two multi-year droughts (Millennium Drought 2003-2009, and The Big Dry 2017-2020). Despite the widespread evidence of the CO~2~ effect, the WUE model notably underpredicted greening in some regions (Fig. 7).
 
 ## Deviations from WUE
-We found the CO~2~ effect on foliar area was the smallest in the driest climate regions (Figs. 5-6,S4-7). This was at odds with the WUE prediction (at 50% allocation; Fig. 7e), and contrary to expectation that the greatest WUE-derived benefit from CO~2~ would be in drier climates [donohue_etal17,mcmurtrieWhyPlantgrowthResponse2008]. These deviations may have resulted from ecosystems processes beyond the scope of a simple model, such as the phenology of the vegetation composition, and disturbances not captured by the satellite products (e.g. small fires, grazing). Browning in the Grassland region (Fig. 3b,S3) may have been caused by distinct dry season phenological differences between overstory woody vegetation and understory C4 grasses [@mooreReviewsSynthesesAustralian2016](Moore et al., 2016), which are dominant there [murphySeasonalWaterAvailability2007]. C4 grasses may have been favored over C3 because precipitation increased during the austral summer over the course of the study (Fig. S2) and this higher concentration of rainfall during the warmest months is thought to favor C4 grasses [@hattersleyDistributionC3C41983a; @knappResolvingDustBowl2020; @murphySeasonalWaterAvailability2007]. Finally, the linear dependency of leaf area upon VPD in the theoretical model may be ill-suited for extreme anomalously arid conditions because NDVI observations suggest a strongly nonlinear relationship with large VPD anomalies (Fig. S11).
+We found the CO~2~ effect on foliar area was the smallest in the driest climate regions (Figs. 5-6,S4-7). This was at odds with the WUE prediction (at 50% allocation; Fig. 7e), and contrary to expectation that the greatest WUE-derived benefit from CO~2~ would be in drier climates [donohue_etal17,mcmurtrieWhyPlantgrowthResponse2008]. These deviations may have resulted from ecosystems processes beyond the scope of a simple model, such as the phenology of the vegetation composition, and disturbances not captured by the satellite products (e.g. small fires, grazing). Browning in the Grassland region (Fig. 3b,S3) may have been caused by distinct dry season phenological differences between overstory woody vegetation and understory C~4~ grasses [@mooreReviewsSynthesesAustralian2016](Moore et al., 2016), which are dominant there [murphySeasonalWaterAvailability2007]. C~4~ grasses may have been favored over C~3~ because precipitation increased during the austral summer over the course of the study (Fig. S2) and this higher concentration of rainfall during the warmest months is thought to favor C~4~ grasses [@hattersleyDistributionC3C41983a; @knappResolvingDustBowl2020; @murphySeasonalWaterAvailability2007]. Finally, the linear dependency of leaf area upon VPD in the theoretical model may be ill-suited for extreme anomalously arid conditions because NDVI observations suggest a strongly nonlinear relationship with large VPD anomalies (Fig. S11).
 
 We explored how much of the higher WUE benefit would have to be allocated to match the GAM estimated CO~2~-attributed changes in NDVI. Allocation rates far greater than 50% would be required to match the WUE prediction in the Tropical and Equatorial zones (Figure 7e), whereas allocation would need to be less than 50% to match the GAM estimate in the Arid region. The Arid region experienced the greatest relative increase in VPD (Fig. 7a, S8), yet the theoretical model still predicted a small but positive increase in NDVI (Fig. 7c) which the GAM estimate suggests would be closer to a 10% rather than 50% foliar allocation level from the WUE benefit (Fig. 7d). Nevertheless, the smaller effect over the Arid region was consistent with earlier observational findings across Australia [@ukkolaReducedStreamflowWaterstressed2016b](Ukkola et al., 2016) and experimentation from the Nevada Desert FACE experiment [@smithLongtermResponseMojave2014].
 
