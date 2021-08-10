@@ -23,3 +23,4 @@ knitr::include_graphics("../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDiff
 knitr::include_graphics("../../figures/Fig8_PPET_change_ThielSen_VCF.png")
 ```
 
+csl: copernicus-publications.csl
