@@ -194,7 +194,7 @@ woody ecosystems are mostly concentrated in the east, where there are
 large gradients of precipitation (P) (300 - 2000+ mm
 yr\textsuperscript{-1}) and potential evapotranspiration (PET) (800-2100
 mm yr\textsuperscript{-1}). Most eastern Australian woodlands occupy
-water-limited regions where annual PET far exceeds P (Fig. S1), and tree
+water-limited regions where annual PET far exceeds P (Fig. A1), and tree
 species have evolved to cope with water-limited conditions
 \citep{petersLivingEdgeContinentalscale2021} and high interannual
 rainfall variability. However, the climate is warming: eight of
@@ -210,7 +210,7 @@ multi-year droughts, episodic deluges of rainfall
 severe heatwaves \citep{perkinsIncreasingFrequencyIntensity2012a} in the
 last few decades. Precipitation changes have been spatially variable
 over eastern Australia, where northern Queensland grew wetter and
-southeast Australia grew drier (Fig. S2). In the last two decades,
+southeast Australia grew drier (Fig. A2). In the last two decades,
 southeast Australia experienced the two worst droughts in the
 observational record (2001-2009;
 \citet{vandijkMillenniumDroughtSoutheast2013d} and 2017-2019;
@@ -300,8 +300,8 @@ last two decades.
 \subsection{Study area}
 
 The study region encompasses the dominant woody ecosystems of eastern
-Australia (Fig. S1b). We used the National Vegetation Information System
-5.1 land cover dataset (\citet{DepartmentAgricultureWater}; Table S1) to
+Australia (Fig. A1b). We used the National Vegetation Information System
+5.1 land cover dataset (\citet{DepartmentAgricultureWater}; Table A1) to
 select locations designated as ``Acacia Forests and Woodlands'',
 ``Acacia Open Woodlands'', ``Callitris Forests and Woodlands'',
 ``Casuarina Forests and Woodlands'', ``Eucalypt Low Open Forests'',
@@ -318,7 +318,7 @@ Woodlands/Grasslands''.
 We used the atmospheric CO\textsubscript{2} record from the
 deseasonalized Mauna Loa record
 (\url{https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html}), and
-extracted climate data (Table S1) from the Australian Bureau of
+extracted climate data (Table A1) from the Australian Bureau of
 Meteorology's Australian Water Availability Project (AWAP;
 \citet{jonesHighqualitySpatialClimate2009}). AWAP is a gridded climate
 product interpolated to 0.05° from a large network of meteorological
@@ -349,14 +349,14 @@ used this climatology to define the mean annual P:PET
 running anomaly of annual P:PET (MI\textsubscript{anom}). Zonal
 statistics for each meteorological variable were calculated using
 simplified Köppen climate zones, derived from the Australian Bureau of
-Meteorology (Fig. 2b, Table S1).
+Meteorology (Fig. 2b, Table A1).
 
 We used surface reflectance from two satellite products to generate the
 NDVI record: National Oceanic and Atmospheric Administration's Climate
 Data Record v5 Advanced Very High Radiometric Resolution (AVHRR) Surface
 Reflectance (NOAA-CDR) record and the National Space and Aeronautical
 Administration's MCD43A4 Nadir Bidirectional Reflectance Distribution
-Function Adjusted Reflectance (MODIS-MCD43) (Table S1; Schaaf \& Wang,
+Function Adjusted Reflectance (MODIS-MCD43) (Table A1; Schaaf \& Wang,
 2015). NDVI data was extracted from 1982-2019 at 0.05° resolution from
 the NOAA-CDR AVHRR version 5 product \citep{vermoteNOAAClimateData2018}.
 The surface reflectance record of AVHRR extends through 2019, but the
@@ -434,10 +434,10 @@ NDVI=\beta_0+ \beta_1\,year+\beta_2\,sensor
 Here \(\beta_0\) represents the estimated NDVI in 1982, the year term
 starts at 1982, and the sensor term is a binary covariate that accounts
 for residual offset differences between the recalibrated AVHRR NDVI ,
-and the NDVIMOD. The relative temporal trends for climate variables and
-the MODIS vegetation continuous fractions were fit for each grid cell
-location using the Theil-Sen estimator, a form of robust pairwise
-regression, with the `zyp' R package
+and the NDVI\textsubscript{MODIS}. The relative temporal trends for
+climate variables and the MODIS vegetation continuous fractions were fit
+for each grid cell location using the Theil-Sen estimator, a form of
+robust pairwise regression, with the `zyp' R package
 \citep{bronaughZypZhangYuePilon2019}. The temporal covariate was
 recentered to start with the first hydrological year (where the year
 starts one month earlier in December) of the data so that the intercept
@@ -466,8 +466,8 @@ nonlinear function. Therefore we used nonlinear least squares
 (nls.multstart package \citep{padfield_matheson20} in R v4.01) to
 compare model fits to a set of fixed nonlinear functional forms
 including the Weibull function (equation 4; Fig. 4), the logistic
-function (equation 5; Fig. S5), and the Richards growth function
-(equation 6; Fig. S6). The focus on the Weibull models because they
+function (equation 5; Fig. A5), and the Richards growth function
+(equation 6; Fig. A6). The focus on the Weibull models because they
 showed equivalent goodness of fit with fewer parameters than the
 Richards function models. Next we added a linear modifier to the Weibull
 function using the covariates of CO\textsubscript{2} (ppm) and the ratio
@@ -495,9 +495,9 @@ NDVI = \frac{V_A}{(1+exp((m-MI_{12mo})/s))}
 
 where \(NDVI\) is the hydrological year mean value of NDVI for a grid
 cell location, \(m\) is the midpoint, \(s\) is a scale parameter, and
-\(V_A\) is the asymptote (plotted in Fig. S5). We also used a modified
+\(V_A\) is the asymptote (plotted in Fig. A5). We also used a modified
 Richards growth function to characterize the CO\textsubscript{2} effect
-upon seasonal NDVI (Fig. S6) as
+upon seasonal NDVI (Fig. A6) as
 
 \begin{align}
 NDVI=(V_A+\beta_1\,CO_2+\beta_2\,MI_{f.anom})\,\frac{(1+exp(m+\beta_3\,CO_2+\beta_4\,MI_{f.anom} - MI_{MA}))}{(s+\beta_5\,CO_2+\beta_6\,MI_{f.anom})^{(-exp(-(q+\beta_7\,CO_2+\beta_8\,F)))}}\\
@@ -513,7 +513,7 @@ with one million random samples from the total merged NDVI record
 To ensure consistent interpretation of the nonlinear response across
 P:PET, we also fit linear models explaining NDVI with
 CO\textsubscript{2} and MI\textsubscript{anom} by season in
-MI\textsubscript{MA} bin-widths of 0.2 (equation 7; Fig. S4). Separate
+MI\textsubscript{MA} bin-widths of 0.2 (equation 7; Fig. A4). Separate
 linear models were fit for increments of 0.15 of MI\textsubscript{MA}
 for each season using the merged 1982-2019 NDVI record. NDVI was modeled
 as
@@ -528,7 +528,7 @@ used to account for residual differences between the recalibrated AVHRR
 NDVI and NDVI\textsubscript{MODIS} records. To aid the comparison of
 model effects, we centered and standardized the continuous model before
 regression. The standardized CO\textsubscript{2} and
-P:PET\textsubscript{anom}. effects (\(\beta\)) are presented in Fig. S4.
+P:PET\textsubscript{anom}. effects (\(\beta\)) are presented in Fig. A4.
 
 Next, we fit robust multiple linear regression models to the time series
 of NDVI for each of the 39,463 pixel locations. The CO\textsubscript{2}
@@ -640,6 +640,7 @@ area is predicted to decline with increasing resource availability
 expectation from the PETA hypothesis as another point of comparison with
 the CO\textsubscript{2} attributable effect on NDVI.
 
+\clearpage
 \begin{figure}
 \includegraphics[width=16cm]{../../figures/Fig1_ndvi_ppet_vectorPlot_wInset} \caption{Individual grid cell temporal 38-year trajectories of the normalized difference vegetation index (NDVI) and the ratio of annual precipitation (P) to potential evapotranspiration (PET). A vector field plot showing the direction of change in mean annual NDVI and P:PET between 1982-1986 and 2015-2019 for 1000 randomly sampled grid-cell locations (color indicates direction of change in P:PET as indicated by legend). An inset shows a magnification of the samples from the 0.1-0.4 P:PET range. The distributions of mean P:PET ($mm\,mm^{-1}$) and NDVI for the period of 1982-1986 are shown as histograms above and to the right of the main panel. Note that the majority of arrows shift towards higher aridity (lower P:PET) and higher NDVI.}\label{fig:fig.align:"left"}
 \end{figure}
@@ -658,11 +659,11 @@ reduced P:PET; the moisture index, MI) in over 52\% of eastern
 Australian woody ecosystems since 1982 (Figs. 1,2a). Aridity decreased
 over northern Queensland encompassing the entirety of Equatorial and
 Tropical regions, and most of the Grassland and Subtropical regions,
-driven by large wet-season increases in precipitation (Fig S2a).
-Widespread increases in PET were evident from September-February (Fig
-S2b). At the same time as these changes in climate were occurring, over
+driven by large wet-season increases in precipitation (Fig. A2a).
+Widespread increases in PET were evident from September-February (Fig.
+A2b). At the same time as these changes in climate were occurring, over
 92\% of these regions experienced overall greening (Fig. 3a), including
-regions where P:PET declined (Figs. 1,2b,S3). The relative increases in
+regions where P:PET declined (Figs. 1,2b,A3). The relative increases in
 NDVI were comparable between the earlier AVHRR epoch (1982-2000) and the
 later MODIS epoch (2001-2019) at 5.7\% (CI={[}-2.9\%, +20.3\%{]}) and
 5.1\% (CI={[}-6.4\%, +20.1\%{]}), respectively. However, the spatial
@@ -677,7 +678,7 @@ over decadal-scale variability. Long term browning only occurred in the
 Arid region (Fig. 3,4). Nevertheless, by examining NDVI trends over
 nearly forty years, we were able to separate regional decadal-scale
 variability from the overall, broad greening trend across eastern
-Australia (Figs. 3,4,S3).
+Australia (Figs. 3,4,A3).
 
 \clearpage
 \begin{figure}
@@ -699,7 +700,7 @@ increases located in regions of higher P:PET (\textgreater0.5) (Fig. 5).
 The nonlinear Weibull models showed a larger CO\textsubscript{2}
 attributable effect on NDVI in regions of higher P:PET (Fig. 5), but the
 effect size of the NDVI response to CO\textsubscript{2} was largely
-consistent across model forms (Figs. S4-7). The
+consistent across model forms (Figs. A4-7). The
 CO\textsubscript{2}-attributable increase in NDVI between 1982-2019
 ranged from approximately 5\% in the Arid interior regions to
 \textgreater20\% in the wettest Tropical and Temperate regions (Fig.
@@ -707,19 +708,12 @@ ranged from approximately 5\% in the Arid interior regions to
 grid cell locations (equation 8; Fig. 6), as well as by comparing the
 CO\textsubscript{2} effect size across 16 linear models fit for grid
 cell locations grouped into bins spanning 0.1 increments of P:PET
-(equation 7; Fig. S4). The GAM fit across grid cell locations also
+(equation 7; Fig. A4). The GAM fit across grid cell locations also
 indicated a larger CO\textsubscript{2} effect in regions with higher
 P:PET (Figs. 6,7b). Quantile regression with generalized additive models
 showed a pronounced response to CO\textsubscript{2} across the
 distribution of pixels with both low and high NDVI (10 - 97.5
-percentiles) across the full aridity gradient of P:PET (Fig. S7).
-
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect} \caption{Effect of increasing $CO_2$ on seasonal NDVI across P:PET. Predictions of seasonal NDVI as a function of mean annual P:PET fit using a standard Weibull function (methods - eq 2), modified with linear effects of $CO_2$, the running 12-month anomaly of P:PET, and the satellite sensor. The $CO_2$ concentration gradient represents the atmospheric $CO_2$ change between 1982-2019. Panel (a) maps the total predicted contribution of $CO_2$ towards the relative increase of NDVI between 1982-2019 assuming no anomaly of P:PET. Panel (b) shows the merged sensor response between 1982-2019 across the gradient of P:PET, (c) shows the model response when fit using just MODIS MCD43 data between 2001-2019, and (d) shows the response when the model was fit with the recalibrated AVHRR data between 1982-2000. The AVHRR and MODIS satellite epoch NDVI predictions are plotted in gray for panels B and C, respectively.}\label{fig:unnamed-chunk-4}
-\end{figure}
-\clearpage
-
+percentiles) across the full aridity gradient of P:PET (Fig. A7).\\
 A recent study found the global CO\textsubscript{2} fertilization effect
 was halved between the 1980s and 2000s
 \citep{wangRecentGlobalDecline2020}. In contrast to the estimates over
@@ -736,7 +730,13 @@ the CO\textsubscript{2} effect was larger during 2001-2019. Consistent
 with the finding of a greater CO\textsubscript{2} effect in wetter
 regions (Fig. 5), the robust linear models and the GAM estimated the
 CO\textsubscript{2} effect to be greatest in the Equatorial and Tropical
-regions, and lowest in the Arid region (Fig. 6).
+regions, and lowest in the Arid region (Fig. 6).\\
+\clearpage
+
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect} \caption{Effect of increasing $CO_2$ on seasonal NDVI across P:PET. Predictions of seasonal NDVI as a function of mean annual P:PET fit using a standard Weibull function (methods - eq 2), modified with linear effects of $CO_2$, the running 12-month anomaly of P:PET, and the satellite sensor. The $CO_2$ concentration gradient represents the atmospheric $CO_2$ change between 1982-2019. Panel (a) maps the total predicted contribution of $CO_2$ towards the relative increase of NDVI between 1982-2019 assuming no anomaly of P:PET. Panel (b) shows the merged sensor response between 1982-2019 across the gradient of P:PET, (c) shows the model response when fit using just MODIS MCD43 data between 2001-2019, and (d) shows the response when the model was fit with the recalibrated AVHRR data between 1982-2000. The AVHRR and MODIS satellite epoch NDVI predictions are plotted in gray for panels B and C, respectively.}\label{fig:unnamed-chunk-4}
+\end{figure}
+\clearpage
 
 \clearpage
 \begin{figure}
@@ -771,33 +771,33 @@ and Subtropical). In comparison, the PETA hypothesis
 \citep{donohue_etal17} predicted the greatest CO\textsubscript{2} effect
 on leaf area to be in regions with the lowest LAI, but this was not
 supported by the statistically estimated CO\textsubscript{2} effect on
-NDVI (Fig. S9). Despite having the lowest LAI, the Arid region received
+NDVI (Fig. A9). Despite having the lowest LAI, the Arid region received
 the smallest CO\textsubscript{2} effect, but it is worth noting the Arid
 region also experienced the greatest increase in VPD and reduction in P
-over the 38 year period (Fig. 7a, S8). In contrast, the largest
+over the 38 year period (Fig. 7a, A8). In contrast, the largest
 estimated CO\textsubscript{2}-attributable effect on greening were found
 to be in the Equatorial and Tropical areas.
-
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot} \caption{Long-term changes in vapor pressure deficit, and comparison between the $\Delta~NDVI$ due to $CO_2$ and the expected $CO_2$ fertilization effect on foliar area due to gains in water use efficiency (WUE). (a) The relative increase in the annual mean of vapor pressure deficit (VPD) between 1982-2019. (b) The predicted relative increase in NDVI due to $CO_2$ (methods - eq 14) with a concurrent increase in VPD. (c) The relative expected increase in NDVI following the theoretical WUE prediction where 50\% of the gain is allocated to foliar area (methods - eq 11).}\label{fig:unnamed-chunk-6}
-\end{figure}
-\clearpage
 
 \subsection{Co-occurring shifts in aridity, NDVI, and vegetation cover}
 
 The shifts in P:PET and NDVI were accompanied by vegetation cover
 changes in some regions. Most notably, the Arid and Temperate regions
 experienced the strongest zonally averaged declines in P:PET (Fig. 8a)
-and increases in VPD (Fig. S8). Seasonal greening trends were relatively
+and increases in VPD (Fig. A8). Seasonal greening trends were relatively
 similar apart from the aforementioned exceptions in the Grassland. The
 MODIS vegetation continuous fraction data from 2001-2018 indicated most
 regions experienced modest changes in tree vegetation cover. The largest
-decline in tree cover occurred in the Temperate regions (Fig. 8c,S10.
+decline in tree cover occurred in the Temperate regions (Fig. 8c,A10.
 Most regions experienced declines in non-vegetated (bare) cover,
 increases in non-tree vegetation, and modest change in tree-cover (Fig.
 8c), however the proportional increase of non-tree vegetation typically
-exceeded tree cover increases (Fig. S10).
+exceeded tree cover increases (Fig. A10).
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot} \caption{Long-term changes in vapor pressure deficit, and comparison between the $\Delta~NDVI$ due to $CO_2$ and the expected $CO_2$ fertilization effect on foliar area due to gains in water use efficiency (WUE). (a) The relative increase in the annual mean of vapor pressure deficit (VPD) between 1982-2019. (b) The predicted relative increase in NDVI due to $CO_2$ (methods - eq 14) with a concurrent increase in VPD. (c) The relative expected increase in NDVI following the theoretical WUE prediction where 50\% of the gain is allocated to foliar area (methods - eq 11).}\label{fig:unnamed-chunk-6}
+\end{figure}
+\clearpage
 
 \clearpage 
 \begin{figure}
@@ -815,7 +815,7 @@ Australia is ideal to explore the CO\textsubscript{2} contribution
 towards vegetation greening because there are fewer confounding effects
 to drive greening. Forest trees are evergreen and the growing season is
 rarely limited by temperature or radiation. The study region spans a
-large moisture gradient (Fig. S1a), but unlike much of the global
+large moisture gradient (Fig. A1a), but unlike much of the global
 tropics, the large majority of the study region is not so cloudy as to
 prevent multiple high quality multispectral satellite retrievals per
 month. Australia has also not been subjected to other prominent drivers
@@ -856,14 +856,14 @@ NDVI has continued to increase. First, while the relative increase in
 NDVI between the 1982-2000 AVHRR epoch (5.7\%) and the 2001-2019 MODIS
 epoch (5.1\%) are comparable (Figs. 3b,8b), the underlying reasons for
 the change differ. VPD changed minimally between 1982-2000, whereas it
-rapidly increased between 2001-2019 (SM Fig. 8). These increases were
+rapidly increased between 2001-2019 (Fig. A8). These increases were
 largest in the most Arid and Temperate regions (12.7\% and 11\% since
 1982, respectively; Fig. 6a), and when coupled with seasonal reductions
-in precipitation (Fig. S2) these would have partially offset benefits
+in precipitation (Fig. A2) these would have partially offset benefits
 from increased intrinsic water-use efficiency (equation 17). In
 contrast, more than half of the Equatorial, Tropical, Subtropical and
 Grassland regions in northern Queensland experienced increases in
-precipitation since 1982 (Fig. S2;
+precipitation since 1982 (Fig. A2;
 \citet{ukkolaExploringStationarityAustralian2019c}), thus allowing these
 locations to exceed the predicted NDVI increases from the WUE model
 (Fig. 7d).
@@ -876,7 +876,7 @@ records (Fig. 3b). It is unclear why browning occurred during austral
 summer time in the Grassland region (Figs. 3b,4,8b). The declines in
 NDVI during 2001-2019 may have been meteorologically driven and related
 to shifts in the distribution of wet and dry season precipitation (Fig.
-S2). Alternatively, the shift could be due to changes in fire and cattle
+A2). Alternatively, the shift could be due to changes in fire and cattle
 management that have been particularly prevalent across regions of
 Queensland in recent decades \citep{seabrookCattleCropsClearing2006}.
 Further, greening may have been suppressed in parts of Queensland
@@ -899,7 +899,7 @@ increased leaf biomass
 \citep{donohueImpactCOFertilization2013b, ukkolaReducedStreamflowWaterstressed2016b}.
 While all our statistical approaches indicated a year round positive
 CO\textsubscript{2} effect, in contrast to theory the effect was
-consistently greater in regions with higher P:PET (Figs. 5-7;S4-7). Our
+consistently greater in regions with higher P:PET (Figs. 5-7;A4-7). Our
 analysis also diverges with a global coarse-scale analysis that found
 weakening of the CO\textsubscript{2} fertilization effect across both
 southeastern and northern Australia \citep{wangRecentGlobalDecline2020}.
@@ -910,11 +910,11 @@ CO\textsubscript{2} effect (Fig. 6). The WUE model predicted similar
 relative rates of NDVI increase between the two epochs (4.5\% and 4.7\%
 for AVHRR and MODIS), yet for different reasons. CO\textsubscript{2}
 increased by 30 ppm between 1982-2000 while VPD changed minimally and
-precipitation increased in Queensland and the Arid region (Fig. S8); all
+precipitation increased in Queensland and the Arid region (Fig. A8); all
 of which are favorable to increasing NDVI. In contrast, the larger
 CO\textsubscript{2} increase between 2001-2019 (40 ppm) was offset by a
 spatially ubiquitous increase of VPD (3.7\%, CI={[}-0.4\%,8.6\%{]}; Fig.
-S8) and the occurrence of two multi-year droughts (Millennium Drought
+A8) and the occurrence of two multi-year droughts (Millennium Drought
 2003-2009, and The Big Dry 2017-2020). Despite the widespread evidence
 of the CO\textsubscript{2} effect, the WUE model notably underpredicted
 greening in some regions (Fig. 7).
@@ -922,7 +922,7 @@ greening in some regions (Fig. 7).
 \subsection{Deviations from WUE}
 
 We found the CO\textsubscript{2} effect on foliar area was the smallest
-in the driest climate regions (Figs. 5-6,S4-7). This was at odds with
+in the driest climate regions (Figs. 5-6,A4-7). This was at odds with
 the WUE prediction (at 50\% allocation; Fig. 7e), and contrary to
 expectation that the greatest WUE-derived benefit from
 CO\textsubscript{2} would be in drier climates
@@ -930,28 +930,28 @@ CO\textsubscript{2} would be in drier climates
 deviations may have resulted from ecosystems processes beyond the scope
 of a simple model, such as the phenology of the vegetation composition,
 and disturbances not captured by the satellite products (e.g.~small
-fires, grazing). Browning in the Grassland region (Fig. 3b,S3) may have
+fires, grazing). Browning in the Grassland region (Fig. 3b,A3) may have
 been caused by distinct dry season phenological differences between
 overstory woody vegetation and understory C\textsubscript{4} grasses
 \citep{mooreReviewsSynthesesAustralian2016}, which are dominant there
-{[}murphySeasonalWaterAvailability2007{]}. C\textsubscript{4} grasses
+\citep{murphySeasonalWaterAvailability2007}. C\textsubscript{4} grasses
 may have been favored over C\textsubscript{3} because precipitation
 increased during the austral summer over the course of the study (Fig.
-S2) and this higher concentration of rainfall during the warmest months
+A2) and this higher concentration of rainfall during the warmest months
 is thought to favor C\textsubscript{4} grasses
 \citep{hattersleyDistributionC3C41983a, knappResolvingDustBowl2020, murphySeasonalWaterAvailability2007}.
 Finally, the linear dependency of leaf area upon VPD in the theoretical
 model may be ill-suited for extreme anomalously arid conditions because
 NDVI observations suggest a strongly nonlinear relationship with large
-VPD anomalies (Fig. S11).
+VPD anomalies (Fig. A11).
 
 We explored how much of the higher WUE benefit would have to be
 allocated to match the GAM estimated CO\textsubscript{2}-attributed
 changes in NDVI. Allocation rates far greater than 50\% would be
 required to match the WUE prediction in the Tropical and Equatorial
-zones (Figure 7e), whereas allocation would need to be less than 50\% to
+zones (Fig. 7e), whereas allocation would need to be less than 50\% to
 match the GAM estimate in the Arid region. The Arid region experienced
-the greatest relative increase in VPD (Fig. 7a, S8), yet the theoretical
+the greatest relative increase in VPD (Fig. 7a, A8), yet the theoretical
 model still predicted a small but positive increase in NDVI (Fig. 7c)
 which the GAM estimate suggests would be closer to a 10\% rather than
 50\% foliar allocation level from the WUE benefit (Fig. 7d).
@@ -994,7 +994,7 @@ soil phosphorus \citep{jiangLowPhosphorusSupply2020}.
 
 Most grid-cell locations in the Temperate zone experienced simultaneous
 apparent declines in tree cover and increases in non-tree vegetation
-cover (e.g.~grasses/shrubs) (Figs. 8c, S10). This is surprising because
+cover (e.g.~grasses/shrubs) (Figs. 8c, A10). This is surprising because
 we focused this regression analysis on 2001-2018 in order to exclude the
 reduced tree cover due to the catastrophic megafires of 2019/20
 \citep{nolanCausesConsequencesEastern2020}. Some may question the
@@ -1046,7 +1046,7 @@ and water resource management on the world's driest inhabited continent.
 
 
 \codedataavailability{All data used are publicly available from sources
-listed in Table S1. Processed data used in model fitting and figures can
+listed in Table A1. Processed data used in model fitting and figures can
 be accessed via Zenodo data repository: {[}future repository link{]}. A
 git repository with all associated data processing, analysis, and code
 to reproduce figures is located at:
