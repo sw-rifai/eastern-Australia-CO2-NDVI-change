@@ -19,7 +19,7 @@ tb <- as_tibble
 oz_poly <- sf::read_sf("../data_general/GADM/gadm36_AUS.gpkg", 
                        layer="gadm36_AUS_1")
 oz_poly <- st_as_sf(oz_poly)
-oz_poly <- st_simplify(oz_poly, dTolerance = 0.05)
+oz_poly <- st_simplify(oz_poly, dTolerance = 1000)
 
 # vegetation index record
 vi <- arrow::read_parquet("../data_general/MCD43/MCD43_AVHRR_NDVI_hybrid_2020-10-12.parquet" 
@@ -162,7 +162,7 @@ p_left <- lt_PPET_annual %>%
                        na.value = 'gray')+
   labs(x=NULL,y=NULL)+
   coord_sf(xlim = c(140,154),
-           ylim = c(-45,-10), expand = FALSE)+
+           ylim = c(-45,-10))+
   guides(fill = guide_colorbar(title.position = 'top'))+
   theme(panel.background = element_rect(fill = '#99A3C4'),
         panel.grid = element_blank(),
@@ -193,7 +193,7 @@ p_right <- bind_rows(sen_ndvi_season_e1, sen_ndvi_season_e2) %>%
                        na.value='gray')+
   labs(x=NULL,y=NULL)+
   coord_sf(xlim = c(140,154),
-           ylim = c(-45,-10), expand = FALSE)+
+           ylim = c(-45,-10))+
   facet_grid(epoch~season)+
   guides(fill = guide_colourbar(label = T)) +
   theme(panel.background = element_rect(fill = '#99A3C4'), 
@@ -219,7 +219,8 @@ p_right <- bind_rows(sen_ndvi_season_e1, sen_ndvi_season_e2) %>%
 ggsave(cowplot::plot_grid(p_left,p_right,ncol=2,labels=c('(a)','(b)'), 
                           rel_widths = c(1,2)),
        filename = "figures/Fig2_PPET_ndvi_seasonal_TheilSen_trend_by_epoch.png", 
-       dpi=350, width=15,height=15.5,units='cm',type='cairo')
+       dpi=350, width=15,height=15.5,units='cm',type='cairo', 
+  device=grDevices::png)
 # ggsave(cowplot::plot_grid(p_left,p_right,ncol=2,labels=c('(a)','(b)'), 
 #                           rel_widths = c(1,2)),
 #        filename = "doc/submission_pnas_1/Fig2_PPET_ndvi_seasonal_TheilSen_trend_by_epoch.pdf", 

@@ -11,12 +11,12 @@ p_vpd_sen <- lt_v_sen %>%
   labs(x=NULL,y=NULL,
     title=expression(paste(Delta,"VPD")), 
     fill="%")+
-  scico::scale_fill_scico(
-                          palette ='romaO', direction=-1,
-                          limits=c(-20,20), 
-                          oob=scales::squish)+
-  # scale_fill_viridis_c(expression(paste(Delta,"VPD(%)")),
-  #   option='A', limits=c(0,20), oob=scales::squish)+
+  # scico::scale_fill_scico(
+  #                         palette ='romaO', direction=-1,
+  #                         limits=c(-20,20), 
+  #                         oob=scales::squish)+
+  scale_fill_viridis_b('%',
+    option='F', limits=c(0,20), oob=scales::squish, n.breaks=8)+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
@@ -37,14 +37,17 @@ p_wue_sen <- lt_v_sen %>%
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
+  scale_fill_binned_sequential(
+    palette='ag_GrnYl',rev=T,n.breaks=10, limits=c(5,15),oob=scales::squish)+
   labs(x=NULL,y=NULL, 
-    title=expression(paste(Delta*NDVI[WUE~Pred.])))+
-  scico::scale_fill_scico("%",
-                          palette = 'bamako', 
-                          direction = -1,
-                          limits=c(5,15), #na.value = 'red',
-                          oob=scales::squish
-  )+
+    title=expression(paste(Delta*NDVI[WUE~Pred.])), 
+    fill='%')+
+  # scico::scale_fill_scico("%",
+  #                         palette = 'bamako', 
+  #                         direction = -1,
+  #                         limits=c(5,15), #na.value = 'red',
+  #                         oob=scales::squish
+  # )+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
@@ -78,14 +81,17 @@ p_gam_pred <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
   scale_x_continuous(breaks=seq(140,154,by=5))+
   coord_sf(xlim = c(140,154),
            ylim = c(-45,-10), expand = FALSE)+
+  scale_fill_binned_sequential(
+    palette='ag_GrnYl',rev=T,n.breaks=10, limits=c(5,15),oob=scales::squish)+
+  # scico::scale_fill_scico("%",
+  #                         palette = 'bamako', 
+  #                         direction = -1,
+  #                         limits=c(5,15), #na.value = 'red',
+  #                         oob=scales::squish
+  # )+
   labs(x=NULL,y=NULL, 
-    title=expression(paste(Delta*NDVI[GAM~Pred.])))+
-  scico::scale_fill_scico("%",
-                          palette = 'bamako', 
-                          direction = -1,
-                          limits=c(5,15), #na.value = 'red',
-                          oob=scales::squish
-  )+
+    title=expression(paste(Delta*NDVI[GAM~Pred.])), 
+    fill='%')+
   theme(panel.background = element_rect(fill='lightblue'),
         panel.grid = element_blank(), 
         legend.title = element_text(size=8),
@@ -261,11 +267,11 @@ p_out <- (p_vpd_sen+theme(plot.margin=margin(t=0,r = -20,b=0,l=-10))|
   tag_suffix=')', 
   theme=theme(plot.margin=margin(t=0,r = -10,b=0,l=-10))
     )+
-  plot_layout(heights=c(1,0.5))&theme(plot.margin = margin(0,5,0,5))
+  plot_layout(heights=c(1,0.4))&theme(plot.margin = margin(0,5,0,5))
 ggsave(p_out,
-  filename = "figures/Fig6_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png",
+  filename = "figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png",
   device=grDevices::png,
-  width = 30,
+  width = 32.5,
   height=35, 
   units='cm',
   dpi=350)

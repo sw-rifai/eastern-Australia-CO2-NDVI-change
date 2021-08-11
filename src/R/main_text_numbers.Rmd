@@ -161,7 +161,7 @@ codes <- readr::read_fwf("../data_general/NVIS/nvis51_majorVegClass_codes.txt",
                          fwf_widths(c(2,100)), skip = 1) %>% 
   set_names(c("veg_class","veg_class_descrip")) %>% 
   mutate(vc = as.factor(veg_class_descrip)) 
-vc <- left_join(nvis, codes, by='veg_class')
+vc <- left_join(nvis, codes, by='veg_class') %>% as.data.table()
 mod <- vc[mod, on=.(x,y)]
 mod[,`:=`(year=year(date))]
 
@@ -177,21 +177,21 @@ mod[,`:=`(year=year(date))]
 # Linear change in MODIS VCF  ---------------------------------------------------
 library(zyp)
 system.time(
-  lt_tree_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+  lt_tree_sen <- mod[year<=2018][,`:=`(year_c = year-2000)] %>% 
     .[,.(beta = list(unname(zyp.sen(tree_cover~year_c, 
                                     data=.SD)$coefficients))), 
       by=.(x,y)] %>% 
     .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]), by=.(x,y)]  
 )
 system.time(
-  lt_nontree_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+  lt_nontree_sen <- mod[year<=2018][,`:=`(year_c = year-2000)] %>% 
     .[,.(beta = list(unname(zyp.sen(nontree_cover~year_c, 
                                     data=.SD)$coefficients))), 
       by=.(x,y)] %>% 
     .[,`:=`(b0=unlist(beta)[1], b1=unlist(beta)[2]), by=.(x,y)]  
 )
 system.time(
-  lt_nonveg_sen <- mod[year<=2018][,`:=`(year_c = year-2009.5)] %>% 
+  lt_nonveg_sen <- mod[year<=2018][,`:=`(year_c = year-2000)] %>% 
     .[,.(beta = list(unname(zyp.sen(nonveg_cover~year_c, 
                                     data=.SD)$coefficients))), 
       by=.(x,y)] %>% 
@@ -200,13 +200,13 @@ system.time(
 
 
 vcf_sen <- inner_join(lt_nontree_sen %>% rename(grass_u=b0, grass_b=b1) %>% select(-beta), 
-                      lt_nonveg_sen %>% rename(nonveg_u=b0, nonveg_b=b1) %>% select(-beta))
+                      lt_nonveg_sen %>% rename(nonveg_u=b0, nonveg_b=b1) %>% select(-beta)) %>% as.data.table()
 vcf_sen <- lt_tree_sen %>% lazy_dt() %>% 
   select(-beta) %>% 
   rename(tree_u=b0, 
          tree_b=b1) %>% 
   as.data.table() %>% 
-  inner_join(., vcf_sen)
+  inner_join(., vcf_sen) %>% as.data.table()
 
 ```
 ## Regressions: NDVI~time+epoch
@@ -1258,11 +1258,12 @@ sen_pet_annual %>%
 merge(vcf_sen,kop,by=c('x','y')) %>% 
   .[is.na(cz)==F] %>% 
   .[is.na(tree_u)==F] %>% 
+  .[is.na(tree_b)==F] %>% 
   lazy_dt() %>% 
   group_by(zone) %>% 
-  summarize(delta_tree = mean(100*((tree_b*18+tree_u)/tree_u -1),na.rm=T), 
-            delta_grass = mean(100*((grass_b*18+grass_u)/grass_u -1),na.rm=T), 
-            delta_bare = mean(100*((nonveg_b*18+nonveg_u)/nonveg_u -1),na.rm=T)) %>% 
+  summarize(delta_tree = median(100*((tree_b*18+tree_u)/tree_u -1),na.rm=T), 
+            delta_grass = median(100*((grass_b*18+grass_u)/grass_u -1),na.rm=T), 
+            delta_bare = median(100*((nonveg_b*18+nonveg_u)/nonveg_u -1),na.rm=T)) %>% 
   as_tibble() %>% 
   knitr::kable(digits = 2)
 ```

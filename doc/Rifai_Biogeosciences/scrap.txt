@@ -36,63 +36,9 @@ csl: copernicus-publications.csl
 
 
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "..."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png")
-```
-\clearpage
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "..."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28.png")
-```
-\clearpage
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "..."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png")
-```
-\clearpage
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "..."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png")
-```
-\clearpage
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "..."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason.png")
-```
-\clearpage
 
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = ""}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png")
-```
-\clearpage
-
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "The linear relative changes in annual vapor pressure deficit (VPD), precipitation (Precip.), and potential evapotranspiration (PET) by climate zone between satellite epochs AVHRR 1982-2000 and MODIS 2001-2019, as estimated by robust regression. The relative changes are with respect to a climatology period calculated between 1982-2011."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png")
-```
-\clearpage
-
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "(a) The fractional increase of NDVI from CO2 is plotted following predictions from the Partitioning of Equilibrium Transpiration and Assimilation (PETA) hypothesis is plotted (green), the Generalized Additive Model (GAM; methods eq. 6) estimates, and the pixel-level Robust Linear Model (RLM; methods eq. 5) estimates. Note we substitute NDVI for the leaf area formulation of the PETA hypothesis (Donohue et al., 2017) because we assume a linear relationship between relative NDVI increase and relative leaf area increase (Donohue et al., 2013; Carlson & Ripley 1997). (b) The relative change in NDVI between 1982-2019 across the range of mean annual leaf area index calculated with MCD15A3H from 2002-2019."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png")
-```
-\clearpage
-
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "The relative shifts of land fraction by tree cover, non-tree vegetation cover (predominantly grasses), and bare ground. 2000-2018 annual rate of change for tree cover (left), non-tree vegetation (middle), and discretized change classes. Min. change indicates the annual rate of change of percentage cover was between -0.1 & 0.1\\% $yr^{-1}$"}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.png")
-```
-\clearpage
-
-\clearpage
-```{r, out.width = "14cm", echo = FALSE, fig.cap = "The nonlinear dependency of NDVI upon the annual anomaly of vapor pressure deficit. 2D density plot of NDVI and the running 12-month anomaly of vapor pressure deficit. The red line shows a GAM fit."}
-knitr::include_graphics("../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png")
-```
-\clearpage
 
