@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.9)  10 AUG 2021 14:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.9)  10 AUG 2021 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -531,16 +531,16 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
 (/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [2] [3] [4] [5] [6]
-Overfull \hbox (8.01347pt too wide) in paragraph at lines 561--568
+Overfull \hbox (27.99321pt too wide) in paragraph at lines 561--568
 []\T1/ptm/m/n/10 where $\OML/cmm/m/it/10 A$ \T1/ptm/m/n/10 is leaf level as-sim
--i-la-tion $\OML/cmm/m/it/10 umol m[] s[]$\T1/ptm/m/n/10 , E is leaf level tran
--spi-ra-tion $\OML/cmm/m/it/10 mol m[] s[]$\T1/ptm/m/n/10 , $\OML/cmm/m/it/10 C
-[]$ \T1/ptm/m/n/10 is at-mo-spheric CO$[]$ $\OML/cmm/m/it/10 umol umol[]$\T1/pt
-m/m/n/10 ,
+-i-la-tion ($\OML/cmm/m/it/10 umol m[] s[]$\T1/ptm/m/n/10 ), E is leaf level tr
+an-spi-ra-tion ($\OML/cmm/m/it/10 mol m[] s[]$\T1/ptm/m/n/10 ), $\OML/cmm/m/it/
+10 C[]$ \T1/ptm/m/n/10 is at-mo-spheric CO$[]$ ($\OML/cmm/m/it/10 umol umol[]$\
+T1/ptm/m/n/10 ),
  []
 
 [7] [8]
-<../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png, id=246, 455.09451pt x 341.
+<../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png, id=250, 455.09451pt x 341.
 32089pt>
 File: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png Graphic file (type png
 )
@@ -549,26 +549,26 @@ Package pdftex.def Info: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png  us
 ed on input line 644.
 (pdftex.def)             Requested size: 455.24408pt x 341.45546pt.
 [9 <../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png>]
-<../../figures/Fig2_PPET-TheilSen_map-Koppen.png, id=256, 426.59949pt x 455.094
+<../../figures/Fig2_PPET-TheilSen_map-Koppen.png, id=260, 426.59949pt x 455.094
 51pt>
 File: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png Graphic file (type png)
 <use ../../figures/Fig2_PPET-TheilSen_map-Koppen.png>
 Package pdftex.def Info: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png  used 
 on input line 648.
-(pdftex.def)             Requested size: 341.43306pt x 364.24275pt.
+(pdftex.def)             Requested size: 398.33858pt x 424.94872pt.
 [10 <../../figures/Fig2_PPET-TheilSen_map-Koppen.png (PNG copy)>] [11
 
 
 ]
 <../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.png, 
-id=268, 568.86815pt x 483.58954pt>
+id=272, 568.86815pt x 483.58954pt>
 File: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.
 png Graphic file (type png)
 <use ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
 ng>
 Package pdftex.def Info: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-Theil
 Sen-trend-by-epoch.png  used on input line 684.
-(pdftex.def)             Requested size: 341.43306pt x 290.25926pt.
+(pdftex.def)             Requested size: 398.33858pt x 338.6358pt.
 
 Underfull \hbox (badness 5519) in paragraph at lines 684--684
 []\T1/ptm/b/n/9 Figure 3. \T1/ptm/m/n/9 Over-all long-term NDVI change and chan
@@ -595,33 +595,33 @@ Underfull \hbox (badness 4217) in paragraph at lines 684--684
 
 [12 <../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
 ng>]
-<../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png, id=276, 568.868
+<../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png, id=280, 568.868
 15pt x 426.59949pt>
 File: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png Graphic fil
 e (type png)
 <use ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png>
 Package pdftex.def Info: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Kop
 pen.png  used on input line 689.
-(pdftex.def)             Requested size: 341.43306pt x 256.0528pt.
+(pdftex.def)             Requested size: 398.33858pt x 298.72827pt.
 [13 <../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png (PNG copy)>]
 [14
 
 
 
 ]
-<../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png, id=288, 
+<../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png, id=293, 
 711.1368pt x 568.86815pt>
 File: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png Grap
 hic file (type png)
 <use ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png>
 Package pdftex.def Info: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_mode
 led_effect.png  used on input line 719.
-(pdftex.def)             Requested size: 341.43306pt x 273.12305pt.
+(pdftex.def)             Requested size: 398.33858pt x 318.65079pt.
 [15 <../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png>] [16
 
 
 ]
-<../../figures/Fig6_rlm_CO2_effect_by_epoch.png, id=302, 483.4863pt x 455.0601p
+<../../figures/Fig6_rlm_CO2_effect_by_epoch.png, id=306, 483.4863pt x 455.0601p
 t>
 File: ../../figures/Fig6_rlm_CO2_effect_by_epoch.png Graphic file (type png)
 <use ../../figures/Fig6_rlm_CO2_effect_by_epoch.png>
@@ -633,19 +633,19 @@ n input line 743.
 
 ]
 <../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png, id=3
-15, 924.64304pt x 995.67412pt>
+19, 924.64304pt x 995.67412pt>
 File: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png 
 Graphic file (type png)
 <use ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png>
 Package pdftex.def Info: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDif
 ferenceBoxplot.png  used on input line 783.
-(pdftex.def)             Requested size: 341.43306pt x 367.6644pt.
+(pdftex.def)             Requested size: 398.33858pt x 428.93674pt.
 [19 <../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png (
 PNG copy)>] [20
 
 
 ]
-<../../figures/Fig8_PPET_change_ThielSen_VCF.png, id=328, 540.5796pt x 739.6318
+<../../figures/Fig8_PPET_change_ThielSen_VCF.png, id=332, 540.5796pt x 739.6318
 4pt>
 File: ../../figures/Fig8_PPET_change_ThielSen_VCF.png Graphic file (type png)
 <use ../../figures/Fig8_PPET_change_ThielSen_VCF.png>
@@ -693,40 +693,40 @@ Underfull \hbox (badness 3482) in paragraph at lines 208--211
 ift on AVHRR-Derived Phe-no-log-i-cal Met-rics, 62, 215--223,
  []
 
-[28]
-Underfull \hbox (badness 1939) in paragraph at lines 323--325
+[28] [29]
+Underfull \hbox (badness 1939) in paragraph at lines 333--335
 []\T1/ptm/m/n/9 Morison, J. I. L.: Sen-si-tiv-ity of Stom-ata and Wa-ter Use Ef
 -fi-ciency to High CO2, 8, 467--474, https://doi.org/[]10.1111/j.1365-
  []
 
-[29]
-Underfull \hbox (badness 10000) in paragraph at lines 340--344
+
+Underfull \hbox (badness 10000) in paragraph at lines 350--354
 []\T1/ptm/m/n/9 of Liv-ing Aus-tralia, A.: The Dead Tree De-tec-tive | Project 
 | Bio-Col-lect, []$https : / / biocollect . ala . org . au / acsa / project / i
 ndex /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--404
+Underfull \hbox (badness 10000) in paragraph at lines 412--415
 []\T1/ptm/m/n/9 Specht, R.: Wa-ter Use by Peren-nial Ev-er-green Plant Com-mu-n
 i-ties in Aus-tralia and Papua New Guinea, 20, 273,
  []
 
 [30]
-Underfull \hbox (badness 10000) in paragraph at lines 450--452
+Underfull \hbox (badness 10000) in paragraph at lines 461--463
 []\T1/ptm/m/n/9 Vermote, E. and Pro-gram, N. C.: NOAA Cli-mate Data Record (CDR
 ) of AVHRR Sur-face Re-flectance, Ver-sion 5,
  []
 
 ) [31] (./Rifai_Biogeosciences.aux) ) 
 Here is how much of TeX's memory you used:
- 13702 strings out of 480502
- 212933 string characters out of 5899685
- 563447 words of memory out of 5000000
- 30963 multiletter control sequences out of 15000+600000
+ 13706 strings out of 480502
+ 213102 string characters out of 5899685
+ 562609 words of memory out of 5000000
+ 30966 multiletter control sequences out of 15000+600000
  456771 words of font info for 111 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,9n,80p,1175b,633s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 75i,9n,80p,1175b,631s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/home/sami/.TinyTeX/texmf-dist/fonts/enc/
 dvips/base/8r.enc}</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmex10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
@@ -745,10 +745,10 @@ a.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></hom
 e/sami/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sami/.TinyTe
 X/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/texmf-dist/f
 onts/type1/urw/times/utmri8a.pfb>
-Output written on Rifai_Biogeosciences.pdf (31 pages, 6166293 bytes).
+Output written on Rifai_Biogeosciences.pdf (31 pages, 6167041 bytes).
 PDF statistics:
- 666 PDF objects out of 1000 (max. 8388607)
- 581 compressed objects within 6 object streams
- 160 named destinations out of 1000 (max. 500000)
+ 679 PDF objects out of 1000 (max. 8388607)
+ 594 compressed objects within 6 object streams
+ 161 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
