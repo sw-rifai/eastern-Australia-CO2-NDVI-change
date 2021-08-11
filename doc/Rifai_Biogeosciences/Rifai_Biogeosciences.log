@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.9)  10 AUG 2021 17:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.9)  10 AUG 2021 18:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -658,12 +658,153 @@ LaTeX Warning: Float too large for page by 17.8443pt on input line 805.
 [21 <../../figures/Fig8_PPET_change_ThielSen_VCF.png (PNG copy)>] [22
 
 
-] [23] [24]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 10
-75.
+] [23] [24] [25]
+<../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png, id=461, 568.9004p
+t x 568.9004pt>
+File: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png Graphic file 
+(type png)
+<use ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVI
+S.png  used on input line 1050.
+(pdftex.def)             Requested size: 398.33858pt x 398.3491pt.
+[26 <../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png, id
+=467, 334.1283pt x 369.7815pt>
+File: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.pn
+g Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
+>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSe
+n_seasonal_P_PET.png  used on input line 1056.
+(pdftex.def)             Requested size: 398.33858pt x 440.841pt.
+[27 <../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
+ (PNG copy)>]
+<../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_Thi
+elSen_Trend_1982_2019_2021-02-28.png, id=473, 426.59949pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longter
+m_ThielSen_Trend_1982_2019_2021-02-28.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
+_ThielSen_Trend_1982_2019_2021-02-28.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsens
+or_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28.png  used on input lin
+e 1062.
+(pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
+[28 <../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
+_ThielSen_Trend_1982_2019_2021-02-28.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png, id=479, 
+455.0601pt x 341.3553pt>
+File: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png Grap
+hic file (type png)
+<use ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MA
+PPET_range.png  used on input line 1068.
+(pdftex.def)             Requested size: 398.33858pt x 298.82056pt.
+[29 <../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>]
+<../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png, id=487
+, 853.5087pt x 569.0058pt>
+File: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png Gr
+aphic file (type png)
+<use ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logist
+ic_Asym_xmid.png  used on input line 1074.
+(pdftex.def)             Requested size: 398.33858pt x 265.55737pt.
+[30 <../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png (PN
+G copy)>]
+<../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason.png
+, id=493, 426.59949pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeaso
+n.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
+.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richar
+d_x3_nlsFit_bySeason.png  used on input line 1080.
+(pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
+[31 <../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
+.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png, id=500, 568
+.86815pt x 398.31094pt>
+File: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png Graphic
+ file (type png)
+<use ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppe
+t_x_co2.png  used on input line 1086.
+(pdftex.def)             Requested size: 398.33858pt x 278.91907pt.
+[32 <../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png (PNG cop
+y)>]
+<../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png, id=5
+06, 568.86815pt x 568.86815pt>
+File: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png 
+Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_
+trend_by_epoch.png  used on input line 1092.
+(pdftex.def)             Requested size: 398.33858pt x 398.35255pt.
+[33 <../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png (
+PNG copy)>]
+<../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png, id=
+512, 426.59949pt x 568.86815pt>
+File: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png
+ Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png>
+
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds
+-xLAI_dNDVIxLAI.png  used on input line 1098.
+(pdftex.def)             Requested size: 341.43306pt x 455.30347pt.
+
+LaTeX Warning: Text page 34 contains only floats.
+
+[34
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png (PN
+G copy)>]
+<../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.png,
+ id=518, 483.58954pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover
+.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
+png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treeco
+ver_nontreeVegcover.png  used on input line 1104.
+(pdftex.def)             Requested size: 398.33858pt x 281.16093pt.
+[35 <../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
+png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png, id=524, 455
+.0601pt x 284.5029pt>
+File: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png Graphic
+ file (type png)
+<use ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_
+density.png  used on input line 1110.
+(pdftex.def)             Requested size: 398.33858pt x 249.05229pt.
+[36 <../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png (PNG cop
+y)>]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 11
+43.
 (/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [25] (./Rifai_Biogeosciences.bbl [26] [27]
+) [37
+
+
+
+
+
+] (./Rifai_Biogeosciences.bbl [38] [39]
 Underfull \hbox (badness 6316) in paragraph at lines 165--167
 []\T1/ptm/m/n/9 Greve, P., Rod-er-ick, M. L., Ukkola, A. M., and Wada, Y.: The 
 Arid-ity In-dex un-der Global Warm-ing, 14, 124006,
@@ -693,7 +834,7 @@ Underfull \hbox (badness 3482) in paragraph at lines 208--211
 ift on AVHRR-Derived Phe-no-log-i-cal Met-rics, 62, 215--223,
  []
 
-[28] [29]
+[40] [41]
 Underfull \hbox (badness 1939) in paragraph at lines 333--335
 []\T1/ptm/m/n/9 Morison, J. I. L.: Sen-si-tiv-ity of Stom-ata and Wa-ter Use Ef
 -fi-ciency to High CO2, 8, 467--474, https://doi.org/[]10.1111/j.1365-
@@ -712,43 +853,44 @@ Underfull \hbox (badness 10000) in paragraph at lines 412--415
 i-ties in Aus-tralia and Papua New Guinea, 20, 273,
  []
 
-[30]
+[42]
 Underfull \hbox (badness 10000) in paragraph at lines 461--463
 []\T1/ptm/m/n/9 Vermote, E. and Pro-gram, N. C.: NOAA Cli-mate Data Record (CDR
 ) of AVHRR Sur-face Re-flectance, Ver-sion 5,
  []
 
-) [31] (./Rifai_Biogeosciences.aux) ) 
+) [43] (./Rifai_Biogeosciences.aux) ) 
 Here is how much of TeX's memory you used:
- 13706 strings out of 480502
- 213102 string characters out of 5899685
- 562609 words of memory out of 5000000
- 30966 multiletter control sequences out of 15000+600000
+ 13863 strings out of 480502
+ 222834 string characters out of 5899685
+ 566319 words of memory out of 5000000
+ 31087 multiletter control sequences out of 15000+600000
  456771 words of font info for 111 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,9n,80p,1175b,631s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 75i,9n,80p,1175b,629s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/home/sami/.TinyTeX/texmf-dist/fonts/enc/
 dvips/base/8r.enc}</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmex10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
 i10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pf
-b></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></ho
-me/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/sam
-i/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sami/.Tin
-yTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></home/sami/.TinyTeX/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/sami/.TinyTeX/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr7.pfb></home/sami/.TinyTeX/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr9.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmsy6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmsy7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8
-a.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></hom
-e/sami/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sami/.TinyTe
-X/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/texmf-dist/f
-onts/type1/urw/times/utmri8a.pfb>
-Output written on Rifai_Biogeosciences.pdf (31 pages, 6167041 bytes).
+b></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></ho
+me/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/sam
+i/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/sami/.Tin
+yTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sami/.TinyTeX/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></home/sami/.TinyTeX/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/sami/.TinyTeX/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr9.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmsy6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb>
+</home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></home/sami
+/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sami/.TinyTeX/texm
+f-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/texmf-dist/fonts/t
+ype1/urw/times/utmri8a.pfb>
+Output written on Rifai_Biogeosciences.pdf (43 pages, 12951190 bytes).
 PDF statistics:
- 679 PDF objects out of 1000 (max. 8388607)
- 594 compressed objects within 6 object streams
- 161 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 766 PDF objects out of 1000 (max. 8388607)
+ 654 compressed objects within 7 object streams
+ 185 named destinations out of 1000 (max. 500000)
+ 96 words of extra memory for PDF output out of 10000 (max. 10000000)
 

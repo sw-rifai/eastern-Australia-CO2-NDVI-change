@@ -1043,6 +1043,74 @@ availability. Greening trends signal changes in evapotranspiration and
 runoff, and therefore need to be considered in planning for future land
 and water resource management on the world's driest inhabited continent.
 
+\appendixfigures[Appendix A]
+\clearpage
+
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS} \caption{(a) Mean Annual P:PET between 1982-2019. (b) Forest and woodland vegetation classes from version 5.1 of the National Vegetation Information System (source: https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system).}\label{fig:unnamed-chunk-8}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET} \caption{Long-term seasonal changes in precipitation (P) and potential evapotranspiration (PET). Linear trend in (a) monthly precipitation and (b) PET by season over the period 1982-2019. Non forest and woodland regions are masked in grey.}\label{fig:unnamed-chunk-9}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28} \caption{The long term seasonal NDVI linear trend between 1982-2019. The Theil-Sen robust linear trend estimator is used with the calibrated merge of the CDR AVHRR (1982-2000) and MODIS MCD43 (2001-2019) surface reflectance products.}\label{fig:unnamed-chunk-10}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range} \caption{Linear model covariate estimates for 128 linear models. The mean annual P:PET range is discretized over 16 increments where NDVI is modeled as a linear function of CO2, $P:PET_{anom.}$, the NVIS vegetation class, and the sensor. Error bars indicate 2x the standard error of the estimate.}\label{fig:unnamed-chunk-11}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid} \caption{NDVI as a logistic function of annual P:PET. (left) Logistic function models, fit per each hydrological year. (right) The positive long-term trend in the NDVI asymptote from the logistic model fits. $m$ is the value of P:PET at the inflection point, and NDVI Asymptote corresponds to the $V_A$ parameter in equation 5.}\label{fig:unnamed-chunk-12}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason} \caption{Seasonal NDVI as a Richards growth function with linear modifiers of CO2 and the anomaly of P:PET (equation 6). }\label{fig:unnamed-chunk-13}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2} \caption{Quantile GAM regression predictions across CO2 and anomalies of annual P:PET. $$NDVI_{3mo} = s(CO_{2})+s(\frac{P}{PET_{MA}})+s(CO2,\frac{P}{PET_{MA}})+s(\frac{P}{PET_{anom.}})$$ Here 's' represents a thinplate spline smoothing function, $\frac{P}{PET_{MA}}$ is the 30-year mean annual P:PET, and $\frac{P}{PET_{anom}}$ is the annual anomaly of $\frac{P}{PET}$.}\label{fig:unnamed-chunk-14}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch} \caption{The linear relative changes in annual vapor pressure deficit (VPD), precipitation (Precip.), and potential evapotranspiration (PET) by climate zone between satellite epochs AVHRR 1982-2000 and MODIS 2001-2019, as estimated by robust regression. The relative changes are with respect to a climatology period calculated between 1982-2011.}\label{fig:unnamed-chunk-15}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=12cm]{../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI} \caption{(a) The fractional increase of NDVI from CO2 is plotted following predictions from the Partitioning of Equilibrium Transpiration and Assimilation (PETA) hypothesis is plotted (green), the Generalized Additive Model (GAM; methods eq. 6) estimates, and the pixel-level Robust Linear Model (RLM; methods eq. 5) estimates. Note we substitute NDVI for the leaf area formulation of the PETA hypothesis (Donohue et al., 2017) because we assume a linear relationship between relative NDVI increase and relative leaf area increase (Donohue et al., 2013; Carlson \& Ripley 1997). (b) The relative change in NDVI between 1982-2019 across the range of mean annual leaf area index calculated with MCD15A3H from 2002-2019.}\label{fig:unnamed-chunk-16}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover} \caption{The relative shifts of land fraction by tree cover, non-tree vegetation cover (predominantly grasses), and bare ground. 2000-2018 annual rate of change for tree cover (left), non-tree vegetation (middle), and discretized change classes. Min. change indicates the annual rate of change of percentage cover was between -0.1 \& 0.1\% $yr^{-1}$}\label{fig:FigA10}
+\end{figure}
+\clearpage
+
+\clearpage
+\begin{figure}
+\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density} \caption{The nonlinear dependency of NDVI upon the annual anomaly of vapor pressure deficit. 2D density plot of NDVI and the running 12-month anomaly of vapor pressure deficit. The red line shows a GAM fit.}\label{fig:FigA11}
+\end{figure}
+\clearpage
+
 
 
 \codedataavailability{All data used are publicly available from sources
