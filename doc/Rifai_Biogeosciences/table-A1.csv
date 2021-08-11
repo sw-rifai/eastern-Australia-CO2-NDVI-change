@@ -1,0 +1,10 @@
+Product,Variable,Spatial,Temporal,Reference
+NOAA-CDR v5 AVHRR surface reflectance,surface reflectance,0.05°,daily,"Vermote et al., 2014"
+MODIS MCD43,surface reflectance,500 m,daily,Schaaf and Wang 2015
+MODIS MOD44B,"Tree cover, non-tree vegetation cover, non-vegetation cover",250 m,annual,"Dimiceli et al., 2015"
+MODIS MCD64A1,Burn Area,500 m,monthly,"Giglio et al., 2015"
+MODIS MCD15A3H,Leaf Area Index,500 m,4-day,"Myneni et al., 2015"
+NVIS v5.1,Major vegetation classes,100 m,-,https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system
+AWAP Climate,"Precip, PET, Tmin, Tmax, Vapor pressure",0.05°,daily,"Jones et al., 2009"
+ERA5-Land,PET,9 km,hourly,Copernicus Climate Change Service (C3S) (2017)
+BoM Major Köppen Climate,Major Köppen Climate zones,-,-,http://www.bom.gov.au/jsp/ncc/climate_averages/climate-classifications
