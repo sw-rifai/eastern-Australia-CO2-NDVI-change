@@ -154,6 +154,8 @@ See the [R Markdown docs for bibliographies and citations](http://rmarkdown.rstu
 Copernicus supports biblatex and a sample bibliography is in file `sample.bib`.
 Read [@Feynman1963118], and [see @Dirac1953888].
 
+See [@king_role_2020] for an example. 
+
 # Content section with R code chunks
 
 ```{r, echo = FALSE}
@@ -199,7 +201,7 @@ When figures and tables are placed at the end of the MS (article in one-column s
 
 Include a 12cm width figure of Nikolaus Copernicus from [Wikipedia](https://en.wikipedia.org/wiki/File:Nikolaus_Kopernikus.jpg) with caption using R Markdown.
 
-```{r, out.width = "8.3cm", echo = FALSE, fig.cap = "one column figure"}
+```{r ABC, out.width = "8.3cm", echo = FALSE, fig.cap = "one column figure"}
 knitr::include_graphics("Nikolaus_Kopernikus.jpg")
 ```
 
@@ -362,3 +364,41 @@ Please use `\unit{}` (allows to save the math/`$` environment) and apply the exp
 
 The conclusion goes here.
 You can modify the section name with  `\conclusions[modified heading if necessary]`.
+
+
+  \appendixtables
+  \clearpage
+  \begin{table*}[t]
+  ```{r,echo=F,message=FALSE,warning=FALSE}
+  
+   kableExtra::kable(read.csv("../Rifai_Biogeosciences/table-A1.csv"),format = 'latex')
+  ```
+  \end{table*}
+  \clearpage 
+  
+
+  \clearpage
+\begin{tabular}{|p{0.2\linewidth}|p{0.2\linewidth}|p{0.06\linewidth}|p{0.08\linewidth}|p{0.3\linewidth}|}
+\hline
+Product & Variable & Spatial & Temporal & Reference\\
+\hline
+NOAA-CDR v5 AVHRR surface reflectance & surface reflectance & 0.05° & daily & Vermote et al., 2014\\
+\hline
+MODIS MCD43 & surface reflectance & 500 m & daily & Schaaf and Wang 2015\\
+\hline
+MODIS MOD44B & Tree cover, non-tree vegetation cover, non-vegetation cover & 250 m & annual & Dimiceli et al., 2015\\
+\hline
+MODIS MCD64A1 & Burn Area & 500 m & monthly & Giglio et al., 2015\\
+\hline
+MODIS MCD15A3H & Leaf Area Index & 500 m & 4-day & Myneni et al., 2015\\
+\hline
+NVIS v5.1 & Major vegetation classes & 100 m & - & https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\\
+\hline
+AWAP Climate & Precip, PET, Tmin, Tmax, Vapor pressure & 0.05° & daily & Jones et al., 2009\\
+\hline
+ERA5-Land & PET & 9 km & hourly & Copernicus Climate Change Service (C3S) (2017)\\
+\hline
+BoM Major Köppen Climate & Major Köppen Climate zones & - & - & http://www.bom.gov.au/jsp/ncc/climate\_averages/climate-classifications\\
+\hline
+\end{tabular}
+\clearpage 

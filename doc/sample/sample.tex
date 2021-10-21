@@ -80,6 +80,20 @@
 % Pandoc citation processing
 
 % The "Technical instructions for LaTex" by Copernicus require _not_ to insert any additional packages.
+%%\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 %
 
 \begin{document}
@@ -216,6 +230,8 @@ Copernicus supports biblatex and a sample bibliography is in file
 \texttt{sample.bib}. Read \citep{Feynman1963118}, and
 \citep[see][]{Dirac1953888}.
 
+See \citep{king_role_2020} for an example.
+
 \section{Content section with R code chunks}
 
 You should always use \texttt{echo\ =\ FALSE} on R Markdown code blocks
@@ -269,7 +285,7 @@ Include a 12cm width figure of Nikolaus Copernicus from
 with caption using R Markdown.
 
 \begin{figure}
-\includegraphics[width=8.3cm]{Nikolaus_Kopernikus} \caption{one column figure}\label{fig:unnamed-chunk-2}
+\includegraphics[width=8.3cm]{Nikolaus_Kopernikus} \caption{one column figure}\label{fig:ABC}
 \end{figure}
 
 \subsubsection{TWO-COLUMN FIGURES}
@@ -277,7 +293,7 @@ with caption using R Markdown.
 You can also include a larger figure.
 
 \begin{figure}
-\includegraphics[width=12cm]{Nikolaus_Kopernikus} \caption{two column figure}\label{fig:unnamed-chunk-3}
+\includegraphics[width=12cm]{Nikolaus_Kopernikus} \caption{two column figure}\label{fig:unnamed-chunk-2}
 \end{figure}
 
 \subsection{TABLES}
@@ -468,6 +484,64 @@ or \unit{0.872\,m\,s^{-1}} (using only
 
 The conclusion goes here. You can modify the section name with
 \texttt{\textbackslash{}conclusions{[}modified\ heading\ if\ necessary{]}}.
+
+\appendixtables \clearpage
+
+\begin{table*}[t]
+  
+  \begin{tabular}{l|l|l|l|l}
+  \hline
+  Product & Variable & Spatial & Temporal & Reference\\
+  \hline
+  NOAA-CDR v5 AVHRR surface reflectance & surface reflectance & 0.05° & daily & Vermote et al., 2014\\
+  \hline
+  MODIS MCD43 & surface reflectance & 500 m & daily & Schaaf and Wang 2015\\
+  \hline
+  MODIS MOD44B & Tree cover, non-tree vegetation cover, non-vegetation cover & 250 m & annual & Dimiceli et al., 2015\\
+  \hline
+  MODIS MCD64A1 & Burn Area & 500 m & monthly & Giglio et al., 2015\\
+  \hline
+  MODIS MCD15A3H & Leaf Area Index & 500 m & 4-day & Myneni et al., 2015\\
+  \hline
+  NVIS v5.1 & Major vegetation classes & 100 m & - & https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\\
+  \hline
+  AWAP Climate & Precip, PET, Tmin, Tmax, Vapor pressure & 0.05° & daily & Jones et al., 2009\\
+  \hline
+  ERA5-Land & PET & 9 km & hourly & Copernicus Climate Change Service (C3S) (2017)\\
+  \hline
+  BoM Major Köppen Climate & Major Köppen Climate zones & - & - & http://www.bom.gov.au/jsp/ncc/climate\_averages/climate-classifications\\
+  \hline
+  \end{tabular}
+  \end{table*}
+  \clearpage
+
+\clearpage
+
+\caption{caption}
+\begin{tabular}{|p{0.2\linewidth}|p{0.2\linewidth}|p{0.06\linewidth}|p{0.08\linewidth}|p{0.3\linewidth}|}
+\hline
+Product & Variable & Spatial & Temporal & Reference\\
+\hline
+NOAA-CDR v5 AVHRR surface reflectance & surface reflectance & 0.05° & daily & Vermote et al., 2014\\
+\hline
+MODIS MCD43 & surface reflectance & 500 m & daily & Schaaf and Wang 2015\\
+\hline
+MODIS MOD44B & Tree cover, non-tree vegetation cover, non-vegetation cover & 250 m & annual & Dimiceli et al., 2015\\
+\hline
+MODIS MCD64A1 & Burn Area & 500 m & monthly & Giglio et al., 2015\\
+\hline
+MODIS MCD15A3H & Leaf Area Index & 500 m & 4-day & Myneni et al., 2015\\
+\hline
+NVIS v5.1 & Major vegetation classes & 100 m & - & https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\\
+\hline
+AWAP Climate & Precip, PET, Tmin, Tmax, Vapor pressure & 0.05° & daily & Jones et al., 2009\\
+\hline
+ERA5-Land & PET & 9 km & hourly & Copernicus Climate Change Service (C3S) (2017)\\
+\hline
+BoM Major Köppen Climate & Major Köppen Climate zones & - & - & http://www.bom.gov.au/jsp/ncc/climate\_averages/climate-classifications\\
+\hline
+\end{tabular}
+\clearpage
 
 
 

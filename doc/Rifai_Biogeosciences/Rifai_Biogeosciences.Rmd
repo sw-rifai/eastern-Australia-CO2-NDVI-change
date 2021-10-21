@@ -67,8 +67,8 @@ competinginterests: |
   The authors declare no competing interests.
 # See https://publications.copernicus.org/for_authors/licence_and_copyright.html, normally used for transferring the copyright, if needed. 
 # Note: additional copyright statements for affiliated software or data need to be placed in the data availability section. 
-copyrightstatement: |
-  The author's copyright for this publication is transferred to institution/company. 
+# copyrightstatement: |
+#   The author's copyright for this publication is transferred to institution/company. 
 ### Note: unless stated otherwise, software and data affiliated with the manuscript are assumed to be published under the same licence as the article (currently Creative Commons 4.0)
 availability:
   #  use this to add a statement when having only software code available
