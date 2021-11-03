@@ -1,0 +1,955 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.11)  3 NOV 2021 08:19
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**Rifai_Biogeosciences.tex
+(./Rifai_Biogeosciences.tex
+LaTeX2e <2021-06-01> patch level 1
+L3 programming layer <2021-07-12> (./copernicus.cls
+Document Class: copernicus 2021/01/12 9.25 Copernicus papers
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/base/fixltx2e.sty
+Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
+Applying: [2015/01/01] Old fixltx2e package on input line 46.
+
+Package fixltx2e Warning: fixltx2e is not required with releases after 2015
+(fixltx2e)                All fixes are now in the LaTeX kernel.
+(fixltx2e)                See the latexrelease package for details.
+
+Already applied: [0000/00/00] Old fixltx2e package on input line 53.
+)
+Additional configuration file copernicus.cfg used
+(./copernicus.cfg) (/home/sami/.TinyTeX/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/base/fleqn.clo
+File: fleqn.clo 2016/12/29 v1.2b Standard LaTeX option (flush left equations)
+\mathindent=\skip47
+Applying: [2015/01/01] Make \[ robust on input line 50.
+LaTeX Info: Redefining \[ on input line 51.
+Already applied: [0000/00/00] Make \[ robust on input line 62.
+Applying: [2015/01/01] Make \] robust on input line 74.
+LaTeX Info: Redefining \] on input line 75.
+Already applied: [0000/00/00] Make \] robust on input line 83.
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2021/02/12 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count182
+\c@section=\count183
+\c@subsection=\count184
+\c@subsubsection=\count185
+\c@paragraph=\count186
+\c@subparagraph=\count187
+\c@figure=\count188
+\c@table=\count189
+\abovecaptionskip=\skip48
+\belowcaptionskip=\skip49
+\bibindent=\dimen138
+)
+\bleed=\dimen139
+\longtwo@top=\skip50
+\longtwo@bottom=\skip51
+\longtwo@box=\box50
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box51
+\UL@hyphenbox=\box52
+\UL@skip=\skip52
+\UL@hook=\toks16
+\UL@height=\dimen140
+\UL@pe=\count190
+\UL@pixel=\dimen141
+\ULC@box=\box53
+Package: ulem 2019/11/18
+\ULdepth=\dimen142
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks17
+\inpenc@posthook=\toks18
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2021/07/22 3.63 The Babel package
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2021/07/22 3.63 Babel common definitions
+\babel@savecnt=\count191
+\U@D=\dimen143
+\l@unhyphenated=\language3
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read2
+)
+\bbl@dirlevel=\count192
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: Hyphen rules for 'british' set to \l@english
+(babel)             (\language0). Reported on input line 82.
+Package babel Info: Hyphen rules for 'UKenglish' set to \l@english
+(babel)             (\language0). Reported on input line 83.
+Package babel Info: Hyphen rules for 'canadian' set to \l@english
+(babel)             (\language0). Reported on input line 102.
+Package babel Info: Hyphen rules for 'australian' set to \l@english
+(babel)             (\language0). Reported on input line 105.
+Package babel Info: Hyphen rules for 'newzealand' set to \l@english
+(babel)             (\language0). Reported on input line 108.
+)) (/home/sami/.TinyTeX/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/04/20 v2.5e Tabular extension package (FMi)
+\col@sep=\dimen144
+\ar@mcellbox=\box54
+\extrarowheight=\dimen145
+\NC@list=\toks19
+\extratabsurround=\skip53
+\backup@length=\skip54
+\ar@cellbox=\box55
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+\TX@col@width=\dimen146
+\TX@old@table=\dimen147
+\TX@old@col=\dimen148
+\TX@target=\dimen149
+\TX@delta=\dimen150
+\TX@cols=\count193
+\TX@ftn=\toks20
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/12/05 v1.2c Enhanced LaTeX Graphics (DPC,SPQR)
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks21
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen151
+\Gin@req@width=\dimen152
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks22
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (/home/sami/.TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2021/04/20 v2.17j AMS math features
+\@mathmargin=\skip55
+For additional information on amsmath, use the `?' option.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks23
+\ex@=\dimen153
+)) (/home/sami/.TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen154
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count194
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count195
+\leftroot@=\count196
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count197
+\DOTSCASE@=\count198
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box56
+\strutbox@=\box57
+\big@size=\dimen155
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count199
+\c@MaxMatrixCols=\count266
+\dotsspace@=\muskip16
+\c@parentequation=\count267
+\dspbrk@lvl=\count268
+\tag@help=\toks24
+\row@=\count269
+\column@=\count270
+\maxfields@=\count271
+\andhelp@=\toks25
+\eqnshift@=\dimen156
+\alignsep@=\dimen157
+\tagshift@=\dimen158
+\tagwidth@=\dimen159
+\totwidth@=\dimen160
+\lineht@=\dimen161
+\@envbody=\toks26
+\multlinegap=\skip56
+\multlinetaggap=\skip57
+\mathdisplay@stack=\toks27
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2020/05/29 v2.20.6
+\thm@style=\toks28
+\thm@bodyfont=\toks29
+\thm@headfont=\toks30
+\thm@notefont=\toks31
+\thm@headpunct=\toks32
+\thm@preskip=\skip58
+\thm@postskip=\skip59
+\thm@headsep=\skip60
+\dth@everypar=\toks33
+)
+\affilsep=\skip61
+\@affilsep=\skip62
+\c@Maxaffil=\count272
+\c@authors=\count273
+\c@affil=\count274
+\c@authnum=\count275
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+
+Class copernicus Warning: Cannot find accents.sty; proceeding without it.
+
+
+Class copernicus Warning: Cannot find cancel.sty; proceeding without it.
+
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip63
+\multirow@cntb=\count276
+\multirow@dima=\skip64
+\bigstrutjot=\dimen162
+)
+
+Class copernicus Warning: Cannot find supertabular.sty; proceeding without it.
+
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/algorithms/algorithmic.sty
+Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\c@ALC@unique=\count277
+\c@ALC@line=\count278
+\c@ALC@rem=\count279
+\c@ALC@depth=\count280
+\ALC@tlm=\skip65
+\algorithmicindent=\skip66
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count281
+\float@exts=\toks34
+\float@box=\box58
+\@float@everytoks=\toks35
+\@floatcapt=\box59
+)
+\@float@every@algorithm=\toks36
+\c@algorithm=\count282
+)
+\c@figscheme=\count283
+\c@plates=\count284
+\c@listings=\count285
+\c@boxes=\count286
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen163
+\captionmargin@=\dimen164
+\captionwidth=\dimen165
+\caption@tempdima=\dimen166
+\caption@indent=\dimen167
+\caption@parindent=\dimen168
+\caption@hangindent=\dimen169
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+Package caption Info: \@makecaption = \long macro:#1#2->\def \@tempa {figure}\i
+fx \@captype \@tempa \if@stage@final \vskip 0.7\abovecaptionskip \else \vskip \
+abovecaptionskip \goodbreak \fi \fi {\let \in@caption \relax \reset@font \small
+ {\bfseries #1.} #2\par }\if@cop@home \ifonline \ifnum \csname c@\@captype \end
+csname =1 \immediate \write \@auxout {\string \gdef \string \@num \@captype {}}
+\hypertarget {\@captype }{}\fi \fi \fi \def \@tempa {table}\ifx \@captype \@tem
+pa \vskip \abovecaptionskip \if@stage@final \else \goodbreak \fi \fi  on input 
+line 1139.
+)
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+\c@caption@flags=\count287
+\c@continuedfloat=\count288
+Package caption Info: float package is loaded.
+)
+
+Class copernicus Warning: Cannot find subfloat.sty; proceeding without it.
+
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip67
+\bibsep=\skip68
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count289
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/graphics/rotating.sty
+Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
+\c@r@tfl@t=\count290
+\rotFPtop=\skip69
+\rotFPbot=\skip70
+\rot@float@box=\box60
+\rot@mess@toks=\toks37
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count291
+\output=\toks38
+\linenoprevgraf=\count292
+\linenumbersep=\dimen170
+\linenumberwidth=\dimen171
+\c@linenumber=\count293
+\c@pagewiselinenumber=\count294
+\c@LN@truepage=\count295
+\c@internallinenumber=\count296
+\c@internallinenumbers=\count297
+\quotelinenumbersep=\dimen172
+\bframerule=\dimen173
+\bframesep=\dimen174
+\bframebox=\box61
+LaTeX Info: Redefining \\ on input line 3056.
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/pifont.sty
+Package: pifont 2020/03/25 PSNFSS-v9.3 Pi font support (SPQR) 
+LaTeX Font Info:    Trying to load font information for U+pzd on input line 63.
+
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Trying to load font information for U+psy on input line 64.
+
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+)) (/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2021-06-07 v7.00m Hypertext links for LaTeX
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen175
+\Hy@linkcounter=\count298
+\Hy@pagecounter=\count299
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2021-06-07 v7.00m Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
+File: hyperref-langpatches.def 2021-06-07 v7.00m Hyperref: patches for babel la
+nguages
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count300
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2021-06-07 v7.00m Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Option `bookmarks' set `false' on input line 4073.
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks OFF on input line 4451.
+\c@Hy@tempcnt=\count301
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen176
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count302
+\Field@Width=\dimen177
+\Fld@charsize=\dimen178
+Package hyperref Info: Hyper figures OFF on input line 6076.
+Package hyperref Info: Link nesting OFF on input line 6081.
+Package hyperref Info: Hyper index ON on input line 6084.
+Package hyperref Info: backreferencing OFF on input line 6091.
+Package hyperref Info: Link coloring OFF on input line 6096.
+Package hyperref Info: Link coloring with OCG OFF on input line 6101.
+Package hyperref Info: PDF/A mode OFF on input line 6106.
+LaTeX Info: Redefining \ref on input line 6146.
+LaTeX Info: Redefining \pageref on input line 6150.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count303
+\c@Item=\count304
+\c@Hfootnote=\count305
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2021-06-07 v7.00m Hyperref driver for pdfTeX
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+\Fld@listcount=\count306
+\c@bookmark@seq@number=\count307
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+(/home/sami/.TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip71
+)
+\c@reaction=\count308
+\tabularwidth=\dimen179
+Package color Info: Redefining color textcol on input line 2613.
+Package color Info: Redefining color bgcol on input line 2613.
+Package color Info: Redefining color textcol on input line 2617.
+Package color Info: Redefining color bgcol on input line 2618.
+Package color Info: Redefining color barcol on input line 2619.
+)
+LaTeX Info: Redefining \vec on input line 14.
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 85
+.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
+) (/home/sami/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count309
+\l__pdf_internal_box=\box62
+) (./Rifai_Biogeosciences.aux)
+\openout1 = `Rifai_Biogeosciences.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 85.
+LaTeX Font Info:    ... okay on input line 85.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: rotating package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring OFF on input line 85.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+) (/home/sami/.TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count310
+)
+LaTeX Info: Redefining \ref on input line 85.
+LaTeX Info: Redefining \pageref on input line 85.
+LaTeX Info: Redefining \nameref on input line 85.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 141
+.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 141
+.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 18
+2.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/t1phv.fd
+File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
+)
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 8.54997pt on input line 182.
+[1
+
+{/home/sami/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
+01.
+(/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [2] [3] [4] [5] [6] [7] [8] [9]
+<../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png, id=259, 455.09451pt x 341.
+32089pt>
+File: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png Graphic file (type png
+)
+<use ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png>
+Package pdftex.def Info: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png  us
+ed on input line 642.
+(pdftex.def)             Requested size: 455.24408pt x 341.45546pt.
+[10 <../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png>]
+<../../figures/Fig2_PPET-TheilSen_map-Koppen.png, id=268, 426.59949pt x 455.094
+51pt>
+File: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png Graphic file (type png)
+<use ../../figures/Fig2_PPET-TheilSen_map-Koppen.png>
+Package pdftex.def Info: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png  used 
+on input line 646.
+(pdftex.def)             Requested size: 398.33858pt x 424.94872pt.
+[11 <../../figures/Fig2_PPET-TheilSen_map-Koppen.png (PNG copy)>] [12
+
+
+
+]
+<../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.png, 
+id=280, 568.86815pt x 483.58954pt>
+File: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.
+png Graphic file (type png)
+<use ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
+ng>
+Package pdftex.def Info: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-Theil
+Sen-trend-by-epoch.png  used on input line 682.
+(pdftex.def)             Requested size: 398.33858pt x 338.6358pt.
+
+Underfull \hbox (badness 5519) in paragraph at lines 682--682
+[]\T1/ptm/b/n/9 Figure 3. \T1/ptm/m/n/9 Over-all long-term NDVI change and chan
+ge shown by satel-lite epoch and sea-son. (a) The an-nual rate of
+ []
+
+
+Underfull \hbox (badness 3428) in paragraph at lines 682--682
+\T1/ptm/m/n/9 NDVI change from the merged satel-lite record span-ning 1982-2019
+. The sea-sonal AVHRR NDVI be-tween 1982-2000 (b-
+ []
+
+
+Underfull \hbox (badness 4872) in paragraph at lines 682--682
+\T1/ptm/m/n/9 top) and MODIS NDVI be-tween 2001-2019 (b-bottom). Non woody ecos
+ys-tem re-gions are masked in gray. A no-table
+ []
+
+
+Underfull \hbox (badness 4217) in paragraph at lines 682--682
+\T1/ptm/m/n/9 brown-ing trend is ev-i-dent at the in-ter-face of the Grass-land
+ and Arid re-gions dur-ing DJF of the MODIS time pe-riod.
+ []
+
+[13 <../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
+ng (PNG copy)>]
+<../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png, id=287, 568.868
+15pt x 426.59949pt>
+File: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png Graphic fil
+e (type png)
+<use ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png>
+Package pdftex.def Info: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Kop
+pen.png  used on input line 687.
+(pdftex.def)             Requested size: 398.33858pt x 298.72827pt.
+[14 <../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png (PNG copy)>]
+
+Underfull \hbox (badness 10000) in paragraph at lines 694--731
+
+ []
+
+[15
+
+
+
+]
+<../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png, id=303, 
+711.1368pt x 568.86815pt>
+File: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png Grap
+hic file (type png)
+<use ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png>
+Package pdftex.def Info: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_mode
+led_effect.png  used on input line 734.
+(pdftex.def)             Requested size: 398.33858pt x 318.65079pt.
+[16 <../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png (PNG 
+copy)>]
+<../../figures/Fig6_rlm_CO2_effect_by_epoch.png, id=309, 483.4863pt x 455.0601p
+t>
+File: ../../figures/Fig6_rlm_CO2_effect_by_epoch.png Graphic file (type png)
+<use ../../figures/Fig6_rlm_CO2_effect_by_epoch.png>
+Package pdftex.def Info: ../../figures/Fig6_rlm_CO2_effect_by_epoch.png  used o
+n input line 740.
+(pdftex.def)             Requested size: 398.33858pt x 374.92928pt.
+[17 <../../figures/Fig6_rlm_CO2_effect_by_epoch.png (PNG copy)>] [18
+
+
+
+
+]
+<../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png, id=3
+23, 924.64304pt x 995.67412pt>
+File: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png 
+Graphic file (type png)
+<use ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png>
+Package pdftex.def Info: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDif
+ferenceBoxplot.png  used on input line 795.
+(pdftex.def)             Requested size: 398.33858pt x 428.93674pt.
+[19 <../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png (
+PNG copy)>]
+<../../figures/Fig8_PPET_change_ThielSen_VCF.png, id=331, 540.5796pt x 739.6318
+4pt>
+File: ../../figures/Fig8_PPET_change_ThielSen_VCF.png Graphic file (type png)
+<use ../../figures/Fig8_PPET_change_ThielSen_VCF.png>
+Package pdftex.def Info: ../../figures/Fig8_PPET_change_ThielSen_VCF.png  used 
+on input line 801.
+(pdftex.def)             Requested size: 341.43306pt x 467.16682pt.
+
+LaTeX Warning: Float too large for page by 48.64417pt on input line 802.
+
+[20 <../../figures/Fig8_PPET_change_ThielSen_VCF.png (PNG copy)>] [21
+
+
+
+
+]
+
+Package natbib Warning: Citation `wang_etal20' on page 22 undefined on input li
+ne 903.
+
+[22]
+
+Package natbib Warning: Citation `sexton_etal13' on page 23 undefined on input 
+line 1002.
+
+
+Package natbib Warning: Citation `gill_etal17' on page 23 undefined on input li
+ne 1008.
+
+[23] [24pdfTeX warning (ext4): destination with the same identifier (name{appen
+dix.A}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1069 \clearpage
+                 ]
+<../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png, id=463, 568.9004p
+t x 568.9004pt>
+File: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png Graphic file 
+(type png)
+<use ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVI
+S.png  used on input line 1071.
+(pdftex.def)             Requested size: 398.33858pt x 398.3491pt.
+[25 <../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png, id
+=470, 334.1283pt x 369.7815pt>
+File: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.pn
+g Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
+>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSe
+n_seasonal_P_PET.png  used on input line 1077.
+(pdftex.def)             Requested size: 398.33858pt x 440.841pt.
+[26 <../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
+ (PNG copy)>]
+<../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_Thi
+elSen_Trend_1982_2019_2021-02-28.png, id=476, 426.59949pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longter
+m_ThielSen_Trend_1982_2019_2021-02-28.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
+_ThielSen_Trend_1982_2019_2021-02-28.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsens
+or_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28.png  used on input lin
+e 1083.
+(pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
+[27 <../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
+_ThielSen_Trend_1982_2019_2021-02-28.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png, id=482, 
+455.0601pt x 341.3553pt>
+File: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png Grap
+hic file (type png)
+<use ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MA
+PPET_range.png  used on input line 1089.
+(pdftex.def)             Requested size: 398.33858pt x 298.82056pt.
+[28 <../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>]
+<../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png, id=490
+, 853.5087pt x 569.0058pt>
+File: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png Gr
+aphic file (type png)
+<use ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logist
+ic_Asym_xmid.png  used on input line 1095.
+(pdftex.def)             Requested size: 398.33858pt x 265.55737pt.
+[29 <../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png (PN
+G copy)>]
+<../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason.png
+, id=496, 426.59949pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeaso
+n.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
+.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richar
+d_x3_nlsFit_bySeason.png  used on input line 1101.
+(pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
+[30 <../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
+.png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png, id=502, 568
+.86815pt x 398.31094pt>
+File: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png Graphic
+ file (type png)
+<use ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppe
+t_x_co2.png  used on input line 1107.
+(pdftex.def)             Requested size: 398.33858pt x 278.91907pt.
+[31 <../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png (PNG cop
+y)>]
+<../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png, id=5
+09, 568.86815pt x 568.86815pt>
+File: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png 
+Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_
+trend_by_epoch.png  used on input line 1113.
+(pdftex.def)             Requested size: 398.33858pt x 398.35255pt.
+[32 <../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png (
+PNG copy)>]
+<../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png, id=
+515, 426.59949pt x 568.86815pt>
+File: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png
+ Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png>
+
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds
+-xLAI_dNDVIxLAI.png  used on input line 1119.
+(pdftex.def)             Requested size: 341.43306pt x 455.30347pt.
+
+LaTeX Warning: Text page 33 contains only floats.
+
+[33
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png (PN
+G copy)>]
+<../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.png,
+ id=521, 483.58954pt x 341.32089pt>
+File: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover
+.png Graphic file (type png)
+<use ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
+png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treeco
+ver_nontreeVegcover.png  used on input line 1125.
+(pdftex.def)             Requested size: 398.33858pt x 281.16093pt.
+[34 <../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
+png (PNG copy)>]
+<../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png, id=527, 455
+.0601pt x 284.5029pt>
+File: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png Graphic
+ file (type png)
+<use ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png>
+Package pdftex.def Info: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_
+density.png  used on input line 1131.
+(pdftex.def)             Requested size: 398.33858pt x 249.05229pt.
+[35 <../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png (PNG cop
+y)>]pdfTeX warning (ext4): destination with the same identifier (name{appendix.
+A}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1135 \appendixtables
+                      
+Underfull \hbox (badness 4726) in paragraph at lines 1143--1143
+[]|\T1/ptm/m/n/9 NOAA-CDR v5 AVHRR
+ []
+
+
+Overfull \hbox (11.12892pt too wide) in paragraph at lines 1153--1154
+[]|\T1/ptm/m/n/9 https://www.environment.gov.au/land/native-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1153--1154
+\T1/ptm/m/n/9 vegetation/national-vegetation-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1157--1158
+[]|\T1/ptm/m/n/9 Copernicus Cli-mate Change Ser-vice
+ []
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 1159--1159
+[]|\T1/ptm/m/n/9 BoM Ma-jor Köp-pen Cli-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1159--1159
+[]|\T1/ptm/m/n/9 Major Köp-pen Cli-mate
+ []
+
+
+Overfull \hbox (58.01782pt too wide) in paragraph at lines 1159--1160
+[]|\T1/ptm/m/n/9 http://www.bom.gov.au/jsp/ncc/climate_averages/climate-
+ []
+
+[36] (./Rifai_Biogeosciences.bbl [37
+
+
+
+
+
+
+
+] [38]
+Underfull \hbox (badness 6316) in paragraph at lines 177--179
+[]\T1/ptm/m/n/9 Greve, P., Rod-er-ick, M. L., Ukkola, A. M., and Wada, Y.: The 
+Arid-ity In-dex un-der Global Warm-ing, 14, 124006,
+ []
+
+
+Underfull \hbox (badness 3612) in paragraph at lines 190--194
+[]\T1/ptm/m/n/9 Harris, I., Jones, P., Os-born, T., and Lis-ter, D.: Up-dated H
+igh-Resolution Grids of Monthly Cli-matic Ob-ser-va-tions - the
+ []
+
+
+Underfull \hbox (badness 1248) in paragraph at lines 190--194
+\T1/ptm/m/n/9 CRU TS3.10 Dataset: UP-DATED HIGH-RESOLUTION GRIDS OF MONTHLY CLI
+-MATIC OB-SER-VA-TIONS, 34, 623--642,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 215--218
+[]\T1/ptm/m/n/9 Hattersley, P. W.: The Dis-tri-bu-tion of C3 and C4 Grasses in 
+Aus-tralia in Re-la-tion to Cli-mate, 57, 113--128,
+ []
+
+
+Underfull \hbox (badness 3482) in paragraph at lines 220--223
+[]\T1/ptm/m/n/9 Ji, L. and Brown, J. F.: Ef-fect of NOAA Satel-lite Or-bital Dr
+ift on AVHRR-Derived Phe-no-log-i-cal Met-rics, 62, 215--223,
+ []
+
+[39] [40]
+Underfull \hbox (badness 1939) in paragraph at lines 345--347
+[]\T1/ptm/m/n/9 Morison, J. I. L.: Sen-si-tiv-ity of Stom-ata and Wa-ter Use Ef
+-fi-ciency to High CO2, 8, 467--474, https://doi.org/[]10.1111/j.1365-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--366
+[]\T1/ptm/m/n/9 of Liv-ing Aus-tralia", A.: The Dead Tree De-tec-tive | Project
+ | Bio-Col-lect, []$https : / / biocollect . ala . org . au / acsa / project / 
+index /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 416--419
+[]\T1/ptm/m/n/9 Specht, R.: Wa-ter Use by Peren-nial Ev-er-green Plant Com-mu-n
+i-ties in Aus-tralia and Papua New Guinea, 20, 273,
+ []
+
+[41]
+Underfull \hbox (badness 3568) in paragraph at lines 465--467
+[]\T1/ptm/m/n/9 Vermote, E. and NOAA CDR Pro-gram: NOAA Cli-mate Data Record (C
+DR) of AVHRR Sur-face Re-flectance, Ver-sion 5,
+ []
+
+[42]) [43]
+
+Package natbib Warning: There were undefined citations.
+
+(./Rifai_Biogeosciences.aux) ) 
+Here is how much of TeX's memory you used:
+ 13899 strings out of 480502
+ 223450 string characters out of 5899684
+ 568210 words of memory out of 5000000
+ 31125 multiletter control sequences out of 15000+600000
+ 456464 words of font info for 110 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 75i,10n,80p,1442b,653s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/home/sami/.TinyTeX/texmf-dist/fonts/enc/dvips/b
+ase/8r.enc}</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex1
+0.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></hom
+e/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/sami
+/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/sami/.Tiny
+TeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/sami/.TinyTeX/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sami/.TinyTeX/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr5.pfb></home/sami/.TinyTeX/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr9.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7
+.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></home
+/sami/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sami/.TinyTeX
+/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/texmf-dist/fo
+nts/type1/urw/times/utmri8a.pfb>
+Output written on Rifai_Biogeosciences.pdf (43 pages, 13258050 bytes).
+PDF statistics:
+ 770 PDF objects out of 1000 (max. 8388607)
+ 662 compressed objects within 7 object streams
+ 185 named destinations out of 1000 (max. 500000)
+ 96 words of extra memory for PDF output out of 10000 (max. 10000000)
+
