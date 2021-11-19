@@ -1,5 +1,5 @@
 # !diagnostics off
-#*******************************************************************************
+#*************************************************************************
 #* Description:
 #* Plot Climate stuff
 #*
@@ -14,7 +14,7 @@ library(RcppArmadillo); library(patchwork)
 library(stars)
 library(foreach); library(doParallel)
 options(pillar.sigfig = 5)
-# IMPORT DATA ###################################################################
+# IMPORT DATA ##############################################################
 
 # load("data/gridCell_lm_ndvi_clim.Rdata") # grid cell linear regressions
 oz_poly <- sf::read_sf("../data_general/GADM/gadm36_AUS.gpkg", 
@@ -339,7 +339,7 @@ p_ppet <- aa %>%
   ggplot(data=., aes(hydro_year, ppet_pct,color=`Climate Zone`,group=`Climate Zone`))+
   # geom_point(alpha=0.05,color='gray')+
   geom_smooth(method=MASS::rlm)+
-  scale_x_continuous(expand=c(0,0), breaks = c(1982,1990,2000,2010,2019))+
+  scale_x_continuous(expand=c(0,0), breaks = c(1982,1990,2000,2010,2019), limits=c(1982,2019.75))+
   scale_y_continuous(expand=c(0,0), labels = scales::format_format(3))+
   scale_color_viridis_d(option='B',end=0.9)+
   # facet_wrap(~`Climate Zone`,scales = 'free',labeller = label_value, 
@@ -348,9 +348,19 @@ p_ppet <- aa %>%
   theme_linedraw()+
   theme(strip.text = element_text(face='bold'), 
         panel.grid = element_blank(), 
-        axis.text.x = element_text(size=7), 
+        axis.text.x = element_text(size=10), 
         legend.position = 'none'); p_ppet
 
+aa %>% 
+  inner_join(aa_mappet,by=c("x","y")) %>% 
+  mutate(ppet_pct = 100*ppet/mappet - 100) %>% 
+  # sample_frac(0.5) %>% 
+  filter(is.na(cz)==FALSE) %>% 
+  # rename(`Climate Zone` = cz) %>% 
+  as.data.table() %>% 
+  split(.$cz) %>% 
+  map(~MASS::rlm(ppet_pct~hydro_year, data=.x)) %>% 
+  map(summary)
 
 
 sen_ndvi_season_e1$epoch <- "AVHRR NDVI 1982-2000"
@@ -370,8 +380,8 @@ p_ndvi_sen <- inner_join(kop,j_sen,by=c("x","y")) %>%
   # geom_histogram(bins = 30, position = 'identity')+
   geom_density(position='identity')+
   # geom_freqpoly()+
-  geom_vline(aes(xintercept=0),col='#cf0000',lwd=1)+
-  geom_vline(aes(xintercept=0),col='red',lwd=0.5)+
+  geom_vline(aes(xintercept=0),col='#cf0000',lwd=1,alpha=0.5)+
+  geom_vline(aes(xintercept=0),col='red',lwd=0.5,alpha=0.5)+
   # scico::scale_fill_scico_d()+
   scale_alpha_discrete(range=c(0.2,0.8))+
   scale_fill_viridis_d(option='B',direction = 1,end=0.925)+
@@ -391,7 +401,7 @@ p_ndvi_sen <- inner_join(kop,j_sen,by=c("x","y")) %>%
   theme(panel.grid = element_blank(), 
         strip.text = element_text(face='bold'), 
         legend.position = 'none', 
-        axis.text = element_text(size=6)); p_ndvi_sen
+        axis.text = element_text(size=8)); p_ndvi_sen
 
 
 library(ggridges)
@@ -413,13 +423,16 @@ p_vcf <- vcf_sen %>%
                      after_stat(scaled)))+
   ggridges::stat_density_ridges(
     quantile_lines = TRUE, 
-    rel_min_height=0.01, 
-    bandwidth = 0.05,
+    quantiles = 2,
+    rel_min_height=0.02, 
+    bandwidth = 0.1,
     alpha=0.5, 
     scale=1, 
+    lwd=0.5,
     color='black')+
   scale_fill_viridis_d(option='B',direction = 1,end=0.9,na.translate=F)+
-  geom_vline(aes(xintercept=0),color='red',lwd=0.75)+
+  geom_vline(aes(xintercept=0),
+    color='red',lwd=1,alpha=0.5)+
   scale_x_continuous(limits=c(-1,1))+
   scale_y_discrete(expand=c(0,0),
                    limits=rev(c("Equatorial","Tropical",

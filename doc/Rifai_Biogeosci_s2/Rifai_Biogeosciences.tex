@@ -452,27 +452,28 @@ from Theil-Sen regression.
 CO\textsubscript{2} and climate toward NDVI
 trends}{Estimating contribution of CO2 and climate toward NDVI trends}}
 
-We used the merged NDVI observations to fit six statistical models to
-quantify the impact of changes in CO\textsubscript{2} and meteorological
-variables on NDVI. The relationship between NDVI and the running
-12-month mean of P:PET was strongly nonlinear and followed a monotonic
-saturating sigmoidal relationship as indicated by GAM fits (methods
-equation 6, see below). GAMs can characterize a nonlinear response
-without specifying a functional form, yet the underlying spline
-parameters are not easily interpreted as the parameters of a fixed
-nonlinear function. Therefore we used nonlinear least squares
-(nls.multstart package \citep{padfield_matheson20} in R v4.01) to
-compare models fit using all pixel-locations to a set of fixed nonlinear
-functional forms including the Weibull function (equation 4; Fig. 5),
-the logistic function (equation 5; Fig. A5), and the Richards growth
-function (equation 6; Fig. A6). The focus on the Weibull models because
-they showed equivalent goodness of fit with fewer parameters than the
+We fit six forms of statistical models to the merged NDVI observations
+in order to to quantify the impact of changes in CO\textsubscript{2} and
+meteorological variables on NDVI. Figure 1 shows the relationship
+between NDVI and multi-annual mean of P:PET was nonlinear and followed a
+monotonic saturating sigmoidal relationship. GAMs can characterize a
+nonlinear response without specifying a functional form, yet the
+underlying spline parameters are not easily interpreted as the
+parameters of a fixed nonlinear function. Therefore we fit models with a
+set of fixed nonlinear functional forms using nonlinear least squares
+(nls.multstart package; \citet{padfield_matheson20} in R v4.01) and
+compared models fit using all pixel-locations. The nonlinear functional
+forms included the Weibull function (equation 4; Fig. 5), the logistic
+function (equation 5; Fig. A5), and the Richards growth function
+(equation 6; Fig. A6). We focused on the Weibull models because they
+showed equivalent goodness of fit with fewer parameters than the
 Richards function models. Next we added a linear modifier to the Weibull
-function using the covariates of CO\textsubscript{2} (ppm) and the ratio
-of the anomaly of P:PET (MI\textsubscript{anom}) to the mean annual
-P:PET (MI\textsubscript{MA}) as follows: \begin{align}
+function using the covariates of CO\textsubscript{2}
+(\(umol\,umol^{-1}\); \(C_{a}\)) and the ratio of the anomaly of P:PET
+(\(MI_{anom}\)) to the mean annual P:PET (\(MI_{MA}\)) as follows:
+\begin{align}
 NDVI=V_a-V_d[exp(-exp(c_{ln})\,(MI_{MA})^{q})]+\eta\\
-\eta = \beta_{1}\frac{MI_{anom}}{MI_{MA}}+\beta_{2}\,CO_2\,MI_{MA} +\beta_{3}\,CO_2\,\frac{MI_{anom}}{MI_{MA}}+sensor\nonumber
+\eta = \beta_{1}\frac{MI_{anom}}{MI_{MA}}+\beta_{2}\,C_{a}\,MI_{MA} +\beta_{3}\,C_{a}\,\frac{MI_{anom}}{MI_{MA}}+sensor\nonumber
 \end{align}
 
 Here the sensor term is a binary covariate indicating the AVHRR or MODIS
@@ -483,9 +484,11 @@ to which MI\textsubscript{MA} is raised. The model was fit by individual
 season with one million observations per model fit. Corresponding
 goodness-of fit metrics (\(R^2\) and root mean square error) were
 calculated by season (Fig. 5) with one million randomly sampled
-observations. Alternative nonlinear functional forms were also fit to
-characterize the effect of CO\textsubscript{2} upon NDVI. A logistic
-model was fit across space for each hydrological year as
+observations.
+
+We tested alternative nonlinear functional forms to characterize the
+effect of CO\textsubscript{2} upon NDVI. A logistic model was fit across
+space for each hydrological year as
 
 \begin{equation}
 NDVI = \frac{V_A}{(1+exp((m-MI_{12mo})/s))}
@@ -498,7 +501,7 @@ Richards growth function to characterize the CO\textsubscript{2} effect
 upon seasonal NDVI (Fig. A6) as
 
 \begin{align}
-NDVI=(V_A+\beta_1\,CO_2+\beta_2\,MI_{f.anom})\,\frac{(1+exp(m+\beta_3\,CO_2+\beta_4\,MI_{f.anom} - MI_{MA}))}{(s+\beta_5\,CO_2+\beta_6\,MI_{f.anom})^{(-exp(-(q+\beta_7\,CO_2+\beta_8\,F)))}}\\
+NDVI=(V_A+\beta_1\,C_{a}+\beta_2\,MI_{f.anom})\,\frac{(1+exp(m+\beta_3\,C_{a}+\beta_4\,MI_{f.anom} - MI_{MA}))}{(s+\beta_5\,C_{a}+\beta_6\,MI_{f.anom})^{(-exp(-(q+\beta_7\,C_{a}+\beta_8\,F)))}}\\
 MI_{f.anom} = \frac{MI_{anom}}{MI_{MA}}\nonumber
 \end{align}
 
@@ -510,41 +513,46 @@ with one million random samples from the total merged NDVI record
 
 To ensure consistent interpretation of the nonlinear response across
 P:PET, we also fit linear models explaining NDVI with
-CO\textsubscript{2} and MI\textsubscript{anom} by season in
-MI\textsubscript{MA} bin-widths of 0.2 (equation 7; Fig. A4). Separate
-linear models were fit for increments of 0.15 of MI\textsubscript{MA}
-for each season using the merged 1982-2019 NDVI record. NDVI was modeled
-as
+CO\textsubscript{2} and \(MI_{anom}\) by season in \(MI_{MA}\)
+bin-widths of 0.2 (equation 7; Fig. A4). Separate linear models were fit
+for increments of 0.15 of \(MI_{MA}\) for each season using the merged
+1982-2019 NDVI record. NDVI was modeled as
 
 \begin{equation}
-NDVI = \beta_0+\beta_1\,CO_2 + \beta_2\,MI_{anom}+\beta_3\,Veg.\,Class+\beta_4\,sensor
+NDVI = \beta_0+\beta_1\,C_{a} + \beta_2\,MI_{anom}+\beta_3\,Veg.\,Class+\beta_4\,sensor
 \end{equation}
 
-where MI\textsubscript{anom} is the annual anomaly of P:PET, Veg. Class
-is the NVIS 5.1 vegetation class, and \(sensor\) is a binary variable
-used to account for residual differences between the recalibrated AVHRR
-NDVI and NDVI\textsubscript{MODIS} records. To aid the comparison of
-model effects, we centered and standardized the continuous model before
-regression. The standardized CO\textsubscript{2} and
-P:PET\textsubscript{anom}. effects (\(\beta\)) are presented in Fig. A4.
+where \(Veg.\,Class\) is the NVIS 5.1 vegetation class, and \(sensor\)
+is a binary variable used to account for residual differences between
+the recalibrated AVHRR NDVI and NDVI\textsubscript{MODIS} records. To
+aid the comparison of model effects, we centered and standardized the
+continuous model covariates before regression. The standardized
+CO\textsubscript{2} and P:PET\textsubscript{anom}. effects (\(\beta\))
+are presented in Fig. A4.
 
-Next, we fit robust multiple linear regression models to the time series
-of NDVI for each of the 39,463 pixel locations. The CO\textsubscript{2}
-effect for each grid cell location was simultaneously estimated with the
-linear effects of the anomalies (anom) of P, PET, VPD, and MI as
-fractions of their mean annual values (MA) as follows:
+Next, to produce spatially varying estimates of the CO\textsubscript{2}
+effect, we fit robust multiple linear regression models to the time
+series of NDVI for each of the 39,463 pixel locations. The
+CO\textsubscript{2} effect for each grid cell location was
+simultaneously estimated with the linear effects of the anomalies (anom)
+of P, PET, VPD, and MI as fractions of their mean annual values (MA) as
+follows:
 
 \begin{equation}
-NDVI=\beta_0+ \beta_1\,CO_2+\beta_2\,\frac{P_{anom}}{P_{MA}}+\beta_3\,\frac{PET_{anom}}{PET_{MA}}+\beta_4\,\frac{VPD_{anom}}{{VPD_{MA}}}+\beta_5\,sensor
+NDVI=\beta_0+ \beta_1\,C_{a}+\beta_2\,\frac{P_{anom}}{P_{MA}}+\beta_3\,\frac{PET_{anom}}{PET_{MA}}+\beta_4\,\frac{VPD_{anom}}{{VPD_{MA}}}+\beta_5\,sensor
 \end{equation}
 
-Finally we estimated the CO\textsubscript{2} effect across the study
-region using a GAM with a penalized smoothing function (\(s\))
-characterizing the effect of the anomalies and mean annual values of
-VPD, P, and PET and sensor epoch as follows.
+Finally we produced a GAM to estimate the CO\textsubscript{2} effect in
+addition to the nonlinear interactions between CO\textsubscript{2}, mean
+annual climate, and climate anomalies. Here instead of predetermined
+nonlinear functional forms, the GAM used penalized smoothing functions
+(\(s\)) to estimate the potentially nonlinear effect of the covariates.
+The GAM was fit across all pixel locations and estimated the
+CO\textsubscript{2} effect and the effects of the anomalies and mean
+annual values of VPD, P, and PET and sensor epoch as follows.
 
 \begin{equation}
-NDVI = s(MI_{MA},CO_2) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},PET_{MA})+sensor
+NDVI = s(MI_{MA},C_{a}) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},PET_{MA})+sensor
 \end{equation}
 
 \subsection{A simplified theoretical water use efficiency model}
@@ -593,16 +601,20 @@ can then be defined as: \begin{equation}
 \frac{dE_{canopy}}{E_{canopy}} \approx \frac{dE_{leaf}}{E_{leaf}}+\frac{dL}{L}
 \end{equation}
 
-If we assume there is no long-term overall change in precipitation then
-we can assume change in \(E_{canopy}\) is tightly coupled to the water
-supply, therefore we have: \begin{equation}
+If we assume there is no overall change in precipitation then we can
+assume change in \(E_{canopy}\) is tightly coupled to the water supply,
+therefore we have: \begin{equation}
 -\frac{dE_{leaf}}{E_{leaf}} \approx \frac{dL}{L}
-\end{equation}
+\end{equation} We note that the assumption of constant precipitation is
+obviously unrealistic, most notably because two major droughts occurred
+during the observation period. However, over much longer periods
+(i.e.~1910-2018) precipitation in eastern Australia has been relatively
+stationary \citep{ukkolaExploringStationarityAustralian2019c}.
 
 NDVI is linearly related to foliar cover (\(F\)) until LAI \(\approx\) 3
 (\(m^2\,m^{-2}\)) \citep{carlsonRelationNDVIFractional1997a}, which is
 the predominantly the case when P:PET \textless{} 1. Most woody
-ecosystems of eastern Australia are strongly water limited with LAI
+ecosystems in eastern Australia are strongly water limited with LAI
 \(\leq\) 1 (\(m^2\,m^{-2}\)), where NDVI is approximately proportional
 with the fraction of foliar cover: \begin{equation}
 \frac{dL}{L}\approx\frac{dF}{F}\approx\frac{d NDVI}{NDVI}
@@ -629,7 +641,7 @@ precipitation anomaly but with the observed increases in
 CO\textsubscript{2} and VPD. One weakness with the application of this
 WUE theoretical model is the uncertainty regarding the assumed
 allocation of the \(W_{leaf}\) benefit towards either \(A_{leaf}\) or
-\(F\) (e.g.~LAI; see above). \citep{donohue_etal17} proposed a similar
+\(F\) (e.g.~LAI; see above). \citet{donohue_etal17} proposed a similar
 model to eq (18), the Partitioning of Equilibrium Transpiration and
 Assimilation (PETA) hypothesis where the relative allocation to leaf
 area is predicted to decline with increasing resource availability
@@ -900,16 +912,16 @@ CO\textsubscript{2} effect, in contrast to theory the effect was
 consistently greater in regions with higher P:PET (Figs. 5-7;A4-7). Our
 analysis also diverges with a global coarse-scale analysis that found
 weakening of the CO\textsubscript{2} fertilization effect across both
-southeastern and northern Australia \citep{wang_etal20}. We found no
-meaningful difference in the CO\textsubscript{2} attributable effect
-towards greening between the AVHRR 1982-2000 and MODIS 2001-2019 epochs
-to support the finding of temporally weakening CO\textsubscript{2}
-effect (Fig. 6). The WUE model predicted similar relative rates of NDVI
-increase between the two epochs (4.5\% and 4.7\% for AVHRR and MODIS),
-yet for different reasons. CO\textsubscript{2} increased by 30 ppm
-between 1982-2000 while VPD changed minimally and precipitation
-increased in Queensland and the Arid region (Fig. A8); all of which are
-favorable to increasing NDVI. In contrast, the larger
+southeastern and northern Australia \citep{wangRecentGlobalDecline2020}.
+We found no meaningful difference in the CO\textsubscript{2}
+attributable effect towards greening between the AVHRR 1982-2000 and
+MODIS 2001-2019 epochs to support the finding of temporally weakening
+CO\textsubscript{2} effect (Fig. 6). The WUE model predicted similar
+relative rates of NDVI increase between the two epochs (4.5\% and 4.7\%
+for AVHRR and MODIS), yet for different reasons. CO\textsubscript{2}
+increased by 30 ppm between 1982-2000 while VPD changed minimally and
+precipitation increased in Queensland and the Arid region (Fig. A8); all
+of which are favorable to increasing NDVI. In contrast, the larger
 CO\textsubscript{2} increase between 2001-2019 (40 ppm) was offset by a
 spatially ubiquitous increase of VPD (3.7\%, CI={[}-0.4\%,8.6\%{]}; Fig.
 A8) and the occurrence of two multi-year droughts (Millennium Drought
@@ -927,11 +939,11 @@ CO\textsubscript{2} would be in drier climates
 \citep{donohue_etal17, mcmurtrieWhyPlantgrowthResponse2008}. These
 deviations may have resulted from ecosystems processes beyond the scope
 of a simple model, such as more severe nutrient limitations, the
-phenology of the vegetation composition, and disturbances not captured
-by the satellite products (e.g.~small fires, grazing). Browning in the
-Grassland region (Fig. 3b,A3) may have been caused by distinct dry
-season phenological differences between overstory woody vegetation and
-understory C\textsubscript{4} grasses
+phenology of the vegetation composition, belowground root processes, and
+disturbances not captured by the satellite products (e.g.~small fires,
+grazing). Browning in the Grassland region (Fig. 3b,A3) may have been
+caused by distinct dry season phenological differences between overstory
+woody vegetation and understory C\textsubscript{4} grasses
 \citep{mooreReviewsSynthesesAustralian2016}, which are dominant there
 \citep{murphySeasonalWaterAvailability2007}. C\textsubscript{4} grasses
 may have been favored over C\textsubscript{3} because precipitation
@@ -999,11 +1011,11 @@ reduced tree cover due to the catastrophic megafires of 2019/20
 \citep{nolanCausesConsequencesEastern2020}. Some may question the
 ability of the MODIS Vegetation Continuous Fraction product
 \citep{dimiceliMOD44BMODISTerra2017} to accurately distinguish
-Australian tree cover from non-tree vegetation {[}\citet{sexton_etal13};
-adzhar\_etal21{]}, however this pattern is consistent with a recent
-LiDAR derived tree-cover time series of Australia
+Australian tree cover from non-tree vegetation
+\citep{sexton_etal13, adzhar_etal21}, however this pattern is consistent
+with a recent LiDAR derived tree-cover time series of Australia
 \citep{liaoWoodyVegetationCover2020}. Future work may seek to uncover
-trends in the green vegegation fraction by analyzing higher resolution
+trends in the green vegetation fraction by analyzing higher resolution
 data derived from the Landsat constellation, such as Geoscience
 Australia's vegetation fractional cover product \citep{gill_etal17}.
 This suggests the drought starting in 2017 was already killing trees

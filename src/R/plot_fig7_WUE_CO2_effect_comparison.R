@@ -323,6 +323,7 @@ bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
 
 
 # Plotting ----------------------------------------------------------------
+## vpd_sen ----
 p_vpd_sen <- lt_v_sen %>% 
   as_tibble() %>% 
   filter(between(b1,-0.1,0.1)) %>% 
@@ -348,7 +349,7 @@ p_vpd_sen <- lt_v_sen %>%
         legend.position = c(1,1), 
         legend.justification = c(1,1)); p_vpd_sen
 
-
+## WUE SEN ----
 p_wue_sen <- lt_v_sen %>% 
   as_tibble() %>% 
   filter(b0 > 0) %>% 
@@ -382,7 +383,7 @@ p_wue_sen <- lt_v_sen %>%
     axis.ticks.y = element_blank()); p_wue_sen
 
 
-
+## GAM pred ----
 p_gam_pred <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom), 
           tibble(pred_vpd_e2) %>% select(x,y,e,frac_vpd_anom)) %>% 
   inner_join(., tibble(co2=c(340.8,411.9),e=c('e1','e2')), 
@@ -425,6 +426,7 @@ p_gam_pred <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()); p_gam_pred
 
+## residuals ----
 p_res <- inner_join({lt_v_sen %>% 
   as_tibble() %>% 
   filter(b0 > 0) %>% 
@@ -478,6 +480,7 @@ p_res <- inner_join({lt_v_sen %>%
     axis.ticks.y = element_blank()); p_res
 
 
+## allocation ----
 vec_cols <- scico::scico(n=4, palette = 'bamako', 
                          direction = -1, end=0.9, begin=0.2)
 p_box <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom), 
@@ -538,7 +541,7 @@ p_box <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
   #   guide=guide_legend(title.position = 'top'))+
   scale_fill_manual(#"% WUE benefit allocated to foliar area:",
     values=c(vec_cols[1], vec_cols[2], vec_cols[3], vec_cols[4],"grey"))+
-  labs(x=NULL, 
+  labs(x="Köppen Climate Zone", 
        y=expression(paste(Predicted~Delta*NDVI," (%)")), 
        fill=expression(paste(CO[2]*' x '*WUE,' gain allocated to foliar area')))+
   scale_x_discrete(limits=(structure(c(1L,2L,3L,4L,5L,6L,7L),# c(5L, 4L, 6L, 2L, 1L, 3L, 7L), 
@@ -559,7 +562,8 @@ p_box <- bind_rows(tibble(pred_vpd_e1) %>% select(x,y,e,frac_vpd_anom),
         legend.text = element_text(size=15),
         legend.title = element_text(size=15),
         # legend.key.height = unit(0.2,'cm'),
-        axis.text = element_text(size=15),
+        axis.text = element_text(size=14),
+        axis.title = element_text(size=16),
         panel.grid = element_blank());
 p_box
 
@@ -600,7 +604,6 @@ ggsave(p_out,
   height=35, 
   units='cm',
   dpi=350)
-
 
 
 

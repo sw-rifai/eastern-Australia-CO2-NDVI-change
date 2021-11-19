@@ -1,145 +1,98 @@
-%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
-%% ---------------------------------
-%% This template should be used for copernicus.cls
-%% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
-%% For further assistance please contact Copernicus Publications at: production@copernicus.org
-%% https://publications.copernicus.org/for_authors/manuscript_preparation.html
-
-%% copernicus_rticles_template (flag for rticles template detection - do not remove!)
-
-%% Please use the following documentclass and journal abbreviations for discussion papers and final revised papers.
-
-%% 2-column papers and discussion papers
-\documentclass[gc, manuscript]{copernicus}
-
-
-
-%% Journal abbreviations (please use the same for discussion papers and final revised papers)
-
-
-% Advances in Geosciences (adgeo)
-% Advances in Radio Science (ars)
-% Advances in Science and Research (asr)
-% Advances in Statistical Climatology, Meteorology and Oceanography (ascmo)
-% Annales Geophysicae (angeo)
-% Archives Animal Breeding (aab)
-% ASTRA Proceedings (ap)
-% Atmospheric Chemistry and Physics (acp)
-% Atmospheric Measurement Techniques (amt)
-% Biogeosciences (bg)
-% Climate of the Past (cp)
-% DEUQUA Special Publications (deuquasp)
-% Drinking Water Engineering and Science (dwes)
-% Earth Surface Dynamics (esurf)
-% Earth System Dynamics (esd)
-% Earth System Science Data (essd)
-% E&G Quaternary Science Journal (egqsj)
-% European Journal of Mineralogy (ejm)
-% Fossil Record (fr)
-% Geochronology (gchron)
-% Geographica Helvetica (gh)
-% Geoscience Communication (gc)
-% Geoscientific Instrumentation, Methods and Data Systems (gi)
-% Geoscientific Model Development (gmd)
-% History of Geo- and Space Sciences (hgss)
-% Hydrology and Earth System Sciences (hess)
-% Journal of Bone and Joint Infection (jbji)
-% Journal of Micropalaeontology (jm)
-% Journal of Sensors and Sensor Systems (jsss)
-% Magnetic Resonance (mr)
-% Mechanical Sciences (ms)
-% Natural Hazards and Earth System Sciences (nhess)
-% Nonlinear Processes in Geophysics (npg)
-% Ocean Science (os)
-% Polarforschung - Journal of the German Society for Polar Research (polf)
-% Primate Biology (pb)
-% Proceedings of the International Association of Hydrological Sciences (piahs)
-% Scientific Drilling (sd)
-% SOIL (soil)
-% Solid Earth (se)
-% The Cryosphere (tc)
-% Weather and Climate Dynamics (wcd)
-% Web Ecology (we)
-% Wind Energy Science (wes)
-
-%% Please DO NOT add additional packages or LaTeX commands to the template. They
-%% are not supported by Coperncius. LaTeX packages already
-%% included in the copernicus.cls are:
-%\usepackage[german, english]{babel}
-%\usepackage{tabularx}
-%\usepackage{cancel}
-%\usepackage{multirow}
-%\usepackage{supertabular}
-%\usepackage{algorithmic}
-%\usepackage{algorithm}
-%\usepackage{amsthm}
-%\usepackage{float}
-%\usepackage{subfig}
-%\usepackage{rotating}
-
-% Pandoc citation processing
-
-% The "Technical instructions for LaTex" by Copernicus require _not_ to insert any additional packages.
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
 %
-
-\begin{document}
-
+\documentclass[
+]{article}
 \title{Thirty-eight years of CO\textsubscript{2} fertilization have
 outpaced growing aridity to drive greening of Australian woody
 ecosystems}
+\author{true \and true \and true \and true \and true \and true \and true}
+\date{}
 
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Thirty-eight years of CO2 fertilization have outpaced growing aridity to drive greening of Australian woody ecosystems},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
 
-\Author[1, *]{Sami W.}{Rifai}
-\Author[1,2,3,4]{Martin G.}{De Kauwe}
-\Author[1,5]{Anna M.}{Ukkola}
-\Author[6]{Lucas A.}{Cernusak}
-\Author[7,8]{Patrick}{Meir}
-\Author[9]{Belinda E.}{Medlyn}
-\Author[1,2]{Andy J.}{Pitman}
-
-
-\affil[1]{ARC Centre of Excellence for Climate Extremes, University of
-New South Wales, Sydney, NSW 2052, Australia}
-\affil[2]{Climate Change Research Centre, University of New South Wales,
-Sydney, NSW 2052, Australia}
-\affil[3]{Evolution \& Ecology Research Centre, University of New South
-Wales, Sydney, NSW 2052, Australia}
-\affil[4]{School of Biological Sciences, University of Bristol, Bristol,
-BS8 1TQ, United Kingdom}
-\affil[5]{Research School of Earth Sciences, Australian National
-University, Canberra, ACT 0200, Australia}
-\affil[6]{College of Science and Engineering, James Cook University,
-Cairns, QLD 4188, Australia}
-\affil[7]{Research School of Biology, The Australian National
-University, Acton, ACT 2601, Australia}
-\affil[8]{School of Geosciences, University of Edinburgh, Edinburgh
-EH89XP, UK}
-\affil[9]{Hawkesbury Institute for the Environment, Western Sydney
-University, Penrith, NSW 2753, Australia}
-
-\runningtitle{CO\textsubscript{2} driven greening}
-
-\runningauthor{Rifai et al.}
-
-
-\correspondence{Sami W.\ Rifai\ (s.rifai@unsw.edu.au)}
-
-
-
-\received{}
-\pubdiscuss{} %% only important for two-stage journals
-\revised{}
-\accepted{}
-\published{}
-
-%% These dates will be inserted by Copernicus Publications during the typesetting process.
-
-
-\firstpage{1}
-
+\begin{document}
 \maketitle
-
-
 \begin{abstract}
 Climate change is projected to increase the imbalance between the supply
 (precipitation) and atmospheric demand for water (i.e.~increased
@@ -180,9 +133,6 @@ CO\textsubscript{2} induced changes in water-use-efficiency affect trees
 and non-tree vegetation is needed.
 \end{abstract}
 
-
-
-
 \introduction[Introduction]
 
 Australia is the world's driest inhabited continent. Predicting how
@@ -193,54 +143,48 @@ large gradients of precipitation (P) (300 - 2000+ mm
 yr\textsuperscript{-1}) and potential evapotranspiration (PET) (800-2100
 mm yr\textsuperscript{-1}). Most eastern Australian woodlands occupy
 water-limited regions where annual PET far exceeds P (Fig. A1), and tree
-species have evolved to cope with water-limited conditions
-\citep{petersLivingEdgeContinentalscale2021} and high interannual
-rainfall variability. However, the climate is warming: eight of
-Australia's ten warmest years on record have occurred since 2005
-\citep{csiroStateClimate20202020} and Australia's climate has warmed by
-\textasciitilde1.5℃ since records began in 1910. The warming has likely
-increased atmospheric demand for water (e.g.~PET or vapor pressure
-deficit, VPD). In most woody ecosystems, the ratio of water supply
-(i.e.~P) to water demand (i.e.~PET) has declined in recent decades
-(Figs. 1,2a). Eastern Australia has also been impacted by several
-multi-year droughts, episodic deluges of rainfall
-\citep{kingRoleClimateVariability2020b}, and an increasing frequency of
-severe heatwaves \citep{perkinsIncreasingFrequencyIntensity2012a} in the
-last few decades. Precipitation changes have been spatially variable
+species have evolved to cope with water-limited conditions (Peters et
+al. 2021) and high interannual rainfall variability. However, the
+climate is warming: eight of Australia's ten warmest years on record
+have occurred since 2005 (CSIRO and Bureau of Meteorology 2020) and
+Australia's climate has warmed by \textasciitilde1.5℃ since records
+began in 1910. The warming has likely increased atmospheric demand for
+water (e.g.~PET or vapor pressure deficit, VPD). In most woody
+ecosystems, the ratio of water supply (i.e.~P) to water demand
+(i.e.~PET) has declined in recent decades (Figs. 1,2a). Eastern
+Australia has also been impacted by several multi-year droughts,
+episodic deluges of rainfall (King et al. 2020), and an increasing
+frequency of severe heatwaves (Perkins, Alexander, and Nairn 2012) in
+the last few decades. Precipitation changes have been spatially variable
 over eastern Australia, where northern Queensland grew wetter and
 southeast Australia grew drier (Fig. A2). In the last two decades,
 southeast Australia experienced the two worst droughts in the
-observational record (2001-2009;
-\citet{vandijkMillenniumDroughtSoutheast2013d} and 2017-2019;
-\citep{bureauofmeteorologyAnnualAustralianClimate}. Yet between these
-two droughts, Eastern Australia experienced record breaking rainfall in
-2011 associated with a strong La Niña event. This caused marked
-vegetation `greening' (e.g.~increased foliar cover), even in the arid
-interior
-\citep{bastosGlobalNPPDependence2013a, poulterContributionSemiaridEcosystems2014, ahlstromDominantRoleSemiarid2015a}.
-However, this greening contributed to record-breaking fires in the
-following year \citep{harrisBiologicalResponsesPress2018b}.
+observational record (2001-2009; van Dijk et al. (2013) and 2017-2019;
+(Bureau of Meteorology 2019). Yet between these two droughts, Eastern
+Australia experienced record breaking rainfall in 2011 associated with a
+strong La Niña event. This caused marked vegetation `greening'
+(e.g.~increased foliar cover), even in the arid interior (Bastos et al.
+2013; Poulter et al. 2014; Ahlstrom et al. 2015). However, this greening
+contributed to record-breaking fires in the following year (R. M. B.
+Harris et al. 2018).
 
 Theory suggests that plant physiological responses to atmospheric carbon
 dioxide (CO\textsubscript{2}) may mitigate some of the negative effects
 of an aridifying climate. However, the magnitude of plant responses to
 increased atmospheric CO\textsubscript{2} has been challenging to
-establish in field experiments \citep{jiangFateCarbonMature2020b}, from
-observations
-\citep{zhuGreeningEarthIts2016a, walkerIntegratingEvidenceTerrestrial2020b},
-or to separate from other drivers (e.g.~climate variability,
-disturbances, and changes in land management). Studies have used data
-from the Advanced Very High Resolution Radiometer (AVHRR) satellites to
-show positive trends in the normalized difference vegetation index
-(NDVI) over Australia
-\citep{donohueClimaterelatedTrendsAustralian2009c}. The greening trend
-is caused by increased leaf area, which has resulted from increased
-atmospheric CO\textsubscript{2} concentrations
-\citep{donohueClimaterelatedTrendsAustralian2009c, ukkolaReducedStreamflowWaterstressed2016b}.
-The evidence for increases in leaf area from rising CO\textsubscript{2}
-have also been supported by observations of reduced runoff in
-Australia's drainage basins
-\citep{trancosoCOVegetationFeedbacks2017b, ukkolaReducedStreamflowWaterstressed2016b}.
+establish in field experiments (Jiang, Medlyn, et al. 2020), from
+observations (Zhu et al. 2016; Walker et al. 2020), or to separate from
+other drivers (e.g.~climate variability, disturbances, and changes in
+land management). Studies have used data from the Advanced Very High
+Resolution Radiometer (AVHRR) satellites to show positive trends in the
+normalized difference vegetation index (NDVI) over Australia (Donohue,
+McVICAR, and Roderick 2009). The greening trend is likely caused by
+increased leaf area, which has resulted from increased atmospheric
+CO\textsubscript{2} concentrations (Donohue, McVICAR, and Roderick 2009;
+Ukkola et al. 2016). The evidence for increases in leaf area from rising
+CO\textsubscript{2} have also been supported by observations of reduced
+runoff in Australia's drainage basins (Trancoso et al. 2017; Ukkola et
+al. 2016).
 
 Yet disentangling the CO\textsubscript{2} fertilization effect from
 other drivers of climate variability and global change has been
@@ -253,34 +197,30 @@ from a single sensor is 20 years (e.g.~MODIS Terra). Analysis of trends
 extending beyond 20 years requires merging satellite records across
 sensors and platforms. But this requires care to address changes in
 radiometric and spatial resolution of the sensor, as well as drift in
-the solar zenith angle
-\citep{jiEffectNOAASatellite2017a, frankenbergCOMMENTRECENTGLOBAL2021}
-and the time of retrieval. Thus different analytical methodologies have
-produced disagreements over where greening has occurred
-\citep{cortesWhereAreGlobal2021}. One often-used method to provide
-additional constraint on greening trends has been to compare remote
-sensing derived trends with modeled changes in leaf area index (LAI)
-from ensembles of dynamic global models
-\citep{zhuGreeningEarthIts2016a, wangRecentGlobalDecline2020}. However
-these model attribution approaches rely on a set of key assumptions.
-None of the models can accurately predict LAI changes in response to
-rising CO\textsubscript{2}
-\citep{dekauwe_etal14, medlynUsingModelsGuide2016c}. Vegetation models
-have been shown to diverge in their simulation of LAI over Australia
-\citep{medlynUsingModelsGuide2016c, teckentrupAssessingRepresentationAustralian2021, zhuGreeningEarthIts2016a},
-and have bioclimatic rules for determining phenology which may not be
-appropriate for the highly variable Australian climate and the evergreen
-Eucalyptus forests
-\citep{teckentrupAssessingRepresentationAustralian2021}. These model
-simulations are typically compared with modeled LAI products derived
-from the red and near infrared wavelengths of multispectral satellite
-sensors, of which each product carries specific algorithmic assumptions
-about canopy-light interception which are conditional upon estimated
-land cover types. In comparison, NDVI carries no ecosystem specific
-assumption, and is an effective proxy of leaf area in ecosystems with
-low-to-moderate canopy cover \citep{carlsonRelationNDVIFractional1997a},
-a characteristic of eastern Australian woody ecosystems
-\citep{spechtWaterUsePerennial1972, yangApplyingConceptEcohydrological2018a}.
+the solar zenith angle (Ji and Brown 2017; Frankenberg et al. 2021) and
+the time of retrieval. Thus different analytical methodologies have
+produced disagreements over where greening has occurred (Cortés et al.
+2021). One often-used method to provide additional constraint on
+greening trends has been to compare remote sensing derived trends with
+modeled changes in leaf area index (LAI) from ensembles of dynamic
+global models (Zhu et al. 2016; Wang et al. 2020). However these model
+attribution approaches rely on a set of key assumptions. None of the
+models can accurately predict LAI changes in response to rising
+CO\textsubscript{2} (De Kauwe et al. 2014; Belinda E. Medlyn et al.
+2016). Vegetation models have been shown to diverge in their simulation
+of LAI over Australia (Belinda E. Medlyn et al. 2016; Teckentrup et al.
+2021; Zhu et al. 2016), and have bioclimatic rules for determining
+phenology which may not be appropriate for the highly variable
+Australian climate and the evergreen Eucalyptus forests (Teckentrup et
+al. 2021). These model simulations are typically compared with modeled
+LAI products derived from the red and near infrared wavelengths of
+multispectral satellite sensors, of which each product carries specific
+algorithmic assumptions about canopy-light interception which are
+conditional upon estimated land cover types. In comparison, NDVI carries
+no ecosystem specific assumption, and is an effective proxy of leaf area
+in ecosystems with low-to-moderate canopy cover (Carlson and Ripley
+1997), a characteristic of eastern Australian woody ecosystems (Specht
+1972; Yang et al. 2018).
 
 Here we ask, how much can greening trends be explained by rising
 CO\textsubscript{2}? Using eastern Australia as a model system, we used
@@ -293,61 +233,63 @@ CO\textsubscript{2}. Finally, we examined whether recent NDVI greening
 trends have co-occurred with changes in tree or grass cover over the
 last two decades.
 
-\section{Methods}
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
 
-\subsection{Study area}
+\hypertarget{study-area}{%
+\subsection{Study area}\label{study-area}}
 
 The study region encompasses the dominant woody ecosystems of eastern
 Australia (Fig. A1b). We used the National Vegetation Information System
-5.1 land cover dataset (\citet{DepartmentAgricultureWater}; Table A1) to
-select locations designated as ``Acacia Forests and Woodlands'',
-``Acacia Open Woodlands'', ``Callitris Forests and Woodlands'',
-``Casuarina Forests and Woodlands'', ``Eucalypt Low Open Forests'',
-``Eucalypt Open Forests'', ``Eucalypt Open Woodlands'', ``Eucalypt Tall
-Open Forests'', ``Eucalypt Woodlands'', ``Low Closed Forests and Tall
-Closed Shrublands'', ``Mallee Open Woodlands and Sparse Mallee
-Shrublands'', ``Mallee Woodlands and Shrublands'', ``Melaleuca Forests
-and Woodlands'', ``Other Forests and Woodlands'', ``Other Open
-Woodlands'', ``Rainforests and Vine Thickets'', and ``Tropical Eucalypt
-Woodlands/Grasslands''.
+5.1 land cover dataset ({``Australian Department of {Agriculture},
+{Water} and the {Environment}''} (n.d.); Table A1) to select locations
+designated as ``Acacia Forests and Woodlands,'' ``Acacia Open
+Woodlands,'' ``Callitris Forests and Woodlands,'' ``Casuarina Forests
+and Woodlands,'' ``Eucalypt Low Open Forests,'' ``Eucalypt Open
+Forests,'' ``Eucalypt Open Woodlands,'' ``Eucalypt Tall Open Forests,''
+``Eucalypt Woodlands,'' ``Low Closed Forests and Tall Closed
+Shrublands,'' ``Mallee Open Woodlands and Sparse Mallee Shrublands,''
+``Mallee Woodlands and Shrublands,'' ``Melaleuca Forests and
+Woodlands,'' ``Other Forests and Woodlands,'' ``Other Open Woodlands,''
+``Rainforests and Vine Thickets,'' and ``Tropical Eucalypt
+Woodlands/Grasslands.''
 
-\subsection{Climate and remote sensing datasets}
+\hypertarget{climate-and-remote-sensing-datasets}{%
+\subsection{Climate and remote sensing
+datasets}\label{climate-and-remote-sensing-datasets}}
 
 We used the atmospheric CO\textsubscript{2} record from the
 deseasonalized Mauna Loa record
 (\url{https://www.esrl.noaa.gov/gmd/ccgg/trends/data.html}), and
 extracted climate data (Table A1) from the Australian Bureau of
-Meteorology's Australian Water Availability Project (AWAP;
-\citet{jonesHighqualitySpatialClimate2009}). AWAP is a gridded climate
-product interpolated to 0.05° from a large network of meteorological
-stations distributed across Australia. Vapor pressure deficit was
-calculated using daily estimates of maximum temperature and vapor
-pressure at 15:00 hours. PET was calculated from shortwave radiation and
-mean air temperature using the Priestley-Taylor method
-\citep{davisSimpleProcessledAlgorithms2017}. The Priestley-Taylor method
-has been shown to be appropriate for estimating large-scale PET
-\citep{raupachEquilibriumEvaporationConvective2000} and is more suited
-for use in long-term analysis where CO\textsubscript{2} increased than
-other common formulations such as the Penman-Monteith equation
-\citep{greveAridityIndexGlobal2019, milly_dunne16}, which explicitly
-imposes a fixed stomatal resistance that is incompatible with plant
-physiology theory \citep{medlyn_etal01}. AWAP measurements of shortwave
-radiation only extend back to 1990, so we extended the PET record to
-1982 by calibrating the ERA5-Land PET record (1980-2019) to the AWAP PET
-record (1990-2019) by linear regression for each grid-cell, and then
-gap-filled the years 1982-1989 with the calibrated ERA5 PET. PET from
-the Climate Research Unit record \citep{harris_etal14} was highly
-correlated with both the recalibrated ERA5 PET (r = 0.91; 1982-1989) and
-the original AWAP PET (r = 0.97; 1990-2019). Next, we calculated a
-30-year climatology of the meteorological variables using the period of
-1982-2011 to be close to current standards
-\citep{worldmeteorologicalorganizationWMOGuidelinesCalculation2017}. We
-used this climatology to define the mean annual P:PET
-(MI\textsubscript{MA}), and as the reference to calculate a 12-month
-running anomaly of annual P:PET (MI\textsubscript{anom}). Zonal
-statistics for each meteorological variable were calculated using
-simplified Köppen climate zones, derived from the Australian Bureau of
-Meteorology (Fig. 2b, Table A1).
+Meteorology's Australian Water Availability Project (AWAP; Jones, Wang,
+and Fawcett (2009)). AWAP is a gridded climate product interpolated to
+0.05° from a large network of meteorological stations distributed across
+Australia. Vapor pressure deficit was calculated using daily estimates
+of maximum temperature and vapor pressure at 15:00 hours. PET was
+calculated from shortwave radiation and mean air temperature using the
+Priestley-Taylor method (Davis et al. 2017). The Priestley-Taylor method
+has been shown to be appropriate for estimating large-scale PET (Raupach
+2000) and is more suited for use in long-term analysis where
+CO\textsubscript{2} increased than other common formulations such as the
+Penman-Monteith equation (Greve et al. 2019; Milly and Dunne 2016),
+which explicitly imposes a fixed stomatal resistance that is
+incompatible with plant physiology theory (B. E. Medlyn et al. 2001).
+AWAP measurements of shortwave radiation only extend back to 1990, so we
+extended the PET record to 1982 by calibrating the ERA5-Land PET record
+(1980-2019) to the AWAP PET record (1990-2019) by linear regression for
+each grid-cell, and then gap-filled the years 1982-1989 with the
+calibrated ERA5 PET. PET from the Climate Research Unit record (I.
+Harris et al. 2014) was highly correlated with both the recalibrated
+ERA5 PET (r = 0.91; 1982-1989) and the original AWAP PET (r = 0.97;
+1990-2019). Next, we calculated a 30-year climatology of the
+meteorological variables using the period of 1982-2011 to be close to
+current standards (Organization 2017). We used this climatology to
+define the mean annual P:PET (MI\textsubscript{MA}), and as the
+reference to calculate a 12-month running anomaly of annual P:PET
+(MI\textsubscript{anom}). Zonal statistics for each meteorological
+variable were calculated using simplified Köppen climate zones, derived
+from the Australian Bureau of Meteorology (Fig. 2b, Table A1).
 
 We used surface reflectance from two satellite products to generate the
 NDVI record: National Oceanic and Atmospheric Administration's Climate
@@ -356,10 +298,10 @@ Reflectance (NOAA-CDR) record and the National Space and Aeronautical
 Administration's MCD43A4 Nadir Bidirectional Reflectance Distribution
 Function Adjusted Reflectance (MODIS-MCD43) (Table A1; Schaaf \& Wang,
 2015). NDVI data was extracted from 1982-2019 at 0.05° resolution from
-the NOAA-CDR AVHRR version 5 product \citep{vermoteNOAAClimateData2018}.
-The surface reflectance record of AVHRR extends through 2019, but the
-quality of the record starts to degrade in 2017 because of an increase
-in the solar zenith angle \citep{jiEffectNOAASatellite2017a}, causing a
+the NOAA-CDR AVHRR version 5 product (Vermote and NOAA CDR Program
+2018). The surface reflectance record of AVHRR extends through 2019, but
+the quality of the record starts to degrade in 2017 because of an
+increase in the solar zenith angle (Ji and Brown 2017), causing a
 sensor-produced decline in NDVI during 2017-2019. For this reason we
 only use AVHRR surface reflectance data between 1982-2016. We composited
 monthly mean AVHRR NDVI (NDVI\textsubscript{AVHRR}) estimates using only
@@ -379,32 +321,29 @@ estimates of the surface reflectance were produced by compositing pixels
 flagged as ``ideal-quality'' (Quality Assurance, bits 0-1). We also
 masked disturbances to have greater confidence in our attribution of the
 targeted drivers of NDVI\textsubscript{MODIS} change (climate \&
-CO\textsubscript{2}). The Global Forest Change product v1.7
-\citep{hansenHighResolutionGlobalMaps2013e} was used to mask pixels from
-2001 onwards that had experienced forest loss due to deforestation or
-severe stand clearing disturbance. We masked pixel locations that
-experienced bushfires from the year 2001 onwards. Specifically, these
-pixels were masked for the year of burning and the following three years
-using the 500 m resolution MODIS-MCD64 monthly burned-area product
-\citep{giglioCollectionMODISBurned2018b}. We terminated the
+CO\textsubscript{2}). The Global Forest Change product v1.7 (Hansen et
+al. 2013) was used to mask pixels from 2001 onwards that had experienced
+forest loss due to deforestation or severe stand clearing disturbance.
+We masked pixel locations that experienced bushfires from the year 2001
+onwards. Specifically, these pixels were masked for the year of burning
+and the following three years using the 500 m resolution MODIS-MCD64
+monthly burned-area product (Giglio et al. 2018). We terminated the
 NDVI\textsubscript{MODIS} time series in August of 2019, prior to the
 widespread bushfires of late 2019/2020. Both NDVI\textsubscript{AVHRR}
 and NDVI\textsubscript{MODIS} datasets were processed using Google Earth
-Engine \citep{gorelickGoogleEarthEngine2017}, and exported at 5 km
-spatial resolution, which best approximated the native resolution of the
-NOAA-CDR AVHRR and AWAP products. Further post-processing used the
-`stars' \citep{pebesmaStarsSpatiotemporalArrays2020} and `data.table'
-\citep{dowleDataTableExtension2019} R packages (see code availability
-section).
+Engine (Gorelick et al. 2017), and exported at 5 km spatial resolution,
+which best approximated the native resolution of the NOAA-CDR AVHRR and
+AWAP products. Further post-processing used the `stars' (Pebesma 2020)
+and `data.table' (Dowle and Srinivasan 2019) R packages (see code
+availability section).
 
 We merged the processed 1982-2016 NDVI\textsubscript{AVHRR} with the
 2001-2019 NDVI\textsubscript{MODIS} by recalibrating the
 NDVI\textsubscript{AVHRR} with a generalized additive model (GAM).
 Specifically, we used one million observations from the overlapping
 2001-2016 portion of both records to fit a GAM using the `mgcv' R
-package \citep{woodGeneralizedAdditiveModels2017b} to model
-NDVI\textsubscript{MODIS} from AVHRR derived covariates as:
-\begin{equation}
+package (Wood 2017) to model NDVI\textsubscript{MODIS} from AVHRR
+derived covariates as: \begin{equation}
 NDVI_{MODIS} = s(NDVI_{AVHRR})+s(month) + s(SZA) + s(TOD) + s(x,y)
 \end{equation}
 
@@ -419,13 +358,14 @@ further reduced monthly temporal variability of NDVI by calculating a
 three month rolling mean of NDVI which we used for subsequent
 statistical model fitting.
 
-\subsection{Estimating NDVI and climate trends}
+\hypertarget{estimating-ndvi-and-climate-trends}{%
+\subsection{Estimating NDVI and climate
+trends}\label{estimating-ndvi-and-climate-trends}}
 
 We estimated the relative increase in NDVI between 1982-2019 with
 respect to time (equation 2) for each grid cell with an iteratively
 weighted least squares robust linear model via the `rlm' function in R's
-MASS package \citep{venablesModernAppliedStatistics2002} as follows.
-\begin{equation}
+MASS package (Venables and Ripley 2002) as follows. \begin{equation}
 NDVI=\beta_0+ \beta_1\,year+\beta_2\,sensor
 \end{equation}
 
@@ -435,22 +375,22 @@ for residual offset differences between the recalibrated AVHRR NDVI ,
 and the NDVI\textsubscript{MODIS}. The relative temporal trends for
 climate variables and the MODIS vegetation continuous fractions were fit
 for each grid cell location using the Theil-Sen estimator, a form of
-robust pairwise regression, with the `zyp' R package
-\citep{bronaughZypZhangYuePilon2019}. The temporal covariate was
-recentered to start with the first hydrological year (where the year
-starts one month earlier in December) of the data so that the intercept
-term represents the mean at the start of the time series. The relative
-rate of change for each variable was reconstructed by calculating
-\begin{equation}
+robust pairwise regression, with the `zyp' R package (Bronaugh and
+Consortium 2019). The temporal covariate was re-centered to start with
+the first hydrological year (where the year starts one month earlier in
+December) of the data so that the intercept term represents the mean at
+the start of the time series. The relative rate of change for each
+variable was reconstructed by calculating \begin{equation}
 100*[\frac{\beta_1(year_{end}-year_{start})}{\beta_0}]
 \end{equation}
 
 where \(\beta_0\) and \(\beta_1\) are the intercept and trend derived
 from Theil-Sen regression.
 
+\hypertarget{estimating-contribution-of-co2-and-climate-toward-ndvi-trends}{%
 \subsection{\texorpdfstring{Estimating contribution of
 CO\textsubscript{2} and climate toward NDVI
-trends}{Estimating contribution of CO2 and climate toward NDVI trends}}
+trends}{Estimating contribution of CO2 and climate toward NDVI trends}}\label{estimating-contribution-of-co2-and-climate-toward-ndvi-trends}}
 
 We used the merged NDVI observations to fit multiple statistical models
 to quantify the impact of changes in CO\textsubscript{2} and
@@ -461,12 +401,12 @@ monotonic saturating sigmoidal relationship as indicated by GAM fits
 response without specifying a functional form, yet the underlying spline
 parameters are not easily interpreted as the parameters of a fixed
 nonlinear function. Therefore we used nonlinear least squares
-(nls.multstart package \citep{padfield_matheson20} in R v4.01) to
+(nls.multstart package (Padfield and Matheson 2020) in R v4.01) to
 compare model fits to a set of fixed nonlinear functional forms
 including the Weibull function (equation 4; Fig. 4), the logistic
 function (equation 5; Fig. A5), and the Richards growth function
-(equation 6; Fig. A6). The focus on the Weibull models because they
-showed equivalent goodness of fit with fewer parameters than the
+(equation 6; Fig. A6). We primarily focus on the Weibull models because
+they showed equivalent goodness of fit with fewer parameters than the
 Richards function models. Next we added a linear modifier to the Weibull
 function using the covariates of CO\textsubscript{2} (ppm) and the ratio
 of the anomaly of P:PET (MI\textsubscript{anom}) to the mean annual
@@ -547,12 +487,14 @@ VPD, P, and PET and sensor epoch as follows.
 NDVI = s(MI_{MA},CO_2) + s(VPD_{anom},VPD_{MA})+s(P_{anom},P_{MA})+s(PET_{anom},PET_{MA})+sensor
 \end{equation}
 
-\subsection{A simplified theoretical water use efficiency model}
+\hypertarget{a-simplified-theoretical-water-use-efficiency-model}{%
+\subsection{A simplified theoretical water use efficiency
+model}\label{a-simplified-theoretical-water-use-efficiency-model}}
 
 We compared the statistically attributed CO\textsubscript{2}
 amplification of NDVI with the expectation from a simple theoretical
-model of WUE. Following \citet{donohueImpactCOFertilization2013b}, WUE
-(\(W\)) is defined as: \begin{equation}
+model of WUE. Following Donohue et al. (2013), WUE (\(W\)) is defined
+as: \begin{equation}
 W_{leaf} = \frac{A_{leaf}}{E_{leaf}} = \frac{C_a}{1.6D}(1 - \chi)
 \end{equation}
 
@@ -572,21 +514,19 @@ If temperature increases without a corresponding increase in humidity,
 \(D\) increases which also causes transpiration to rise and thus reduces
 \(W\). However, \(W\) is predicted to increase with CO\textsubscript{2}
 which may offset increases in \(D\). Experiments suggest that \(\chi\)
-does not change with \(C_a\) but is sensitive to \(D\)
-\citep{wong_etal85, drake_etal97} and can be estimated as being
-proportional to the square root of \(D\)
-\citep{medlynReconcilingOptimalEmpirical2011d}. By substituting
-\[(1-\chi) \approx \sqrt(D)\] into equation (11) we can estimate the
-theoretical combined effect of \(C_a\) and \(D\) upon \(W_{leaf}\) as:
-\begin{equation}
+does not change with \(C_a\) but is sensitive to \(D\) (Wong, Cowan, and
+Farquhar 1985; B. G. Drake, Gonzàlez-Meler, and Long 1997) and can be
+estimated as being proportional to the square root of \(D\) (Belinda E.
+Medlyn et al. 2011). By substituting \[(1-\chi) \approx \sqrt(D)\] into
+equation (11) we can estimate the theoretical combined effect of \(C_a\)
+and \(D\) upon \(W_{leaf}\) as: \begin{equation}
 \frac{dW_{leaf}}{W_{leaf}}=\frac{dA_{leaf}}{A_{leaf}} - \frac{dE_{leaf}}{E_{leaf}} = \frac{dC_a}{C_a} - \frac{1}{2}\frac{dD}{D}
 \end{equation}
 
 Transpiration per unit ground area is strongly controlled by water
 supply in warm, water limited environments with relatively low leaf area
-such as eastern Australia \citep{spechtWaterUsePerennial1972} therefore
-we approximate canopy transpiration (\(E_{canopy}\)) as:
-\begin{equation}
+such as eastern Australia (Specht 1972) therefore we approximate canopy
+transpiration (\(E_{canopy}\)) as: \begin{equation}
 E_{canopy}=E_{leaf}\,L
 \end{equation}
 
@@ -601,11 +541,11 @@ supply, therefore we have: \begin{equation}
 \end{equation}
 
 NDVI is linearly related to foliar cover (\(F\)) until LAI \(\approx\) 3
-(\(m^2\,m^{-2}\)) \citep{carlsonRelationNDVIFractional1997a}, which is
-the predominantly the case when P:PET \textless{} 1. Most woody
-ecosystems of eastern Australia are strongly water limited with LAI
-\(\leq\) 1 (\(m^2\,m^{-2}\)), where NDVI is approximately proportional
-with the fraction of foliar cover: \begin{equation}
+(\(m^2\,m^{-2}\)) (Carlson and Ripley 1997), which is the predominantly
+the case when P:PET \textless{} 1. Most woody ecosystems of eastern
+Australia are strongly water limited with LAI \(\leq\) 1
+(\(m^2\,m^{-2}\)), where NDVI is approximately proportional with the
+fraction of foliar cover: \begin{equation}
 \frac{dL}{L}\approx\frac{dF}{F}\approx\frac{d NDVI}{NDVI}
 \end{equation}
 
@@ -630,7 +570,7 @@ precipitation anomaly but with the observed increases in
 CO\textsubscript{2} and VPD. One weakness with the application of this
 WUE theoretical model is the uncertainty regarding the assumed
 allocation of the \(W_{leaf}\) benefit towards either \(A_{leaf}\) or
-\(F\) (e.g.~LAI; see above). \citep{donohue_etal17} proposed a similar
+\(F\) (e.g.~LAI; see above). (Donohue et al. 2017) proposed a similar
 model to eq (18), the Partitioning of Equilibrium Transpiration and
 Assimilation (PETA) hypothesis where the relative allocation to leaf
 area is predicted to decline with increasing resource availability
@@ -648,9 +588,12 @@ the CO\textsubscript{2} attributable effect on NDVI.
 \end{figure}
 \clearpage
 
-\section{Results}
+\hypertarget{results}{%
+\section{Results}\label{results}}
 
-\subsection{Long-term Greening in a changing climate}
+\hypertarget{long-term-greening-in-a-changing-climate}{%
+\subsection{Long-term Greening in a changing
+climate}\label{long-term-greening-in-a-changing-climate}}
 
 Parts of northern Queensland grew wetter, but aridity (as measured by
 reduced P:PET; the moisture index, MI) in over 52\% of eastern
@@ -689,8 +632,10 @@ Australia (Figs. 3,4,A3).
 \end{figure}
 \clearpage
 
+\hypertarget{empirical-attribution-of-the-co2-effect}{%
 \subsection{\texorpdfstring{Empirical attribution of the
-CO\textsubscript{2} effect}{Empirical attribution of the CO2 effect}}
+CO\textsubscript{2}
+effect}{Empirical attribution of the CO2 effect}}\label{empirical-attribution-of-the-co2-effect}}
 
 We found consistently positive NDVI responses to CO\textsubscript{2}
 across the moisture gradient of P:PET for all seasons, with the greatest
@@ -713,22 +658,22 @@ showed a pronounced response to CO\textsubscript{2} across the
 distribution of pixels with both low and high NDVI (10 - 97.5
 percentiles) across the full aridity gradient of P:PET (Fig. A7).\\
 A recent study found the global CO\textsubscript{2} fertilization effect
-was halved between the 1980s and 2000s
-\citep{wangRecentGlobalDecline2020}. In contrast to the estimates over
-eastern Australia from wangRecentGlobalDecline2020 over, we found no
-consistent evidence of a decline in the effect of CO\textsubscript{2} on
-NDVI through time. Neither the GAM estimates nor the robust linear model
-estimates of the CO\textsubscript{2} effect showed any consistent
-evidence of a weakening CO\textsubscript{2} effect between 1982-2000 and
-2001-2019 (Fig. 6). The central 25-75\% percentiles of the distribution
-of robust linear model effect sizes overlapped in all regions between
-epochs. The central 25-75\% of the GAM estimated distributions also
-overlapped, with the exception of the Grassland and Arid regions where
-the CO\textsubscript{2} effect was larger during 2001-2019. Consistent
-with the finding of a greater CO\textsubscript{2} effect in wetter
-regions (Fig. 5), the robust linear models and the GAM estimated the
-CO\textsubscript{2} effect to be greatest in the Equatorial and Tropical
-regions, and lowest in the Arid region (Fig. 6).\\
+was halved between the 1980s and 2000s (Wang et al. 2020). In contrast
+to the estimates over eastern Australia from wangRecentGlobalDecline2020
+over, we found no consistent evidence of a decline in the effect of
+CO\textsubscript{2} on NDVI through time. Neither the GAM estimates nor
+the robust linear model estimates of the CO\textsubscript{2} effect
+showed any consistent evidence of a weakening CO\textsubscript{2} effect
+between 1982-2000 and 2001-2019 (Fig. 6). The central 25-75\%
+percentiles of the distribution of robust linear model effect sizes
+overlapped in all regions between epochs. The central 25-75\% of the GAM
+estimated distributions also overlapped, with the exception of the
+Grassland and Arid regions where the CO\textsubscript{2} effect was
+larger during 2001-2019. Consistent with the finding of a greater
+CO\textsubscript{2} effect in wetter regions (Fig. 5), the robust linear
+models and the GAM estimated the CO\textsubscript{2} effect to be
+greatest in the Equatorial and Tropical regions, and lowest in the Arid
+region (Fig. 6).\\
 \clearpage
 
 \begin{figure}
@@ -742,9 +687,10 @@ regions, and lowest in the Arid region (Fig. 6).\\
 \end{figure}
 \clearpage
 
+\hypertarget{co2-driven-greening-and-expectations-from-water-use-efficiency}{%
 \subsection{\texorpdfstring{CO\textsubscript{2} driven greening and
 expectations from water use
-efficiency}{CO2 driven greening and expectations from water use efficiency}}
+efficiency}{CO2 driven greening and expectations from water use efficiency}}\label{co2-driven-greening-and-expectations-from-water-use-efficiency}}
 
 The range of statistically estimated CO\textsubscript{2}-attributable
 greening responses was compared with the expectation from the
@@ -765,18 +711,20 @@ CO\textsubscript{2} effect (Fig. 7d). Regions of higher P:PET
 (Equatorial, Tropical, Temperate, and Temperate Tasmanian) required
 greater allocation fractions than 50\%, whereas the allocation fraction
 would be between 25-50\% for regions with lower P:PET (Arid, Grassland,
-and Subtropical). In comparison, the PETA hypothesis
-\citep{donohue_etal17} predicted the greatest CO\textsubscript{2} effect
-on leaf area to be in regions with the lowest LAI, but this was not
-supported by the statistically estimated CO\textsubscript{2} effect on
-NDVI (Fig. A9). Despite having the lowest LAI, the Arid region received
-the smallest CO\textsubscript{2} effect, but it is worth noting the Arid
-region also experienced the greatest increase in VPD and reduction in P
-over the 38 year period (Fig. 7a, A8). In contrast, the largest
-estimated CO\textsubscript{2}-attributable effect on greening were found
-to be in the Equatorial and Tropical areas.
+and Subtropical). In comparison, the PETA hypothesis (Donohue et al.
+2017) predicted the greatest CO\textsubscript{2} effect on leaf area to
+be in regions with the lowest LAI, but this was not supported by the
+statistically estimated CO\textsubscript{2} effect on NDVI (Fig. A9).
+Despite having the lowest LAI, the Arid region received the smallest
+CO\textsubscript{2} effect, but it is worth noting the Arid region also
+experienced the greatest increase in VPD and reduction in P over the 38
+year period (Fig. 7a, A8). In contrast, the largest estimated
+CO\textsubscript{2}-attributable effect on greening were found to be in
+the Equatorial and Tropical areas.
 
-\subsection{Co-occurring shifts in aridity, NDVI, and vegetation cover}
+\hypertarget{co-occurring-shifts-in-aridity-ndvi-and-vegetation-cover}{%
+\subsection{Co-occurring shifts in aridity, NDVI, and vegetation
+cover}\label{co-occurring-shifts-in-aridity-ndvi-and-vegetation-cover}}
 
 The shifts in P:PET and NDVI were accompanied by vegetation cover
 changes in some regions. Most notably, the Arid and Temperate regions
@@ -803,11 +751,13 @@ exceeded tree cover increases (Fig. A10).
 \end{figure}
 \clearpage
 
-\section{Discussion}
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
 
+\hypertarget{australian-woody-vegetation-as-model-systems-to-quantify-co2-fertilization}{%
 \subsection{\texorpdfstring{Australian woody vegetation as model systems
 to quantify CO\textsubscript{2}
-fertilization}{Australian woody vegetation as model systems to quantify CO2 fertilization}}
+fertilization}{Australian woody vegetation as model systems to quantify CO2 fertilization}}\label{australian-woody-vegetation-as-model-systems-to-quantify-co2-fertilization}}
 
 Australia is ideal to explore the CO\textsubscript{2} contribution
 towards vegetation greening because there are fewer confounding effects
@@ -817,54 +767,52 @@ large moisture gradient (Fig. A1a), but unlike much of the global
 tropics, the large majority of the study region is not so cloudy as to
 prevent multiple high quality multispectral satellite retrievals per
 month. Australia has also not been subjected to other prominent drivers
-of greening such as nitrogen deposition
-\citep{ackermanGlobalEstimatesInorganic2019}. Nevertheless, Australia
-has experienced notable land-use change during the study period such as
-high rates of deforestation in Queensland and northern New South Wales
-\citep{evansDeforestationAustraliaDrivers2016}. However, we excluded
-affected pixel locations from the analysis.
+of greening such as nitrogen deposition (Ackerman, Millet, and Chen
+2019). Nevertheless, Australia has experienced notable land-use change
+during the study period such as high rates of deforestation in
+Queensland and northern New South Wales (Evans 2016). However, we
+excluded affected pixel locations from the analysis.
 
 Prior global analyses on warm arid environments have quantified the
-CO\textsubscript{2} effect on greening
-\citep{donohueImpactCOFertilization2013b}, yet a more expansive
-global-scale analysis of all terrestrial vegetation using dynamic global
-vegetation model attribution did not connect Australia's greening to
-changes in atmospheric CO\textsubscript{2} concentration
-\citep{zhuGreeningEarthIts2016a}. Australian studies documented the
-greening trend up to 2010 using the long-term AVHRR record
-\citep{donohueClimaterelatedTrendsAustralian2009c, ukkolaReducedStreamflowWaterstressed2016b}
-and have been able to partially attribute CO\textsubscript{2} as a
-driver of greening in sub-humid and semi-arid regions. Here we advanced
-upon prior research to separate the effects of disturbance, and changes
-in aridity and moisture in order to quantify the CO\textsubscript{2}
-fertilization effect across the full spectrum of moisture availability
-experienced by Australian woody ecosystems, notably for 38 years.
+CO\textsubscript{2} effect on greening (Donohue et al. 2013), yet a more
+expansive global-scale analysis of all terrestrial vegetation using
+dynamic global vegetation model attribution did not connect Australia's
+greening to changes in atmospheric CO\textsubscript{2} concentration
+(Zhu et al. 2016). Australian studies documented the greening trend up
+to 2010 using the long-term AVHRR record (Donohue, McVICAR, and Roderick
+2009; Ukkola et al. 2016) and have been able to partially attribute
+CO\textsubscript{2} as a driver of greening in sub-humid and semi-arid
+regions. Here we advanced upon prior research to separate the effects of
+disturbance, and changes in aridity and moisture in order to quantify
+the CO\textsubscript{2} fertilization effect across the full spectrum of
+moisture availability experienced by Australian woody ecosystems,
+notably for 38 years.
 
-\subsection{Regional differences in greening and browning through time}
+\hypertarget{regional-differences-in-greening-and-browning-through-time}{%
+\subsection{Regional differences in greening and browning through
+time}\label{regional-differences-in-greening-and-browning-through-time}}
 
 Despite the region's high decadal scale variability of NDVI (Fig. 4),
 the nearly four decade long record allowed us to separate the
 CO\textsubscript{2} effect on NDVI from the anomalies caused by drought
 (e.g.~2003-2009) or high rainfall (e.g.~La Niña 2010-2011). Although the
 long-term greening trends we document in the nine years following
-earlier studies are generally consistent
-\citep{donohueClimaterelatedTrendsAustralian2009c, ukkolaReducedStreamflowWaterstressed2016b},
-our results diverge and lead to key differences in interpretation of why
-NDVI has continued to increase. First, while the relative increase in
-NDVI between the 1982-2000 AVHRR epoch (5.7\%) and the 2001-2019 MODIS
-epoch (5.1\%) are comparable (Figs. 3b,8b), the underlying reasons for
-the change differ. VPD changed minimally between 1982-2000, whereas it
-rapidly increased between 2001-2019 (Fig. A8). These increases were
-largest in the most Arid and Temperate regions (12.7\% and 11\% since
-1982, respectively; Fig. 6a), and when coupled with seasonal reductions
-in precipitation (Fig. A2) these would have partially offset benefits
-from increased intrinsic water-use efficiency (equation 17). In
-contrast, more than half of the Equatorial, Tropical, Subtropical and
-Grassland regions in northern Queensland experienced increases in
-precipitation since 1982 (Fig. A2;
-\citet{ukkolaExploringStationarityAustralian2019c}), thus allowing these
-locations to exceed the predicted NDVI increases from the WUE model
-(Fig. 7d).
+earlier studies are generally consistent (Donohue, McVICAR, and Roderick
+2009; Ukkola et al. 2016), our results diverge and lead to key
+differences in interpretation of why NDVI has continued to increase.
+First, while the relative increase in NDVI between the 1982-2000 AVHRR
+epoch (5.7\%) and the 2001-2019 MODIS epoch (5.1\%) are comparable
+(Figs. 3b,8b), the underlying reasons for the change differ. VPD changed
+minimally between 1982-2000, whereas it rapidly increased between
+2001-2019 (Fig. A8). These increases were largest in the most Arid and
+Temperate regions (12.7\% and 11\% since 1982, respectively; Fig. 6a),
+and when coupled with seasonal reductions in precipitation (Fig. A2)
+these would have partially offset benefits from increased intrinsic
+water-use efficiency (equation 17). In contrast, more than half of the
+Equatorial, Tropical, Subtropical and Grassland regions in northern
+Queensland experienced increases in precipitation since 1982 (Fig. A2;
+Ukkola et al. (2019)), thus allowing these locations to exceed the
+predicted NDVI increases from the WUE model (Fig. 7d).
 
 It should be noted not all regions experienced consistent greening
 trends throughout the observation period. For example, `greening'
@@ -876,40 +824,38 @@ NDVI during 2001-2019 may have been meteorologically driven and related
 to shifts in the distribution of wet and dry season precipitation (Fig.
 A2). Alternatively, the shift could be due to changes in fire and cattle
 management that have been particularly prevalent across regions of
-Queensland in recent decades \citep{seabrookCattleCropsClearing2006}.
+Queensland in recent decades (Seabrook, McAlpine, and Fensham 2006).
 Further, greening may have been suppressed in parts of Queensland
 because cattle ranching activity has intensified and has driven forest
-conversion to managed pasture in the region
-\citep{mcalpineIncreasingWorldConsumption2009}.
+conversion to managed pasture in the region (McAlpine et al. 2009).
 
+\hypertarget{attributing-a-co2-fertilization-contribution-towards-greening}{%
 \subsection{\texorpdfstring{Attributing a CO\textsubscript{2}
 fertilization contribution towards
-greening}{Attributing a CO2 fertilization contribution towards greening}}
+greening}{Attributing a CO2 fertilization contribution towards greening}}\label{attributing-a-co2-fertilization-contribution-towards-greening}}
 
 Plants increase their rates of photosynthesis in response to rising
 atmospheric CO\textsubscript{2}, whilst also reducing stomatal
 conductance, which reduces evaporative losses and combined, the two
-responses lead to greater WUE
-\citep{ainsworthResponsePhotosynthesisStomatal2007, morisonSensitivityStomataWater1985}.
+responses lead to greater WUE (Ainsworth and Rogers 2007; Morison 1985).
 In water-limited ecosystems, it has been hypothesized that this
 physiological response by plants to CO\textsubscript{2} should result in
-increased leaf biomass
-\citep{donohueImpactCOFertilization2013b, ukkolaReducedStreamflowWaterstressed2016b}.
-While all our statistical approaches indicated a year round positive
+increased leaf biomass (Donohue et al. 2013; Ukkola et al. 2016). While
+all our statistical approaches indicated a year round positive
 CO\textsubscript{2} effect, in contrast to theory the effect was
 consistently greater in regions with higher P:PET (Figs. 5-7;A4-7). Our
 analysis also diverges with a global coarse-scale analysis that found
 weakening of the CO\textsubscript{2} fertilization effect across both
-southeastern and northern Australia \citep{wangRecentGlobalDecline2020}.
-We found no meaningful difference in the CO\textsubscript{2}
-attributable effect towards greening between the AVHRR 1982-2000 and
-MODIS 2001-2019 epochs to support the finding of temporally weakening
-CO\textsubscript{2} effect (Fig. 6). The WUE model predicted similar
-relative rates of NDVI increase between the two epochs (4.5\% and 4.7\%
-for AVHRR and MODIS), yet for different reasons. CO\textsubscript{2}
-increased by 30 ppm between 1982-2000 while VPD changed minimally and
-precipitation increased in Queensland and the Arid region (Fig. A8); all
-of which are favorable to increasing NDVI. In contrast, the larger
+southeastern and northern Australia (Wang et al. 2020). We found no
+meaningful difference in the CO\textsubscript{2} attributable effect
+towards greening between the AVHRR 1982-2000 and MODIS 2001-2019 epochs
+to support the finding of temporally weakening CO\textsubscript{2}
+effect (Fig. 6). The WUE model predicted similar relative rates of NDVI
+increase between the two epochs (4.5\% and 4.7\% for AVHRR and MODIS),
+yet for different reasons. CO\textsubscript{2} increased by 30 ppm
+between 1982-2000 while VPD changed minimally and precipitation
+increased in Queensland and the Arid region (Fig. A8); all of which are
+favorable to increasing NDVI. In contrast, the larger
 CO\textsubscript{2} increase between 2001-2019 (40 ppm) was offset by a
 spatially ubiquitous increase of VPD (3.7\%, CI={[}-0.4\%,8.6\%{]}; Fig.
 A8) and the occurrence of two multi-year droughts (Millennium Drought
@@ -917,31 +863,31 @@ A8) and the occurrence of two multi-year droughts (Millennium Drought
 of the CO\textsubscript{2} effect, the WUE model notably underpredicted
 greening in some regions (Fig. 7).
 
-\subsection{Deviations from WUE}
+\hypertarget{deviations-from-wue}{%
+\subsection{Deviations from WUE}\label{deviations-from-wue}}
 
 We found the CO\textsubscript{2} effect on foliar area was the smallest
 in the driest climate regions (Figs. 5-6,A4-7). This was at odds with
 the WUE prediction (at 50\% allocation; Fig. 7e), and contrary to
 expectation that the greatest WUE-derived benefit from
-CO\textsubscript{2} would be in drier climates
-\citep{donohue_etal17, mcmurtrieWhyPlantgrowthResponse2008}. These
-deviations may have resulted from ecosystems processes beyond the scope
-of a simple model, such as the phenology of the vegetation composition,
-and disturbances not captured by the satellite products (e.g.~small
-fires, grazing). Browning in the Grassland region (Fig. 3b,A3) may have
-been caused by distinct dry season phenological differences between
-overstory woody vegetation and understory C\textsubscript{4} grasses
-\citep{mooreReviewsSynthesesAustralian2016}, which are dominant there
-\citep{murphySeasonalWaterAvailability2007}. C\textsubscript{4} grasses
-may have been favored over C\textsubscript{3} because precipitation
-increased during the austral summer over the course of the study (Fig.
-A2) and this higher concentration of rainfall during the warmest months
-is thought to favor C\textsubscript{4} grasses
-\citep{hattersleyDistributionC3C41983a, knappResolvingDustBowl2020, murphySeasonalWaterAvailability2007}.
-Finally, the linear dependency of leaf area upon VPD in the theoretical
-model may be ill-suited for extreme anomalously arid conditions because
-NDVI observations suggest a strongly nonlinear relationship with large
-VPD anomalies (Fig. A11).
+CO\textsubscript{2} would be in drier climates (Donohue et al. 2017;
+McMurtrie et al. 2008). These deviations may have resulted from
+ecosystems processes beyond the scope of a simple model, such as the
+phenology of the vegetation composition, carbon allocation to
+belowground root growth, and disturbances not captured by the satellite
+products (e.g.~small fires, grazing). Browning in the Grassland region
+(Fig. 3b,A3) may have been caused by distinct dry season phenological
+differences between overstory woody vegetation and understory
+C\textsubscript{4} grasses (Moore et al. 2016), which are dominant there
+(Murphy and Bowman 2007). C\textsubscript{4} grasses may have been
+favored over C\textsubscript{3} because precipitation increased during
+the austral summer over the course of the study (Fig. A2) and this
+higher concentration of rainfall during the warmest months is thought to
+favor C\textsubscript{4} grasses (Hattersley 1983; Knapp et al. 2020;
+Murphy and Bowman 2007). Finally, the linear dependency of leaf area
+upon VPD in the theoretical model may be ill-suited for extreme
+anomalously arid conditions because NDVI observations suggest a strongly
+nonlinear relationship with large VPD anomalies (Fig. A11).
 
 We explored how much of the higher WUE benefit would have to be
 allocated to match the GAM estimated CO\textsubscript{2}-attributed
@@ -954,62 +900,61 @@ model still predicted a small but positive increase in NDVI (Fig. 7c)
 which the GAM estimate suggests would be closer to a 10\% rather than
 50\% foliar allocation level from the WUE benefit (Fig. 7d).
 Nevertheless, the smaller effect over the Arid region was consistent
-with earlier observational findings across Australia
-\citep{ukkolaReducedStreamflowWaterstressed2016b} and experimentation
-from the Nevada Desert FACE experiment
-\citep{smithLongtermResponseMojave2014}.
+with earlier observational findings across Australia (Ukkola et al.
+2016) and experimentation from the Nevada Desert FACE experiment (Smith
+et al. 2014).
 
+\hypertarget{relation-to-ecosystem-co2-fertilization-experiments}{%
 \subsection{\texorpdfstring{Relation to ecosystem CO\textsubscript{2}
 fertilization
-experiments}{Relation to ecosystem CO2 fertilization experiments}}
+experiments}{Relation to ecosystem CO2 fertilization experiments}}\label{relation-to-ecosystem-co2-fertilization-experiments}}
 
 Notably, a four year long ecosystem-scale CO\textsubscript{2}
 manipulation experiment carried out in a mature Eucalyptus woodland in
 Sydney (EucFACE) did not observe an increase in leaf area under elevated
-CO\textsubscript{2} \citep{jiangFateCarbonMature2020b}. The experimental
-site is located upon phosphorus poor soils, typical of Australia. The
-lack of a leaf area growth response observed at EucFACE is not
-necessarily inconsistent with the greening effect observed in this
-study. Our observational window of 38 years is much longer than the
-elevated CO\textsubscript{2} exposure time in the experiment \citep[four
-years in][]{jiangFateCarbonMature2020b}, covers different
-CO\textsubscript{2} increments (historical vs future) and could imply
-that woodlands are eventually able to liberate belowground phosphorus to
-support greater biomass growth on longer timescales. Increased
-autotrophic soil respiration and belowground productivity were observed
-at EucFACE under elevated CO\textsubscript{2} exposure
-\citep{drakeShorttermCarbonCycling2016, jiangFateCarbonMature2020b}, as
-was a brief period of enhanced nitrogen and phosphorus mineralization
-\citep{hasegawaElevatedCarbonDioxide2016}. Over time, this increased
-investment of carbon belowground could potentially liberate sufficient
-phosphorus to support an expansion of leaf area. The reduced allocation
-to foliar area in the Arid region (Fig. 7e) may reflect that extra
-carbon derived from CO\textsubscript{2} is allocated belowground to
-increase water uptake or mitigate other resource limitations such as
-soil phosphorus \citep{jiangLowPhosphorusSupply2020}.
+CO\textsubscript{2} (Jiang, Medlyn, et al. 2020). The experimental site
+is located upon phosphorus poor soils, typical of Australia. The lack of
+a leaf area growth response observed at EucFACE is not necessarily
+inconsistent with the greening effect observed in this study. Our
+observational window of 38 years is much longer than the elevated
+CO\textsubscript{2} exposure time in the experiment (four years in
+Jiang, Medlyn, et al. 2020), covers different CO\textsubscript{2}
+increments (historical vs future) and could imply that woodlands are
+eventually able to liberate belowground phosphorus to support greater
+biomass growth on longer timescales. Increased autotrophic soil
+respiration and belowground productivity were observed at EucFACE under
+elevated CO\textsubscript{2} exposure (J. E. Drake et al. 2016; Jiang,
+Medlyn, et al. 2020), as was a brief period of enhanced nitrogen and
+phosphorus mineralization (Hasegawa, Macdonald, and Power 2016). Over
+time, this increased investment of carbon belowground could potentially
+liberate sufficient phosphorus to support an expansion of leaf area. The
+reduced allocation to foliar area in the Arid region (Fig. 7e) may
+reflect that extra carbon derived from CO\textsubscript{2} is allocated
+belowground to increase water uptake or mitigate other resource
+limitations such as soil phosphorus (Jiang, Caldararu, et al. 2020).
 
-\subsection{Vegetation composition shifts}
+\hypertarget{vegetation-composition-shifts}{%
+\subsection{Vegetation composition
+shifts}\label{vegetation-composition-shifts}}
 
 Most grid-cell locations in the Temperate zone experienced simultaneous
 apparent declines in tree cover and increases in non-tree vegetation
 cover (e.g.~grasses/shrubs) (Figs. 8c, A10). This is surprising because
 we focused this regression analysis on 2001-2018 in order to exclude the
-reduced tree cover due to the catastrophic megafires of 2019/20
-\citep{nolanCausesConsequencesEastern2020}. Some may question the
-veracity of the MODIS Vegetation Continuous Fraction product
-\citep{dimiceliMOD44BMODISTerra2017} to accurately distinguish
-Australian tree cover from non-tree vegetation, however this pattern is
-consistent with a recent LiDAR derived tree-cover time series of
-Australia \citep{liaoWoodyVegetationCover2020}. This suggests the
-drought starting in 2017 was already killing trees prior to the 2019/20
-megafires. Field observations of tree decline remain relatively rare,
-but a citizen science initiative has documented more than 300 locations
-of non-fire related mass tree mortality between 2018-2020
-\citep{atlasoflivingaustraliaDeadTreeDetective}. Similarly, a study
-using an experimental constrained plant hydraulics model to predict the
-regions at risk of drought-induced tree mortality, found greater risk in
-the same arid regions of southeast Australian forests and woodlands
-\citep{dekauweIdentifyingAreasRisk2020b}. These predicted regions of
+reduced tree cover due to the catastrophic megafires of 2019/20 (Nolan
+et al. 2020). Some may question the veracity of the MODIS Vegetation
+Continuous Fraction product (DiMiceli et al. 2017) to accurately
+distinguish Australian tree cover from non-tree vegetation, however this
+pattern is consistent with a recent LiDAR derived tree-cover time series
+of Australia (Liao et al. 2020). This suggests the drought starting in
+2017 was already killing trees prior to the 2019/20 megafires. Field
+observations of tree decline remain relatively rare, but a citizen
+science initiative has documented more than 300 locations of non-fire
+related mass tree mortality between 2018-2020 (Living Australia" 2020).
+Similarly, a study using an experimental constrained plant hydraulics
+model to predict the regions at risk of drought-induced tree mortality,
+found greater risk in the same arid regions of southeast Australian
+forests and woodlands (De Kauwe et al. 2020). These predicted regions of
 mortality coincide with where we document the greening trends that fell
 short of the theoretical WUE expectation. These rapid shifts in
 vegetation underlie the need for greater continuous field vegetation
@@ -1041,187 +986,476 @@ availability. Greening trends signal changes in evapotranspiration and
 runoff, and therefore need to be considered in planning for future land
 and water resource management on the world's driest inhabited continent.
 
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-ackermanGlobalEstimatesInorganic2019}{}}%
+Ackerman, Daniel, Dylan B. Millet, and Xin Chen. 2019. {``Global
+{Estimates} of {Inorganic Nitrogen Deposition Across Four Decades}.''}
+\emph{Global Biogeochemical Cycles} 33 (1): 100--107.
+\url{https://doi.org/10.1029/2018GB005990}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-ahlstromDominantRoleSemiarid2015a}{}}%
+Ahlstrom, A., M. R. Raupach, G. Schurgers, B. Smith, A. Arneth, M. Jung,
+M. Reichstein, et al. 2015. {``The Dominant Role of Semi-Arid Ecosystems
+in the Trend and Variability of the Land {Co2} Sink.''} \emph{Science}
+348 (6237): 895--99. \url{https://doi.org/10.1126/science.aaa1668}.
 
-\codedataavailability{All data used are publicly available from sources
-listed in Table A1. Processed data used in model fitting and figures can
-be accessed via Zenodo data repository: {[}future repository link{]}. A
-git repository with all associated data processing, analysis, and code
-to reproduce figures is located at:
-https://github.com/sw-rifai/eastern-Australia-CO2-NDVI-change.} %% use this section when having data sets and software code available
+\leavevmode\vadjust pre{\hypertarget{ref-ainsworthResponsePhotosynthesisStomatal2007}{}}%
+Ainsworth, Elizabeth A., and Alistair Rogers. 2007. {``The Response of
+Photosynthesis and Stomatal Conductance to Rising {[}{CO}
+{\textsubscript{2}} {]}: Mechanisms and Environmental Interactions:
+{Photosynthesis} and Stomatal Conductance Responses to Rising {[}{CO}
+{\textsubscript{2}} {]}.''} \emph{Plant, Cell \& Environment} 30 (3):
+258--70. \url{https://doi.org/10.1111/j.1365-3040.2007.01641.x}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-DepartmentAgricultureWater}{}}%
+{``Australian Department of {Agriculture}, {Water} and the
+{Environment}.''} n.d. {Australian Department of Agriculture, Water and
+the Environment}. Accessed October 24, 2020.
+\url{http://www.environment.gov.au/}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-bastosGlobalNPPDependence2013a}{}}%
+Bastos, A., Steven W. Running, Célia Gouveia, and Ricardo M. Trigo.
+2013. {``The Global {NPP} Dependence on {ENSO}: {La Niña} and the
+Extraordinary Year of 2011: {GLOBAL NPP AND ENSO}: {THE} 2011 {LA
+NIÑA}.''} \emph{Journal of Geophysical Research: Biogeosciences} 118
+(3): 1247--55. \url{https://doi.org/10.1002/jgrg.20100}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% optional
+\leavevmode\vadjust pre{\hypertarget{ref-bronaughZypZhangYuePilon2019}{}}%
+Bronaugh, David, and Arelia Werner for the Pacific Climate Impacts
+Consortium. 2019. \emph{Zyp: {Zhang} + {Yue}-{Pilon Trends Package}}.
+\url{https://CRAN.R-project.org/package=zyp}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
-\section{Figures and tables in appendices}
+\leavevmode\vadjust pre{\hypertarget{ref-bureauofmeteorologyAnnualAustralianClimate}{}}%
+Bureau of Meteorology. 2019. {``Annual {Australian Climate Statement}
+2019.''} {scheme=AGLSTERMS.AglsAgent; corporateName=Australian
+Government - Bureau of Meteorology}. 2019.
+\url{http://www.bom.gov.au/climate/current/annual/aus/\#tabs=Overview}.
 
-\appendixfigures
+\leavevmode\vadjust pre{\hypertarget{ref-carlsonRelationNDVIFractional1997a}{}}%
+Carlson, Toby N., and David A. Ripley. 1997. {``On the Relation Between
+{NDVI}, Fractional Vegetation Cover, and Leaf Area Index.''}
+\emph{Remote Sensing of Environment} 62 (3): 241--52.
+\url{https://doi.org/10.1016/S0034-4257(97)00104-1}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS} \caption{(a) Mean Annual P:PET between 1982-2019. (b) Forest and woodland vegetation classes from version 5.1 of the National Vegetation Information System (source: https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system).}\label{fig:FigA1}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-cortesWhereAreGlobal2021}{}}%
+Cortés, José, Miguel D. Mahecha, Markus Reichstein, Ranga B. Myneni, Chi
+Chen, and Alexander Brenning. 2021. {``Where {Are Global Vegetation
+Greening} and {Browning Trends Significant}?''} \emph{Geophysical
+Research Letters} 48 (6): e2020GL091496.
+\url{https://doi.org/10.1029/2020GL091496}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET} \caption{Long-term seasonal changes in precipitation (P) and potential evapotranspiration (PET). Linear trend in (a) monthly precipitation and (b) PET by season over the period 1982-2019. Non forest and woodland regions are masked in grey.}\label{fig:FigA2}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-csiroStateClimate20202020}{}}%
+CSIRO and Bureau of Meteorology. 2020. {``State of the {Climate}
+2020.''} \url{http://www.bom.gov.au/state-of-the-climate/}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28} \caption{The long term seasonal NDVI linear trend between 1982-2019. The Theil-Sen robust linear trend estimator is used with the calibrated merge of the CDR AVHRR (1982-2000) and MODIS MCD43 (2001-2019) surface reflectance products.}\label{fig:FigA3}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-davisSimpleProcessledAlgorithms2017}{}}%
+Davis, Tyler W., I. Colin Prentice, Benjamin D. Stocker, Rebecca T.
+Thomas, Rhys J. Whitley, Han Wang, Bradley J. Evans, Angela V.
+Gallego-Sala, Martin T. Sykes, and Wolfgang Cramer. 2017. {``Simple
+Process-Led Algorithms for Simulating Habitats ({SPLASH} v.1.0): Robust
+Indices of Radiation, Evapotranspiration and Plant-Available
+Moisture.''} \emph{Geoscientific Model Development} 10 (2): 689--708.
+\url{https://doi.org/10.5194/gmd-10-689-2017}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range} \caption{Linear model covariate estimates for 128 linear models. The mean annual P:PET range is discretized over 16 increments where NDVI is modeled as a linear function of CO2, $P:PET_{anom.}$, the NVIS vegetation class, and the sensor. Error bars indicate 2x the standard error of the estimate.}\label{fig:FigA4}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-dekauweIdentifyingAreasRisk2020b}{}}%
+De Kauwe, Martin G., Belinda E. Medlyn, Anna M. Ukkola, Mengyuan Mu,
+Manon E. B. Sabot, Andrew J. Pitman, Patrick Meir, et al. 2020.
+{``Identifying Areas at Risk of Drought-Induced Tree Mortality Across
+{South}-{Eastern Australia}.''} \emph{Global Change Biology} 26 (10):
+5716--33. \url{https://doi.org/10.1111/gcb.15215}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid} \caption{NDVI as a logistic function of annual P:PET. (left) Logistic function models, fit per each hydrological year. (right) The positive long-term trend in the NDVI asymptote from the logistic model fits. $m$ is the value of P:PET at the inflection point, and NDVI Asymptote corresponds to the $V_A$ parameter in equation 5.}\label{fig:FigA5}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-dekauwe_etal14}{}}%
+De Kauwe, Martin G., Belinda E. Medlyn, Sönke Zaehle, Anthony P. Walker,
+Michael C. Dietze, Ying-Ping Wang, Yiqi Luo, et al. 2014. {``Where Does
+the Carbon Go? {A} Model-Data Intercomparison of Vegetation Carbon
+Allocation and Turnover Processes at Two Temperate Forest Free-Air {CO}
+{\textsubscript{2}} Enrichment Sites.''} \emph{New Phytologist} 203 (3):
+883--99. \url{https://doi.org/10.1111/nph.12847}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason} \caption{Seasonal NDVI as a Richards growth function with linear modifiers of CO2 and the anomaly of P:PET (equation 6). }\label{fig:FigA6}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-vandijkMillenniumDroughtSoutheast2013d}{}}%
+Dijk, Albert I. J. M. van, Hylke E. Beck, Russell S. Crosbie, Richard A.
+M. de Jeu, Yi Y. Liu, Geoff M. Podger, Bertrand Timbal, and Neil R.
+Viney. 2013. {``The {Millennium Drought} in Southeast {Australia}
+(2001-2009): {Natural} and Human Causes and Implications for Water
+Resources, Ecosystems, Economy, and Society: {CAUSES AND IMPACTS OF
+AUSTRALIA}'{S RECORD DROUGHT}.''} \emph{Water Resources Research} 49
+(2): 1040--57. \url{https://doi.org/10.1002/wrcr.20123}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2} \caption{Quantile GAM regression predictions across CO2 and anomalies of annual P:PET. $$NDVI_{3mo} = s(CO_{2})+s(\frac{P}{PET_{MA}})+s(CO2,\frac{P}{PET_{MA}})+s(\frac{P}{PET_{anom.}})$$ Here 's' represents a thinplate spline smoothing function, $\frac{P}{PET_{MA}}$ is the 30-year mean annual P:PET, and $\frac{P}{PET_{anom}}$ is the annual anomaly of $\frac{P}{PET}$.}\label{fig:FigA7}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-dimiceliMOD44BMODISTerra2017}{}}%
+DiMiceli, CM, R Carroll, DH Sohlberg, M Kim, and JGR Townshend. 2017.
+{``{Mod44b MODIS}/{Terra Vegetation Continuous Fields Yearly L3 Global}
+250m {SIN Grid V006}.''} {NASA EOSDIS Land Processes DAAC}.
+\url{https://doi.org/10.5067/MODIS/MOD44B.006}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch} \caption{The linear relative changes in annual vapor pressure deficit (VPD), precipitation (Precip.), and potential evapotranspiration (PET) by climate zone between satellite epochs AVHRR 1982-2000 and MODIS 2001-2019, as estimated by robust regression. The relative changes are with respect to a climatology period calculated between 1982-2011.}\label{fig:FigA8}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-donohueClimaterelatedTrendsAustralian2009c}{}}%
+Donohue, Randall J., Tim R. McVICAR, and Michael L. Roderick. 2009.
+{``Climate-Related Trends in {Australian} Vegetation Cover as Inferred
+from Satellite Observations, 1981-2006.''} \emph{Global Change Biology}
+15 (4): 1025--39.
+\url{https://doi.org/10.1111/j.1365-2486.2008.01746.x}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=12cm]{../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI} \caption{(a) The fractional increase of NDVI from CO2 is plotted following predictions from the Partitioning of Equilibrium Transpiration and Assimilation (PETA) hypothesis is plotted (green), the Generalized Additive Model (GAM; methods eq. 6) estimates, and the pixel-level Robust Linear Model (RLM; methods eq. 5) estimates. Note we substitute NDVI for the leaf area formulation of the PETA hypothesis (Donohue et al., 2017) because we assume a linear relationship between relative NDVI increase and relative leaf area increase (Donohue et al., 2013; Carlson \& Ripley 1997). (b) The relative change in NDVI between 1982-2019 across the range of mean annual leaf area index calculated with MCD15A3H from 2002-2019.}\label{fig:FigA9}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-donohueImpactCOFertilization2013b}{}}%
+Donohue, Randall J., Michael L. Roderick, Tim R. McVicar, and Graham D.
+Farquhar. 2013. {``Impact of {CO} {\textsubscript{2}} Fertilization on
+Maximum Foliage Cover Across the Globe's Warm, Arid Environments: {CO}
+{\textsubscript{2}} {FERTILIZATION AND FOLIAGE COVER}.''}
+\emph{Geophysical Research Letters} 40 (12): 3031--35.
+\url{https://doi.org/10.1002/grl.50563}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover} \caption{The relative shifts of land fraction by tree cover, non-tree vegetation cover (predominantly grasses), and bare ground. 2000-2018 annual rate of change for tree cover (left), non-tree vegetation (middle), and discretized change classes. Min. change indicates the annual rate of change of percentage cover was between -0.1 \& 0.1\% $yr^{-1}$}\label{fig:FigA10}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-donohue_etal17}{}}%
+Donohue, Randall J., Michael L. Roderick, Tim R. McVicar, and Yuting
+Yang. 2017. {``A Simple Hypothesis of How Leaf and Canopy-Level
+Transpiration and Assimilation Respond to Elevated {CO}
+{\textsubscript{2}} Reveals Distinct Response Patterns Between Disturbed
+and Undisturbed Vegetation: {VEGETATION RESPONSES TO ELEVATED CO}
+{\textsubscript{2}}.''} \emph{Journal of Geophysical Research:
+Biogeosciences} 122 (1): 168--84.
+\url{https://doi.org/10.1002/2016JG003505}.
 
-\clearpage
-\begin{figure}
-\includegraphics[width=14cm]{../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density} \caption{The nonlinear dependency of NDVI upon the annual anomaly of vapor pressure deficit. 2D density plot of NDVI and the running 12-month anomaly of vapor pressure deficit. The red line shows a GAM fit.}\label{fig:FigA11}
-\end{figure}
-\clearpage
+\leavevmode\vadjust pre{\hypertarget{ref-dowleDataTableExtension2019}{}}%
+Dowle, Matt, and Arun Srinivasan. 2019. \emph{Data.table: {Extension} of
+`Data.frame`}.
 
-\appendixtables
-\clearpage
-\begin{table}
-\caption{\label{tab:table-name} Table A1}
-\begin{tabular}{|p{0.2\linewidth}|p{0.2\linewidth}|p{0.06\linewidth}|p{0.08\linewidth}|p{0.3\linewidth}|}
-\hline
-Product & Variable & Spatial & Temporal & Reference\\
-\hline
-NOAA-CDR v5 AVHRR surface reflectance & surface reflectance & 0.05° & daily & Vermote et al., 2014\\
-\hline
-MODIS MCD43 & surface reflectance & 500 m & daily & Schaaf and Wang 2015\\
-\hline
-MODIS MOD44B & Tree cover, non-tree vegetation cover, non-vegetation cover & 250 m & annual & Dimiceli et al., 2015\\
-\hline
-MODIS MCD64A1 & Burn Area & 500 m & monthly & Giglio et al., 2015\\
-\hline
-MODIS MCD15A3H & Leaf Area Index & 500 m & 4-day & Myneni et al., 2015\\
-\hline
-NVIS v5.1 & Major vegetation classes & 100 m & - & https://www.environment.gov.au/land/native-vegetation/national-vegetation-information-system\\
-\hline
-AWAP Climate & Precip, PET, Tmin, Tmax, Vapor pressure & 0.05° & daily & Jones et al., 2009\\
-\hline
-ERA5-Land & PET & 9 km & hourly & Copernicus Climate Change Service (C3S) (2017)\\
-\hline
-BoM Major Köppen Climate & Major Köppen Climate zones & - & - & http://www.bom.gov.au/jsp/ncc/climate\_averages/climate-classifications\\
-\hline
-\end{tabular}
-\end{table}
-\clearpage
-\noappendix
+\leavevmode\vadjust pre{\hypertarget{ref-drake_etal97}{}}%
+Drake, Bert G., Miquel A. Gonzàlez-Meler, and Steve P. Long. 1997.
+{``{MORE EFFICIENT PLANTS}: {A Consequence} of {Rising Atmospheric
+Co2}?''} \emph{Annual Review of Plant Physiology and Plant Molecular
+Biology} 48 (1): 609--39.
+\url{https://doi.org/10.1146/annurev.arplant.48.1.609}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontribution{S.W.R., M.G.D.K., P.M., L.A.C., B.E.M., and A.J.P.
-designed the study. S.W.R. analyzed the data and produced the figures.
-S.W.R and A.M.U. processed climate data. S.W.R. wrote the first draft
-with M.G.D.K., and all authors have contributed to writing and revising
-the manuscript.} %% optional section
+\leavevmode\vadjust pre{\hypertarget{ref-drakeShorttermCarbonCycling2016}{}}%
+Drake, John E., Catriona A. Macdonald, Mark G. Tjoelker, Kristine Y.
+Crous, Teresa E. Gimeno, Brajesh K. Singh, Peter B. Reich, Ian C.
+Anderson, and David S. Ellsworth. 2016. {``Short-Term Carbon Cycling
+Responses of a Mature Eucalypt Woodland to Gradual Stepwise Enrichment
+of Atmospheric {CO} {\textsubscript{2}} Concentration.''} \emph{Global
+Change Biology} 22 (1): 380--90.
+\url{https://doi.org/10.1111/gcb.13109}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\competinginterests{The authors declare no competing
-interests.} %% this section is mandatory even if you declare that no competing interests are present
+\leavevmode\vadjust pre{\hypertarget{ref-evansDeforestationAustraliaDrivers2016}{}}%
+Evans, Megan C. 2016. {``Deforestation in {Australia}: Drivers, Trends
+and Policy Responses.''} \emph{Pacific Conservation Biology} 22 (2):
+130. \url{https://doi.org/10.1071/PC15052}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\disclaimer{NA.} %% optional section
+\leavevmode\vadjust pre{\hypertarget{ref-frankenbergCOMMENTRECENTGLOBAL2021}{}}%
+Frankenberg, Christian, Yi Yin, Brendan Byrne, Liyin He, and Pierre
+Gentine. 2021. {``{COMMENT ON}{`{RECENT GLOBAL DECLINE OF Co2
+FERTILIZATION EFFECTS ON VEGETATION PHOTOSYNTHESIS}'},''} January.
+\url{https://eartharxiv.org/repository/view/2022/}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{acknowledgements}
-S.W.R., M.G.D.K., A.J.P., L.A.C, and P.M., acknowledge support from the
-Australian Research Council Discovery Grant (DP190101823). S.W.R.,
-M.G.D.K., A.M.U., and A.J.P. acknowledge support from the ARC Centre of
-Excellence for Climate Extremes (CE170100023). M.G.D.K. was also
-supported by the NSW Research Attraction and Acceleration Program and
-A.M.U. by an ARC Discovery Early Career Researcher Award (DE200100086).
-B.E.M. acknowledges support from ARC Laureate Fellowship FL190100003. We
-are grateful to Randall J. Donohue (CSIRO Land and Water) for valuable
-discussion and comments on drafts of this manuscript.
-\end{acknowledgements}
+\leavevmode\vadjust pre{\hypertarget{ref-giglioCollectionMODISBurned2018b}{}}%
+Giglio, Louis, Luigi Boschetti, David P. Roy, Michael L. Humber, and
+Christopher O. Justice. 2018. {``The {Collection} 6 {MODIS} Burned Area
+Mapping Algorithm and Product.''} \emph{Remote Sensing of Environment}
+217 (November): 72--85. \url{https://doi.org/10.1016/j.rse.2018.08.005}.
 
-%% REFERENCES
-%% DN: pre-configured to BibTeX for rticles
+\leavevmode\vadjust pre{\hypertarget{ref-gorelickGoogleEarthEngine2017}{}}%
+Gorelick, Noel, Matt Hancher, Mike Dixon, Simon Ilyushchenko, David
+Thau, and Rebecca Moore. 2017. {``Google {Earth Engine}:
+{Planetary}-Scale Geospatial Analysis for Everyone.''} \emph{Remote
+Sensing of Environment}.
+\url{https://doi.org/10.1016/j.rse.2017.06.031}.
 
-%% The reference list is compiled as follows:
-%%
-%% \begin{thebibliography}{}
-%%
-%% \bibitem[AUTHOR(YEAR)]{LABEL1}
-%% REFERENCE 1
-%%
-%% \bibitem[AUTHOR(YEAR)]{LABEL2}
-%% REFERENCE 2
-%%
-%% \end{thebibliography}
+\leavevmode\vadjust pre{\hypertarget{ref-greveAridityIndexGlobal2019}{}}%
+Greve, P., M. L. Roderick, A. M. Ukkola, and Y. Wada. 2019. {``The
+Aridity {Index} Under Global Warming.''} \emph{Environmental Research
+Letters} 14 (12): 124006.
+\url{https://doi.org/10.1088/1748-9326/ab5046}.
 
-%% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
-%% authors experienced with BibTeX only have to include the following two lines:
-%%
-\bibliographystyle{copernicus}
-\bibliography{test.bib}
-%%
-%% URLs and DOIs can be entered in your BibTeX file as:
-%%
-%% URL = {http://www.xyz.org/~jones/idx_g.htm}
-%% DOI = {10.5194/xyz}
+\leavevmode\vadjust pre{\hypertarget{ref-hansenHighResolutionGlobalMaps2013e}{}}%
+Hansen, M. C., P. V. Potapov, R. Moore, M. Hancher, S. A. Turubanova, A.
+Tyukavina, D. Thau, et al. 2013. {``High-{Resolution Global Maps} of
+21st-{Century Forest Cover Change}.''} \emph{Science} 342 (6160):
+850--53. \url{https://doi.org/10.1126/science.1244693}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-harris_etal14}{}}%
+Harris, I., P. D. Jones, T. J. Osborn, and D. H. Lister. 2014.
+{``Updated High-Resolution Grids of Monthly Climatic Observations - the
+{CRU Ts3}.10 {Dataset}: {UPDATED HIGH}-{RESOLUTION GRIDS OF MONTHLY
+CLIMATIC OBSERVATIONS}.''} \emph{International Journal of Climatology}
+34 (3): 623--42. \url{https://doi.org/10.1002/joc.3711}.
 
-%% LITERATURE CITATIONS
-%%
-%% command                        & example result
-%% \citet{jones90}|               & Jones et al. (1990)
-%% \citep{jones90}|               & (Jones et al., 1990)
-%% \citep{jones90,jones93}|       & (Jones et al., 1990, 1993)
-%% \citep[p.~32]{jones90}|        & (Jones et al., 1990, p.~32)
-%% \citep[e.g.,][]{jones90}|      & (e.g., Jones et al., 1990)
-%% \citep[e.g.,][p.~32]{jones90}| & (e.g., Jones et al., 1990, p.~32)
-%% \citeauthor{jones90}|          & Jones et al.
-%% \citeyear{jones90}|            & 1990
+\leavevmode\vadjust pre{\hypertarget{ref-harrisBiologicalResponsesPress2018b}{}}%
+Harris, R. M. B., L. J. Beaumont, T. R. Vance, C. R. Tozer, T. A.
+Remenyi, S. E. Perkins-Kirkpatrick, P. J. Mitchell, et al. 2018.
+{``Biological Responses to the Press and Pulse of Climate Trends and
+Extreme Events.''} \emph{Nature Climate Change} 8 (7): 579--87.
+\url{https://doi.org/10.1038/s41558-018-0187-9}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-hasegawaElevatedCarbonDioxide2016}{}}%
+Hasegawa, Shun, Catriona A. Macdonald, and Sally A. Power. 2016.
+{``Elevated Carbon Dioxide Increases Soil Nitrogen and Phosphorus
+Availability in a Phosphorus-Limited {\emph{Eucalyptus}} Woodland.''}
+\emph{Global Change Biology} 22 (4): 1628--43.
+\url{https://doi.org/10.1111/gcb.13147}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-hattersleyDistributionC3C41983a}{}}%
+Hattersley, P. W. 1983. {``The Distribution of {C3} and {C4} Grasses in
+{Australia} in Relation to Climate.''} \emph{Oecologia} 57 (1-2):
+113--28. \url{https://doi.org/10.1007/BF00379569}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-jiEffectNOAASatellite2017a}{}}%
+Ji, Lei, and Jesslyn F. Brown. 2017. {``Effect of {NOAA} Satellite
+Orbital Drift on {AVHRR}-Derived Phenological Metrics.''}
+\emph{International Journal of Applied Earth Observation and
+Geoinformation} 62 (October): 215--23.
+\url{https://doi.org/10.1016/j.jag.2017.06.013}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-jiangLowPhosphorusSupply2020}{}}%
+Jiang, Mingkai, Silvia Caldararu, Haiyang Zhang, Katrin Fleischer,
+Kristine Y. Crous, Jinyan Yang, Martin G. De Kauwe, et al. 2020. {``Low
+Phosphorus Supply Constrains Plant Responses to Elevated {CO}
+{\textsubscript{2}} : {A} Meta-Analysis.''} \emph{Global Change Biology}
+26 (10): 5856--73. \url{https://doi.org/10.1111/gcb.15277}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-jiangFateCarbonMature2020b}{}}%
+Jiang, Mingkai, Belinda E. Medlyn, John E. Drake, Remko A. Duursma, Ian
+C. Anderson, Craig V. M. Barton, Matthias M. Boer, et al. 2020. {``The
+Fate of Carbon in a Mature Forest Under Carbon Dioxide Enrichment.''}
+\emph{Nature} 580 (7802): 227--31.
+\url{https://doi.org/10.1038/s41586-020-2128-9}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-jonesHighqualitySpatialClimate2009}{}}%
+Jones, DA, W Wang, and R Fawcett. 2009. {``High-Quality Spatial Climate
+Data-Sets for {Australia}.''} \emph{Aust. Meteorol. Oceanogr. J.} 58:
+233--48.
+
+\leavevmode\vadjust pre{\hypertarget{ref-kingRoleClimateVariability2020b}{}}%
+King, Andrew D., Andy J. Pitman, Benjamin J. Henley, Anna M. Ukkola, and
+Josephine R. Brown. 2020. {``The Role of Climate Variability in
+{Australian} Drought.''} \emph{Nature Climate Change} 10 (3): 177--79.
+\url{https://doi.org/10.1038/s41558-020-0718-z}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-knappResolvingDustBowl2020}{}}%
+Knapp, Alan K., Anping Chen, Robert J. Griffin-Nolan, Lauren E. Baur,
+Charles J. W. Carroll, Jesse E. Gray, Ava M. Hoffman, et al. 2020.
+{``Resolving the {Dust Bowl} Paradox of Grassland Responses to Extreme
+Drought.''} \emph{Proceedings of the National Academy of Sciences} 117
+(36): 22249--55. \url{https://doi.org/10.1073/pnas.1922030117}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-liaoWoodyVegetationCover2020}{}}%
+Liao, Zhanmang, Albert I. J. M. Van Dijk, Binbin He, Pablo Rozas
+Larraondo, and Peter F. Scarth. 2020. {``Woody Vegetation Cover, Height
+and Biomass at 25-m Resolution Across {Australia} Derived from Multiple
+Site, Airborne and Satellite Observations.''} \emph{International
+Journal of Applied Earth Observation and Geoinformation} 93 (December):
+102209. \url{https://doi.org/10.1016/j.jag.2020.102209}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-atlasoflivingaustraliaDeadTreeDetective}{}}%
+Living Australia", "Atlas of. 2020. {``The {Dead Tree Detective}
+\textbar{} {Project} \textbar{} {BioCollect}.''} 2020.
+\url{https://biocollect.ala.org.au/acsa/project/index/77285a13-e231-49e8-b212-660c66c74bac}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-mcalpineIncreasingWorldConsumption2009}{}}%
+McAlpine, C. A., A. Etter, P. M. Fearnside, L. Seabrook, and W. F.
+Laurance. 2009. {``Increasing World Consumption of Beef as a Driver of
+Regional and Global Change: {A} Call for Policy Action Based on Evidence
+from {Queensland} ({Australia}), {Colombia} and {Brazil}.''}
+\emph{Global Environmental Change} 19 (1): 21--33.
+\url{https://doi.org/10.1016/j.gloenvcha.2008.10.008}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-mcmurtrieWhyPlantgrowthResponse2008}{}}%
+McMurtrie, Ross E., Richard J. Norby, Belinda E. Medlyn, Roderick C.
+Dewar, David A. Pepper, Peter B. Reich, Craig V. M. Barton, et al. 2008.
+{``Why Is Plant-Growth Response to Elevated {Co2} Amplified When Water
+Is Limiting, but Reduced When Nitrogen Is Limiting? {A}
+Growth-Optimisation Hypothesis.''} \emph{Functional Plant Biology} 35
+(6): 521--34. \url{https://doi.org/10.1071/FP08128}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-medlyn_etal01}{}}%
+Medlyn, B. E., C. V. M. Barton, M. S. J. Broadmeadow, R. Ceulemans, P.
+De Angelis, M. Forstreuter, M. Freeman, et al. 2001. {``Stomatal
+Conductance of Forest Species After Long-Term Exposure to Elevated {Co2}
+Concentration: A Synthesis.''} \emph{New Phytologist} 149 (2): 247--64.
+\url{https://doi.org/10.1046/j.1469-8137.2001.00028.x}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-medlynReconcilingOptimalEmpirical2011d}{}}%
+Medlyn, Belinda E., Remko A. Duursma, Derek Eamus, David S. Ellsworth,
+I. Colin Prentice, Craig V. M. Barton, Kristine Y. Crous, Paolo De
+Angelis, Michael Freeman, and Lisa Wingate. 2011. {``Reconciling the
+Optimal and Empirical Approaches to Modelling Stomatal Conductance:
+{RECONCILING OPTIMAL AND EMPIRICAL STOMATAL MODELS}.''} \emph{Global
+Change Biology} 17 (6): 2134--44.
+\url{https://doi.org/10.1111/j.1365-2486.2010.02375.x}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-medlynUsingModelsGuide2016c}{}}%
+Medlyn, Belinda E., Martin G. De Kauwe, Sönke Zaehle, Anthony P. Walker,
+Remko A. Duursma, Kristina Luus, Mikhail Mishurov, et al. 2016. {``Using
+Models to Guide Field Experiments: A Priori Predictions for the {Co2}
+Response of a Nutrient- and Water-Limited Native {Eucalypt} Woodland.''}
+\emph{Global Change Biology} 22 (8): 2834--51.
+\url{https://doi.org/10.1111/gcb.13268}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-milly_dunne16}{}}%
+Milly, P. C. D., and K. A. Dunne. 2016. {``Potential Evapotranspiration
+and Continental Drying.''} \emph{Nature Climate Change} 6 (10): 946--49.
+\url{https://doi.org/10.1038/nclimate3046}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-mooreReviewsSynthesesAustralian2016}{}}%
+Moore, Caitlin E., Tim Brown, Trevor F. Keenan, Remko A. Duursma, Albert
+I. J. M. van Dijk, Jason Beringer, Darius Culvenor, et al. 2016.
+{``Reviews and Syntheses: {Australian} Vegetation Phenology: New
+Insights from Satellite Remote Sensingand Digital Repeat Photography.''}
+\emph{Biogeosciences} 13 (17): 5085--5102.
+\url{https://doi.org/10.5194/bg-13-5085-2016}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-morisonSensitivityStomataWater1985}{}}%
+Morison, James I. L. 1985. {``Sensitivity of Stomata and Water Use
+Efficiency to High {Co2}.''} \emph{Plant, Cell \& Environment} 8 (6):
+467--74. \url{https://doi.org/10.1111/j.1365-3040.1985.tb01682.x}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-murphySeasonalWaterAvailability2007}{}}%
+Murphy, Brett P., and David M. J. S. Bowman. 2007. {``Seasonal Water
+Availability Predicts the Relative Abundance of {C} {\textsubscript{3}}
+and {C} {\textsubscript{4}} Grasses in {Australia}.''} \emph{Global
+Ecology and Biogeography} 16 (2): 160--69.
+\url{https://doi.org/10.1111/j.1466-8238.2006.00285.x}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-nolanCausesConsequencesEastern2020}{}}%
+Nolan, Rachael H., Matthias M. Boer, Luke Collins, Víctor Resco de Dios,
+Hamish Clarke, Meaghan Jenkins, Belinda Kenny, and Ross A. Bradstock.
+2020. {``Causes and Consequences of Eastern {Australia}'s
+2019\textendash 20 Season of Mega-Fires.''} \emph{Global Change Biology}
+26 (3): 1039--41. \url{https://doi.org/10.1111/gcb.14987}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-worldmeteorologicalorganizationWMOGuidelinesCalculation2017}{}}%
+Organization, World Meteorological. 2017. {``{WMO} Guidelines on the
+Calculation of Climate Normals.''} WMO-No. 1203. {World Meteorological
+Organization Geneva, Switzerland}.
+\url{https://library.wmo.int/doc_num.php?explnum_id=4166}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-padfield_matheson20}{}}%
+Padfield, Daniel, and Granville Matheson. 2020. \emph{Nls.multstart:
+{Robust Non}-{Linear Regression} Using {AIC Scores}}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-pebesmaStarsSpatiotemporalArrays2020}{}}%
+Pebesma, Edzer. 2020. \emph{Stars: {Spatiotemporal Arrays}, {Raster} and
+{Vector Data Cubes}}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-perkinsIncreasingFrequencyIntensity2012a}{}}%
+Perkins, S. E., L. V. Alexander, and J. R. Nairn. 2012. {``Increasing
+Frequency, Intensity and Duration of Observed Global Heatwaves and Warm
+Spells.''} \emph{Geophysical Research Letters} 39 (20).
+\url{https://doi.org/10.1029/2012GL053361}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-petersLivingEdgeContinentalscale2021}{}}%
+Peters, Jennifer M. R., Rosana López, Markus Nolf, Lindsay B. Hutley,
+Tim Wardlaw, Lucas A. Cernusak, and Brendan Choat. 2021. {``Living on
+the Edge: {A} Continental-Scale Assessment of Forest Vulnerability to
+Drought.''} \emph{Global Change Biology} 27 (15): 3620--41.
+\url{https://doi.org/10.1111/gcb.15641}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-poulterContributionSemiaridEcosystems2014}{}}%
+Poulter, Benjamin, David Frank, Philippe Ciais, Ranga B. Myneni, Niels
+Andela, Jian Bi, Gregoire Broquet, et al. 2014. {``Contribution of
+Semi-Arid Ecosystems to Interannual Variability of the Global Carbon
+Cycle.''} \emph{Nature} 509 (7502): 600--603.
+\url{https://doi.org/10.1038/nature13376}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-raupachEquilibriumEvaporationConvective2000}{}}%
+Raupach, MR. 2000. {``Equilibrium Evaporation and the Convective
+Boundary Layer.''} \emph{Boundary-Layer Meteorology} 96 (1-2): 107--42.
+
+\leavevmode\vadjust pre{\hypertarget{ref-seabrookCattleCropsClearing2006}{}}%
+Seabrook, Leonie, Clive McAlpine, and Rod Fensham. 2006. {``Cattle,
+Crops and Clearing: {Regional} Drivers of Landscape Change in the
+{Brigalow Belt}, {Queensland}, {Australia}, 1840\textendash 2004.''}
+\emph{Landscape and Urban Planning} 78 (4): 373--85.
+\url{https://doi.org/10.1016/j.landurbplan.2005.11.007}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-smithLongtermResponseMojave2014}{}}%
+Smith, Stanley D., Therese N. Charlet, Stephen F. Zitzer, Scott R.
+Abella, Cheryl H. Vanier, and Travis E. Huxman. 2014. {``Long-Term
+Response of a {Mojave Desert} Winter Annual Plant Community to a
+Whole-Ecosystem Atmospheric {CO} {\textsubscript{2}} Manipulation
+({FACE}).''} \emph{Global Change Biology} 20 (3): 879--92.
+\url{https://doi.org/10.1111/gcb.12411}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-spechtWaterUsePerennial1972}{}}%
+Specht, Rl. 1972. {``Water {Use} by {Perennial Evergreen Plant
+Communities} in {Australia} and {Papua New Guinea}.''} \emph{Australian
+Journal of Botany} 20 (3): 273. \url{https://doi.org/10.1071/BT9720273}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-teckentrupAssessingRepresentationAustralian2021}{}}%
+Teckentrup, Lina, Martin G. De Kauwe, Andrew J. Pitman, Daniel Goll,
+Vanessa Haverd, Atul K. Jain, Emilie Joetzjer, et al. 2021. {``Assessing
+the Representation of the {Australian} Carbon Cycle in Global Vegetation
+Models.''} \emph{Biogeosciences Discussions}, March, 1--47.
+\url{https://doi.org/10.5194/bg-2021-66}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-trancosoCOVegetationFeedbacks2017b}{}}%
+Trancoso, Ralph, Joshua R. Larsen, Tim R. McVicar, Stuart R. Phinn, and
+Clive A. McAlpine. 2017. {``{CO} {\textsubscript{2}} -Vegetation
+Feedbacks and Other Climate Changes Implicated in Reducing Base Flow.''}
+\emph{Geophysical Research Letters} 44 (5): 2310--18.
+\url{https://doi.org/10.1002/2017GL072759}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-ukkolaReducedStreamflowWaterstressed2016b}{}}%
+Ukkola, Anna M., I. Colin Prentice, Trevor F. Keenan, Albert I. J. M.
+van Dijk, Neil R. Viney, Ranga B. Myneni, and Jian Bi. 2016. {``Reduced
+Streamflow in Water-Stressed Climates Consistent with {Co2} Effects on
+Vegetation.''} \emph{Nature Climate Change} 6 (1): 75--78.
+\url{https://doi.org/10.1038/nclimate2831}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-ukkolaExploringStationarityAustralian2019c}{}}%
+Ukkola, Anna M., M L Roderick, A Barker, and A J Pitman. 2019.
+{``Exploring the Stationarity of {Australian} Temperature, Precipitation
+and Pan Evaporation Records over the Last Century.''}
+\emph{Environmental Research Letters} 14 (12): 124035.
+\url{https://doi.org/10.1088/1748-9326/ab545c}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-venablesModernAppliedStatistics2002}{}}%
+Venables, W. N., and B. D. Ripley. 2002. \emph{Modern {Applied
+Statistics} with {S}}. Fourth. {New York}: {Springer}.
+\url{http://www.stats.ox.ac.uk/pub/MASS4}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-vermoteNOAAClimateData2018}{}}%
+Vermote, Eric, and NOAA CDR Program. 2018. {``{NOAA Climate Data Record}
+({CDR}) of {AVHRR Surface Reflectance}, {Version} 5.''} {NOAA National
+Centers for Environmental Information}.
+\url{https://doi.org/10.7289/V53776Z4}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-walkerIntegratingEvidenceTerrestrial2020b}{}}%
+Walker, Anthony P., Martin G. De Kauwe, Ana Bastos, Soumaya Belmecheri,
+Katerina Georgiou, Ralph F. Keeling, Sean M. McMahon, et al. 2020.
+{``Integrating the Evidence for a Terrestrial Carbon Sink Caused by
+Increasing Atmospheric {CO} {\textsubscript{2}}.''} \emph{New
+Phytologist}, October, nph.16866.
+\url{https://doi.org/10.1111/nph.16866}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-wangRecentGlobalDecline2020}{}}%
+Wang, Songhan, Yongguang Zhang, Weimin Ju, Jing M. Chen, Philippe Ciais,
+Alessandro Cescatti, Jordi Sardans, et al. 2020. {``Recent Global
+Decline of {Co2} Fertilization Effects on Vegetation Photosynthesis.''}
+\emph{Science} 370 (6522): 1295--1300.
+\url{https://doi.org/10.1126/science.abb7772}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-wong_etal85}{}}%
+Wong, Suan-Chin, Ian R. Cowan, and Graham D. Farquhar. 1985. {``Leaf
+{Conductance} in {Relation} to {Rate} of {Co2 Assimilation}: {I}.
+{Influence} of {Nitrogen Nutrition}, {Phosphorus Nutrition}, {Photon
+Flux Density}, and {Ambient Partial Pressure} of {Co2} During
+{Ontogeny}.''} \emph{Plant Physiology} 78 (4): 821--25.
+\url{https://doi.org/10.1104/pp.78.4.821}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-woodGeneralizedAdditiveModels2017b}{}}%
+Wood, S. N. 2017. \emph{Generalized {Additive Models}: {An Introduction}
+with {R}}. 2nd ed. {Chapman and Hall/CRC}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-yangApplyingConceptEcohydrological2018a}{}}%
+Yang, J., B. E. Medlyn, M. G. De Kauwe, and R. A. Duursma. 2018.
+{``Applying the {Concept} of {Ecohydrological Equilibrium} to {Predict
+Steady State Leaf Area Index}.''} \emph{Journal of Advances in Modeling
+Earth Systems} 10 (8): 1740--58.
+\url{https://doi.org/10.1029/2017MS001169}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-zhuGreeningEarthIts2016a}{}}%
+Zhu, Zaichun, Shilong Piao, Ranga B. Myneni, Mengtian Huang, Zhenzhong
+Zeng, Josep G. Canadell, Philippe Ciais, et al. 2016. {``Greening of the
+{Earth} and Its Drivers.''} \emph{Nature Climate Change} 6 (8): 791--95.
+\url{https://doi.org/10.1038/nclimate3004}.
+
+\end{CSLReferences}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.11)  3 NOV 2021 08:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2021.8.11)  17 NOV 2021 11:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -535,21 +535,21 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 2
 (/home/sami/.TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [2] [3] [4] [5] [6] [7] [8] [9]
-<../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png, id=259, 455.09451pt x 341.
+<../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png, id=263, 455.09451pt x 341.
 32089pt>
 File: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png Graphic file (type png
 )
 <use ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png>
 Package pdftex.def Info: ../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png  us
-ed on input line 642.
+ed on input line 654.
 (pdftex.def)             Requested size: 455.24408pt x 341.45546pt.
 [10 <../../figures/Fig1_ndvi_ppet_vectorPlot_wInset.png>]
-<../../figures/Fig2_PPET-TheilSen_map-Koppen.png, id=268, 426.59949pt x 455.094
+<../../figures/Fig2_PPET-TheilSen_map-Koppen.png, id=272, 426.59949pt x 455.094
 51pt>
 File: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png Graphic file (type png)
 <use ../../figures/Fig2_PPET-TheilSen_map-Koppen.png>
 Package pdftex.def Info: ../../figures/Fig2_PPET-TheilSen_map-Koppen.png  used 
-on input line 646.
+on input line 658.
 (pdftex.def)             Requested size: 398.33858pt x 424.94872pt.
 [11 <../../figures/Fig2_PPET-TheilSen_map-Koppen.png (PNG copy)>] [12
 
@@ -557,51 +557,51 @@ on input line 646.
 
 ]
 <../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.png, 
-id=280, 568.86815pt x 483.58954pt>
+id=284, 568.86815pt x 483.58954pt>
 File: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.
 png Graphic file (type png)
 <use ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
 ng>
 Package pdftex.def Info: ../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-Theil
-Sen-trend-by-epoch.png  used on input line 682.
+Sen-trend-by-epoch.png  used on input line 694.
 (pdftex.def)             Requested size: 398.33858pt x 338.6358pt.
 
-Underfull \hbox (badness 5519) in paragraph at lines 682--682
+Underfull \hbox (badness 5519) in paragraph at lines 694--694
 []\T1/ptm/b/n/9 Figure 3. \T1/ptm/m/n/9 Over-all long-term NDVI change and chan
 ge shown by satel-lite epoch and sea-son. (a) The an-nual rate of
  []
 
 
-Underfull \hbox (badness 3428) in paragraph at lines 682--682
+Underfull \hbox (badness 3428) in paragraph at lines 694--694
 \T1/ptm/m/n/9 NDVI change from the merged satel-lite record span-ning 1982-2019
 . The sea-sonal AVHRR NDVI be-tween 1982-2000 (b-
  []
 
 
-Underfull \hbox (badness 4872) in paragraph at lines 682--682
+Underfull \hbox (badness 4872) in paragraph at lines 694--694
 \T1/ptm/m/n/9 top) and MODIS NDVI be-tween 2001-2019 (b-bottom). Non woody ecos
 ys-tem re-gions are masked in gray. A no-table
  []
 
 
-Underfull \hbox (badness 4217) in paragraph at lines 682--682
+Underfull \hbox (badness 4217) in paragraph at lines 694--694
 \T1/ptm/m/n/9 brown-ing trend is ev-i-dent at the in-ter-face of the Grass-land
  and Arid re-gions dur-ing DJF of the MODIS time pe-riod.
  []
 
 [13 <../../figures/Fig3_ndvi-annual-rlm_ndvi-seasonal-TheilSen-trend-by-epoch.p
 ng (PNG copy)>]
-<../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png, id=287, 568.868
+<../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png, id=292, 568.868
 15pt x 426.59949pt>
 File: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png Graphic fil
 e (type png)
 <use ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png>
 Package pdftex.def Info: ../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Kop
-pen.png  used on input line 687.
+pen.png  used on input line 699.
 (pdftex.def)             Requested size: 398.33858pt x 298.72827pt.
 [14 <../../figures/Fig4_ndvi_lin_rlm_trend_10yr_segs_by_Koppen.png (PNG copy)>]
 
-Underfull \hbox (badness 10000) in paragraph at lines 694--731
+Underfull \hbox (badness 10000) in paragraph at lines 706--743
 
  []
 
@@ -610,22 +610,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 694--731
 
 
 ]
-<../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png, id=303, 
+<../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png, id=307, 
 711.1368pt x 568.86815pt>
 File: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png Grap
 hic file (type png)
 <use ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png>
 Package pdftex.def Info: ../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_mode
-led_effect.png  used on input line 734.
+led_effect.png  used on input line 746.
 (pdftex.def)             Requested size: 398.33858pt x 318.65079pt.
 [16 <../../figures/Fig5_n4_ndvi_map_weibull_ppet_x_co2_modeled_effect.png (PNG 
 copy)>]
-<../../figures/Fig6_rlm_CO2_effect_by_epoch.png, id=309, 483.4863pt x 455.0601p
+<../../figures/Fig6_rlm_CO2_effect_by_epoch.png, id=313, 483.4863pt x 455.0601p
 t>
 File: ../../figures/Fig6_rlm_CO2_effect_by_epoch.png Graphic file (type png)
 <use ../../figures/Fig6_rlm_CO2_effect_by_epoch.png>
 Package pdftex.def Info: ../../figures/Fig6_rlm_CO2_effect_by_epoch.png  used o
-n input line 740.
+n input line 752.
 (pdftex.def)             Requested size: 398.33858pt x 374.92928pt.
 [17 <../../figures/Fig6_rlm_CO2_effect_by_epoch.png (PNG copy)>] [18
 
@@ -634,140 +634,126 @@ n input line 740.
 
 ]
 <../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png, id=3
-23, 924.64304pt x 995.67412pt>
+27, 924.64304pt x 995.67412pt>
 File: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png 
 Graphic file (type png)
 <use ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png>
 Package pdftex.def Info: ../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDif
-ferenceBoxplot.png  used on input line 795.
+ferenceBoxplot.png  used on input line 807.
 (pdftex.def)             Requested size: 398.33858pt x 428.93674pt.
 [19 <../../figures/Fig7_map_dVpd_gamCO2Pred_wueCO2Pred_dDifferenceBoxplot.png (
 PNG copy)>]
-<../../figures/Fig8_PPET_change_ThielSen_VCF.png, id=331, 540.5796pt x 739.6318
+<../../figures/Fig8_PPET_change_ThielSen_VCF.png, id=335, 540.5796pt x 739.6318
 4pt>
 File: ../../figures/Fig8_PPET_change_ThielSen_VCF.png Graphic file (type png)
 <use ../../figures/Fig8_PPET_change_ThielSen_VCF.png>
 Package pdftex.def Info: ../../figures/Fig8_PPET_change_ThielSen_VCF.png  used 
-on input line 801.
+on input line 813.
 (pdftex.def)             Requested size: 341.43306pt x 467.16682pt.
 
-LaTeX Warning: Float too large for page by 48.64417pt on input line 802.
+LaTeX Warning: Float too large for page by 48.64417pt on input line 814.
 
 [20 <../../figures/Fig8_PPET_change_ThielSen_VCF.png (PNG copy)>] [21
 
 
 
 
-]
-
-Package natbib Warning: Citation `wang_etal20' on page 22 undefined on input li
-ne 903.
-
-[22]
-
-Package natbib Warning: Citation `sexton_etal13' on page 23 undefined on input 
-line 1002.
-
-
-Package natbib Warning: Citation `gill_etal17' on page 23 undefined on input li
-ne 1008.
-
-[23] [24pdfTeX warning (ext4): destination with the same identifier (name{appen
-dix.A}) has been already used, duplicate ignored
+] [22] [23] [24pdfTeX warning (ext4): destination with the same identifier (nam
+e{appendix.A}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1069 \clearpage
+l.1081 \clearpage
                  ]
-<../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png, id=463, 568.9004p
+<../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png, id=474, 568.9004p
 t x 568.9004pt>
 File: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png Graphic file 
 (type png)
 <use ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVI
-S.png  used on input line 1071.
+S.png  used on input line 1083.
 (pdftex.def)             Requested size: 398.33858pt x 398.3491pt.
 [25 <../../figures/appendix-A/SM_Fig1_map_eastOz_MAPPET_NVIS.png (PNG copy)>]
 <../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png, id
-=470, 334.1283pt x 369.7815pt>
+=481, 334.1283pt x 369.7815pt>
 File: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.pn
 g Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
 >
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSe
-n_seasonal_P_PET.png  used on input line 1077.
+n_seasonal_P_PET.png  used on input line 1089.
 (pdftex.def)             Requested size: 398.33858pt x 440.841pt.
 [26 <../../figures/appendix-A/SM_Fig2_Map_EastOz_lt_TheilSen_seasonal_P_PET.png
  (PNG copy)>]
 <../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm_Thi
-elSen_Trend_1982_2019_2021-02-28.png, id=476, 426.59949pt x 341.32089pt>
+elSen_Trend_1982_2019_2021-02-28.png, id=487, 426.59949pt x 341.32089pt>
 File: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longter
 m_ThielSen_Trend_1982_2019_2021-02-28.png Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
 _ThielSen_Trend_1982_2019_2021-02-28.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsens
 or_seasonal_longterm_ThielSen_Trend_1982_2019_2021-02-28.png  used on input lin
-e 1083.
+e 1095.
 (pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
 [27 <../../figures/appendix-A/SM_Fig3_ndvi_f_of_timeANDsensor_seasonal_longterm
 _ThielSen_Trend_1982_2019_2021-02-28.png (PNG copy)>]
-<../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png, id=482, 
+<../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png, id=493, 
 455.0601pt x 341.3553pt>
 File: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png Grap
 hic file (type png)
 <use ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig4_big_linearModel_by_MA
-PPET_range.png  used on input line 1089.
+PPET_range.png  used on input line 1101.
 (pdftex.def)             Requested size: 398.33858pt x 298.82056pt.
 [28 <../../figures/appendix-A/SM_Fig4_big_linearModel_by_MAPPET_range.png>]
-<../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png, id=490
+<../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png, id=501
 , 853.5087pt x 569.0058pt>
 File: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png Gr
 aphic file (type png)
 <use ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logist
-ic_Asym_xmid.png  used on input line 1095.
+ic_Asym_xmid.png  used on input line 1107.
 (pdftex.def)             Requested size: 398.33858pt x 265.55737pt.
 [29 <../../figures/appendix-A/SM_Fig5_ndvi3mo_PE12mo_logistic_Asym_xmid.png (PN
 G copy)>]
 <../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason.png
-, id=496, 426.59949pt x 341.32089pt>
+, id=507, 426.59949pt x 341.32089pt>
 File: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeaso
 n.png Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
 .png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richar
-d_x3_nlsFit_bySeason.png  used on input line 1101.
+d_x3_nlsFit_bySeason.png  used on input line 1113.
 (pdftex.def)             Requested size: 398.33858pt x 318.71155pt.
 [30 <../../figures/appendix-A/SM_Fig6_ndvi3mo_PE12mo_richard_x3_nlsFit_bySeason
 .png (PNG copy)>]
-<../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png, id=502, 568
+<../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png, id=513, 568
 .86815pt x 398.31094pt>
 File: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png Graphic
  file (type png)
 <use ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppe
-t_x_co2.png  used on input line 1107.
+t_x_co2.png  used on input line 1119.
 (pdftex.def)             Requested size: 398.33858pt x 278.91907pt.
 [31 <../../figures/appendix-A/SM_Fig7_quantile_reg_ndvi_ppet_x_co2.png (PNG cop
 y)>]
 <../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png, id=5
-09, 568.86815pt x 568.86815pt>
+20, 568.86815pt x 568.86815pt>
 File: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png 
 Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_
-trend_by_epoch.png  used on input line 1113.
+trend_by_epoch.png  used on input line 1125.
 (pdftex.def)             Requested size: 398.33858pt x 398.35255pt.
 [32 <../../figures/appendix-A/SM_Fig8_zonal_vpd_precip_pet_trend_by_epoch.png (
 PNG copy)>]
 <../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png, id=
-515, 426.59949pt x 568.86815pt>
+526, 426.59949pt x 568.86815pt>
 File: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png
  Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png>
 
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds
--xLAI_dNDVIxLAI.png  used on input line 1119.
+-xLAI_dNDVIxLAI.png  used on input line 1131.
 (pdftex.def)             Requested size: 341.43306pt x 455.30347pt.
 
 LaTeX Warning: Text page 33 contains only floats.
@@ -793,62 +779,62 @@ LaTeX Warning: Text page 33 contains only floats.
  <../../figures/appendix-A/SM_Fig9_NDVI-CO2-effect-preds-xLAI_dNDVIxLAI.png (PN
 G copy)>]
 <../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.png,
- id=521, 483.58954pt x 341.32089pt>
+ id=532, 483.58954pt x 341.32089pt>
 File: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover
 .png Graphic file (type png)
 <use ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
 png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig10_EOz_map_delta_treeco
-ver_nontreeVegcover.png  used on input line 1125.
+ver_nontreeVegcover.png  used on input line 1137.
 (pdftex.def)             Requested size: 398.33858pt x 281.16093pt.
 [34 <../../figures/appendix-A/SM_Fig10_EOz_map_delta_treecover_nontreeVegcover.
 png (PNG copy)>]
-<../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png, id=527, 455
+<../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png, id=538, 455
 .0601pt x 284.5029pt>
 File: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png Graphic
  file (type png)
 <use ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png>
 Package pdftex.def Info: ../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_
-density.png  used on input line 1131.
+density.png  used on input line 1143.
 (pdftex.def)             Requested size: 398.33858pt x 249.05229pt.
 [35 <../../figures/appendix-A/SM_Fig11_vpdanom12mo_ndvi_2d_density.png (PNG cop
 y)>]pdfTeX warning (ext4): destination with the same identifier (name{appendix.
 A}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1135 \appendixtables
+l.1147 \appendixtables
                       
-Underfull \hbox (badness 4726) in paragraph at lines 1143--1143
+Underfull \hbox (badness 4726) in paragraph at lines 1155--1155
 []|\T1/ptm/m/n/9 NOAA-CDR v5 AVHRR
  []
 
 
-Overfull \hbox (11.12892pt too wide) in paragraph at lines 1153--1154
+Overfull \hbox (11.12892pt too wide) in paragraph at lines 1165--1166
 []|\T1/ptm/m/n/9 https://www.environment.gov.au/land/native-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1153--1154
+Underfull \hbox (badness 10000) in paragraph at lines 1165--1166
 \T1/ptm/m/n/9 vegetation/national-vegetation-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1157--1158
+Underfull \hbox (badness 10000) in paragraph at lines 1169--1170
 []|\T1/ptm/m/n/9 Copernicus Cli-mate Change Ser-vice
  []
 
 
-Underfull \hbox (badness 1990) in paragraph at lines 1159--1159
+Underfull \hbox (badness 1990) in paragraph at lines 1171--1171
 []|\T1/ptm/m/n/9 BoM Ma-jor Köp-pen Cli-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1159--1159
+Underfull \hbox (badness 10000) in paragraph at lines 1171--1171
 []|\T1/ptm/m/n/9 Major Köp-pen Cli-mate
  []
 
 
-Overfull \hbox (58.01782pt too wide) in paragraph at lines 1159--1160
+Overfull \hbox (58.01782pt too wide) in paragraph at lines 1171--1172
 []|\T1/ptm/m/n/9 http://www.bom.gov.au/jsp/ncc/climate_averages/climate-
  []
 
@@ -861,95 +847,103 @@ Overfull \hbox (58.01782pt too wide) in paragraph at lines 1159--1160
 
 
 ] [38]
-Underfull \hbox (badness 6316) in paragraph at lines 177--179
+Underfull \hbox (badness 10000) in paragraph at lines 181--185
+[]\T1/ptm/m/n/9 Gill, T., Jo-hansen, K., Phinn, S., Tre-vithick, R., Scarth, P.
+, and Arm-ston, J.: A Method for Map-ping Aus-tralian
+ []
+
+
+Underfull \hbox (badness 4752) in paragraph at lines 181--185
+\T1/ptm/m/n/9 Woody Veg-e-ta-tion Cover by Link-ing Continental-Scale Field Dat
+a and Long-Term Land-sat Time Se-ries, 38, 679--705,
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 194--196
 []\T1/ptm/m/n/9 Greve, P., Rod-er-ick, M. L., Ukkola, A. M., and Wada, Y.: The 
 Arid-ity In-dex un-der Global Warm-ing, 14, 124006,
  []
 
 
-Underfull \hbox (badness 3612) in paragraph at lines 190--194
+Underfull \hbox (badness 3612) in paragraph at lines 207--211
 []\T1/ptm/m/n/9 Harris, I., Jones, P., Os-born, T., and Lis-ter, D.: Up-dated H
 igh-Resolution Grids of Monthly Cli-matic Ob-ser-va-tions - the
  []
 
 
-Underfull \hbox (badness 1248) in paragraph at lines 190--194
+Underfull \hbox (badness 1248) in paragraph at lines 207--211
 \T1/ptm/m/n/9 CRU TS3.10 Dataset: UP-DATED HIGH-RESOLUTION GRIDS OF MONTHLY CLI
 -MATIC OB-SER-VA-TIONS, 34, 623--642,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 215--218
+[39]
+Underfull \hbox (badness 10000) in paragraph at lines 232--235
 []\T1/ptm/m/n/9 Hattersley, P. W.: The Dis-tri-bu-tion of C3 and C4 Grasses in 
 Aus-tralia in Re-la-tion to Cli-mate, 57, 113--128,
  []
 
 
-Underfull \hbox (badness 3482) in paragraph at lines 220--223
+Underfull \hbox (badness 3482) in paragraph at lines 237--240
 []\T1/ptm/m/n/9 Ji, L. and Brown, J. F.: Ef-fect of NOAA Satel-lite Or-bital Dr
 ift on AVHRR-Derived Phe-no-log-i-cal Met-rics, 62, 215--223,
  []
 
-[39] [40]
-Underfull \hbox (badness 1939) in paragraph at lines 345--347
+[40]
+Underfull \hbox (badness 1939) in paragraph at lines 362--364
 []\T1/ptm/m/n/9 Morison, J. I. L.: Sen-si-tiv-ity of Stom-ata and Wa-ter Use Ef
 -fi-ciency to High CO2, 8, 467--474, https://doi.org/[]10.1111/j.1365-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--366
+Underfull \hbox (badness 10000) in paragraph at lines 379--383
 []\T1/ptm/m/n/9 of Liv-ing Aus-tralia", A.: The Dead Tree De-tec-tive | Project
  | Bio-Col-lect, []$https : / / biocollect . ala . org . au / acsa / project / 
 index /
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 416--419
+[41]
+Underfull \hbox (badness 10000) in paragraph at lines 441--444
 []\T1/ptm/m/n/9 Specht, R.: Wa-ter Use by Peren-nial Ev-er-green Plant Com-mu-n
 i-ties in Aus-tralia and Papua New Guinea, 20, 273,
  []
 
-[41]
-Underfull \hbox (badness 3568) in paragraph at lines 465--467
+
+Underfull \hbox (badness 3568) in paragraph at lines 490--492
 []\T1/ptm/m/n/9 Vermote, E. and NOAA CDR Pro-gram: NOAA Cli-mate Data Record (C
 DR) of AVHRR Sur-face Re-flectance, Ver-sion 5,
  []
 
-[42]) [43]
-
-Package natbib Warning: There were undefined citations.
-
-(./Rifai_Biogeosciences.aux) ) 
+[42]) [43] (./Rifai_Biogeosciences.aux) ) 
 Here is how much of TeX's memory you used:
- 13899 strings out of 480502
- 223450 string characters out of 5899684
- 568210 words of memory out of 5000000
- 31125 multiletter control sequences out of 15000+600000
+ 13911 strings out of 480502
+ 223685 string characters out of 5899684
+ 568608 words of memory out of 5000000
+ 31134 multiletter control sequences out of 15000+600000
  456464 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,10n,80p,1442b,653s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/home/sami/.TinyTeX/texmf-dist/fonts/enc/dvips/b
-ase/8r.enc}</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex1
-0.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
-></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></hom
-e/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></home/sami
-/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home/sami/.Tiny
-TeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/sami/.TinyTeX/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sami/.TinyTeX/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr5.pfb></home/sami/.TinyTeX/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr9.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7
-.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></home
-/sami/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sami/.TinyTeX
-/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/texmf-dist/fo
-nts/type1/urw/times/utmri8a.pfb>
-Output written on Rifai_Biogeosciences.pdf (43 pages, 13258050 bytes).
+ 75i,10n,80p,1442b,649s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/home/sami/.TinyTeX/texmf-dist/fonts/
+enc/dvips/base/8r.enc}</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmex10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+5.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb>
+</home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></home
+/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></home/sami/
+.TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></home/sami/.TinyT
+eX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></home/sami/.TinyTeX/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></home/sami/.TinyTeX/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr9.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmsy6.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy7.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a
+.pfb></home/sami/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></home/sa
+mi/.TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></home/sami/.TinyTeX/te
+xmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rifai_Biogeosciences.pdf (43 pages, 13259586 bytes).
 PDF statistics:
- 770 PDF objects out of 1000 (max. 8388607)
- 662 compressed objects within 7 object streams
- 185 named destinations out of 1000 (max. 500000)
+ 785 PDF objects out of 1000 (max. 8388607)
+ 677 compressed objects within 7 object streams
+ 188 named destinations out of 1000 (max. 500000)
  96 words of extra memory for PDF output out of 10000 (max. 10000000)
 
